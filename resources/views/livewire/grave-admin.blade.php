@@ -40,26 +40,95 @@
                     </div>
 
                 </div>
+                <div class="mb-3">
+                    <div>
+                        <label for="cemeteries_selected" class="form-label"> Cemetery</label>
+                    </div>
+                    <div class="mb-3">
+                        <select id="cemeteries_selected" name="cemeteries_selected" class="form-select p-2"
+                            style="width:100%;" wire:model="cemeteries_selected">
 
+                            <option selected>Select Cemetery</option>
+                            @foreach ($cemeteries as $cemetry)
+                                <option value="{{ $cemetry->id }}">{{ $cemetry->CemeteryName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
                 <!--section details-->
                 <div class="mb-3">
                     <label for="sectionNumber" class="form-label">Number of sections in Cemetary</label>
                     <input type="number" class="form-control" id="sectionNumber" name="graveyardNumber"
-                        placeholder="Enter Number of Cemetery Sections" wire:model="grave_number"/>
+                        placeholder="Enter Number of Cemetery Sections" wire:model="grave_number" />
                 </div>
                 <!--if user puts the numer of sections in cemetery, it should display the same number of inputs with the section code placeholder-->
                 <div class="mb-3" id="gravePerSecContainer">
-                    <label for="numberOfGraves" class="form-label">Graves per section</label>
+                    <label for="numberOfGraves" class="form-label">Graves in section
+                        {{ count($sections) > 0 ? count($sections) + 1 : 0 }}</label>
 
                     <input type="number" class="form-control" id="numberOfGraves" name="numberOfGraves"
-                        placeholder="Enter Number of Graves for section" wire:model="number_of_graves"/>
+                        placeholder="Enter Number of Graves for section" wire:model="number_of_graves" />
 
                 </div>
+                @if (count($this->sections) > 0)
 
 
+                    @if (count($this->sections) == $grave_number)
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    @else
+                        <a type="button" class="btn btn-primary green" wire:click="addSection">Add
+                            Section</a>
+                        <a type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#sectionModal">View
+                            Section(s)</a>
+                    @endif
+                @endif
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+
             </form>
+
+            <!-- Modal -->
+            <div class="modal fade" id="sectionModal" tabindex="-1" aria-labelledby="sectionModalLable"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="sectionModalLable">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Cemetery ID </th>
+                                        <th scope="col">Section Code</th>
+                                        <th scope="col">Total Graves</th>
+                                        <th scope="col">Available Graves</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+
+                                    @foreach ($sections as $section_item)
+                                        <tr>
+                                            <th scope="row">{{ $section_item['CemeteryID'] }}</th>
+                                            <td>{{ $section_item['SectionCode'] }}</td>
+                                            <td>{{ $section_item['TotalGraves'] }}</td>
+                                            <td>{{ $section_item['AvailableGraves'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
