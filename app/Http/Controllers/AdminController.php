@@ -20,4 +20,10 @@ class AdminController extends Controller
 
         return view('towns', ['towns' => $towns]);
     }
+    public function grave_admin()
+    {
+
+
+        return view('graves.admin');
+    }
 }

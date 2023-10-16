@@ -20,3 +20,12 @@ Route::get('/', function () {
 });
 Route::get('/addGraveyard', [AdminController::class, 'showRegions']);
 Route::get('/getTowns/{regionId}', [AdminController::class, 'getTowns']);
+
+
+//administration route to add and modify the grave yards
+
+Route::get('/graveyard-admin', [AdminController::class, 'grave_admin'])->name('grave.admin');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
