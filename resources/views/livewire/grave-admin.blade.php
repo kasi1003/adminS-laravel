@@ -50,7 +50,7 @@
 
                             <option selected>Select Cemetery</option>
                             @foreach ($cemeteries as $cemetry)
-                                <option value="{{ $cemetry->id }}">{{ $cemetry->CemeteryName }}</option>
+                                <option value="{{ $cemetry->CemeteryID }}">{{ $cemetry->CemeteryName }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -71,19 +71,18 @@
                         placeholder="Enter Number of Graves for section" wire:model="number_of_graves" />
 
                 </div>
-                @if (count($this->sections) > 0)
 
 
-                    @if (count($this->sections) == $grave_number)
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    @else
-                        <a type="button" class="btn btn-primary green" wire:click="addSection">Add
-                            Section</a>
-                        <a type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#sectionModal">View
-                            Section(s)</a>
-                    @endif
+
+                @if (count($this->sections) == $grave_number && count($this->sections) > 0)
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                @else
+                    <a type="button" class="btn btn-primary green" wire:click="addSection">Add
+                        Section</a>
+                    <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sectionModal">View
+                        Section(s)</a>
                 @endif
+
 
 
             </form>

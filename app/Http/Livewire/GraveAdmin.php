@@ -18,8 +18,8 @@ class GraveAdmin extends Component
     public $cemeteries_selected;
     public $number_of_graves;
     public $sections = [];
-    public $addSections=true;
-
+    public $addSections = true;
+    public $cemeteries;
 
     //this function is only called once when the page loads
     public function mount()
@@ -36,28 +36,28 @@ class GraveAdmin extends Component
 
         $regions = Regions::all();
         $towns = Towns::all();
-        $cemeteries = Cemeteries::all();
+        $this->cemeteries = Cemeteries::all();
+
+
         //here we will get all the towns that are related to the region selected
         if ($this->region_selected != '') {
             $towns = Towns::where('region_id', $this->region_selected)->get();
         }
 
-        if ($this->town_selected != '') {
-            $towns = Cemeteries::where('Town', $this->town_selected)->get();
-        }
+
 
 
         return view('livewire.grave-admin', [
             'towns' => $towns,
             'regions' => $regions,
-            'cemeteries' => $cemeteries
+
         ]);
     }
     public function addGrave()
     {
-        $grave_data = [
-            ''
-        ];
+
+
+        dd($this->sections);
     }
     public function addSection()
     {
@@ -71,7 +71,5 @@ class GraveAdmin extends Component
             'TotalGraves' => $this->number_of_graves,
             'AvailableGraves' => $this->number_of_graves,
         ]);
-
-
     }
 }
