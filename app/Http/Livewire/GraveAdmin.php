@@ -59,6 +59,19 @@ class GraveAdmin extends Component
 
         dd($this->sections);
     }
+    public function modGrave($id, $type_of_mod)
+    {
+        //to delete the grave
+        if ($type_of_mod == 'delete') {
+            # code...
+        }
+        //to edit the grave
+        if ($type_of_mod == 'edit') {
+            # code...
+        }
+        dd($this->sections);
+    }
+
     public function addSection()
     {
 
