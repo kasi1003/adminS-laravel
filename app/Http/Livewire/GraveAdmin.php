@@ -12,6 +12,9 @@ class GraveAdmin extends Component
     //variables
     public $region_selected;
     public $town_selected;
+    public $grave_name;
+    public $grave_number;
+    public $number_of_graves;
 
 
     //this function is only called once when the page loads
@@ -42,5 +45,11 @@ class GraveAdmin extends Component
             'towns' => $towns,
             'regions' => $regions
         ]);
+    }
+    public function addGrave()
+    {
+        $grave_data=[
+            ''
+        ];
     }
 }

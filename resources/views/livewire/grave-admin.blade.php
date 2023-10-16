@@ -3,11 +3,11 @@
         <h1 class="card-header">Add a Graveyard</h1>
         <div class="card-body">
             <!--form to add a graveyard-->
-            <form action="../php/addGraveyardInsert.php" method="post">
+            <form wire:submit.prevent="addGrave">
                 <div class="mb-3">
                     <label for="graveyardName" class="form-label">Graveyard Name</label>
                     <input type="text" class="form-control" id="graveyardName" name="graveyardName"
-                        placeholder="Enter Graveyard Name" />
+                        placeholder="Enter Graveyard Name" wire:model="grave_name" />
                 </div>
                 <div class="mb-3">
                     <div>
@@ -41,19 +41,18 @@
 
                 </div>
 
-
                 <!--section details-->
                 <div class="mb-3">
                     <label for="sectionNumber" class="form-label">Number of sections in Cemetary</label>
                     <input type="number" class="form-control" id="sectionNumber" name="graveyardNumber"
-                        placeholder="Enter Number of Cemetery Sections" oninput="generateGraveInputs()" />
+                        placeholder="Enter Number of Cemetery Sections" wire:model="grave_number"/>
                 </div>
                 <!--if user puts the numer of sections in cemetery, it should display the same number of inputs with the section code placeholder-->
                 <div class="mb-3" id="gravePerSecContainer">
                     <label for="numberOfGraves" class="form-label">Graves per section</label>
 
                     <input type="number" class="form-control" id="numberOfGraves" name="numberOfGraves"
-                        placeholder="Enter Number of Graves for section" />
+                        placeholder="Enter Number of Graves for section" wire:model="number_of_graves"/>
 
                 </div>
 
