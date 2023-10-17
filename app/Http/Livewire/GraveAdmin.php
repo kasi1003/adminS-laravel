@@ -84,5 +84,16 @@ class GraveAdmin extends Component
             'TotalGraves' => $this->number_of_graves,
             'AvailableGraves' => $this->number_of_graves,
         ]);
+
+        $this->number_of_graves = "";
+
+
+
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Section Added',
+            'icon' => 'success',
+            'iconColor' => 'green',
+        ]);
+       // session()->flash('message', 'Section Added');
     }
 }

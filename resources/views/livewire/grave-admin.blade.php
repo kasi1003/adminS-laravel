@@ -63,16 +63,16 @@
                         placeholder="Enter Number of Cemetery Sections" wire:model="grave_number" />
                 </div>
                 <!--if user puts the numer of sections in cemetery, it should display the same number of inputs with the section code placeholder-->
-                <div class="mb-3" id="gravePerSecContainer">
-                    <label for="numberOfGraves" class="form-label">Graves in section
-                        {{ count($sections) > 0 ? count($sections) + 1 : 0 }}</label>
+                @if (count($this->sections) < $grave_number)
+                    <div class="mb-3" id="gravePerSecContainer">
+                        <label for="numberOfGraves" class="form-label">Graves in section
+                            {{ count($sections) > 0 ? count($sections) + 1 : 1 }}</label>
 
-                    <input type="number" class="form-control" id="numberOfGraves" name="numberOfGraves"
-                        placeholder="Enter Number of Graves for section" wire:model="number_of_graves" />
+                        <input type="number" class="form-control" id="numberOfGraves" name="numberOfGraves"
+                            placeholder="Enter Number of Graves for section" wire:model="number_of_graves" />
 
-                </div>
-
-
+                    </div>
+                @endif
 
                 @if (count($this->sections) == $grave_number && count($this->sections) > 0)
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -130,4 +130,16 @@
             </div>
         </div>
     </div>
+    <script>
+        window.addEventListener('swal', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                iconColor: e.detail.iconColor,
+                icon: e.detail.icon,
+                confirmButtonText: 'Cool'
+            })
+
+
+        });
+    </script>
 </div>
