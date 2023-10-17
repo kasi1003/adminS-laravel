@@ -57,7 +57,59 @@ class GraveAdmin extends Component
     {
 
 
-        dd($this->sections);
+
+
+
+        $t_graves = 0;
+        //calculating then total graves to put into the cemetery table
+
+        foreach ($this->sections as $sec) {
+            $t_graves = $t_graves +  $sec['TotalGraves'];
+        }
+
+
+
+        $cem_name = $this->grave_name;
+
+
+        if ($this->cemeteries_selected != 'other') {
+            $cem_name = $this->cemeteries_selected;
+        }
+
+
+
+
+
+        $cem_data = [
+            'Region' => $this->region_selected,
+            'CemeteryName' => $cem_name,
+            'Town' => $this->town_selected,
+            'NumberOfSections' => count($this->sections),
+            'TotalGraves' =>  $t_graves,
+            'AvailableGraves' =>  $t_graves,
+            'id' => count($this->cemeteries) + 1,
+        ];
+
+        // dd($cem_data);
+        if ($this->cemeteries_selected == 'other') {
+            Cemeteries::create(
+
+                $cem_data
+            );
+        } else {
+            Cemeteries::updateOrInsert(
+                ['CemeteryID' => $this->cemeteries_selected],
+                $cem_data
+            );
+        }
+
+
+
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Grave Yard Added',
+            'icon' => 'success',
+            'iconColor' => 'green',
+        ]);
     }
     public function modGrave($id, $type_of_mod)
     {
@@ -94,6 +146,6 @@ class GraveAdmin extends Component
             'icon' => 'success',
             'iconColor' => 'green',
         ]);
-       // session()->flash('message', 'Section Added');
+        // session()->flash('message', 'Section Added');
     }
 }

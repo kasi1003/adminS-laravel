@@ -4,11 +4,7 @@
         <div class="card-body">
             <!--form to add a graveyard-->
             <form wire:submit.prevent="addGrave">
-                <div class="mb-3">
-                    <label for="graveyardName" class="form-label">Graveyard Name</label>
-                    <input type="text" class="form-control" id="graveyardName" name="graveyardName"
-                        placeholder="Enter Graveyard Name" wire:model="grave_name" />
-                </div>
+
                 <div class="mb-3">
                     <div>
                         <label for="graveyardLocation" class="form-label">Graveyard Location</label>
@@ -52,10 +48,18 @@
                             @foreach ($cemeteries as $cemetry)
                                 <option value="{{ $cemetry->CemeteryID }}">{{ $cemetry->CemeteryName }}</option>
                             @endforeach
+                            <option value="other">Other</option>
                         </select>
                     </div>
 
                 </div>
+                @if ($cemeteries_selected == 'other')
+                    <div class="mb-3">
+                        <label for="graveyardName" class="form-label">Graveyard Name</label>
+                        <input type="text" class="form-control" id="graveyardName" name="graveyardName"
+                            placeholder="Enter Graveyard Name" wire:model="grave_name" />
+                    </div>
+                @endif
                 <!--section details-->
                 <div class="mb-3">
                     <label for="sectionNumber" class="form-label">Number of sections in Cemetary</label>
@@ -136,7 +140,8 @@
                 title: e.detail.title,
                 iconColor: e.detail.iconColor,
                 icon: e.detail.icon,
-                confirmButtonText: 'Cool'
+                timer: 1000,
+                showConfirmButton: false,
             })
 
 
