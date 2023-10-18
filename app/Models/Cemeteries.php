@@ -14,6 +14,9 @@ class Cemeteries extends Model
         'Region',
         'CemeteryName',
         'Town',
-
+        'NumberOfSections',
+        'TotalGraves',
+        'AvailableGraves',
+        'id',
     ];
 }
