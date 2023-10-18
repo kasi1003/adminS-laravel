@@ -68,14 +68,14 @@ class GraveAdmin extends Component
 
 
         if ($this->cemeteries_selected != 'other') {
-            $cem_name = $this->grave_name;
+            $cem_name = $this->cemeteries_selected;
         }
 
 
         // creates new cemetery if other is selected or updates the current sections in the database
 
         if ($this->cemeteries_selected == 'other') {
-
+            $cem_name = $this->grave_name;
 
 
             $cem_data = [
