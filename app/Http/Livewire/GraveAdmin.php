@@ -68,7 +68,7 @@ class GraveAdmin extends Component
 
 
         if ($this->cemeteries_selected != 'other') {
-            $cem_name = $this->cemeteries_selected;
+            $cem_name = $this->grave_name;
         }
 
 
