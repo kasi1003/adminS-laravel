@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Cemeteries extends Model
 {
     use HasFactory;
-    protected $table = 'cemeteries';
+    protected $table = 'cemetery';
     protected $fillable = [
         'CemeteryID',
         'Region',
@@ -17,6 +17,6 @@ class Cemeteries extends Model
         'NumberOfSections',
         'TotalGraves',
         'AvailableGraves',
-        'id',
+
     ];
 }

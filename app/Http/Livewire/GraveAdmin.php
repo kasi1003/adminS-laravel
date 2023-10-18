@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Cemeteries;
 use App\Models\Regions;
+use App\Models\Sections;
 use App\Models\Towns;
 use Livewire\Component;
 
@@ -56,10 +57,8 @@ class GraveAdmin extends Component
     public function addGrave()
     {
 
-
-
-
-
+        //cemetery id which will link to the sections
+        $cem_id = count($this->cemeteries) + 1;
         $t_graves = 0;
         //calculating then total graves to put into the cemetery table
 
@@ -68,35 +67,42 @@ class GraveAdmin extends Component
         }
 
 
-
-        $cem_name = $this->grave_name;
-
-
         if ($this->cemeteries_selected != 'other') {
             $cem_name = $this->cemeteries_selected;
         }
 
 
+        // creates new cemetery if other is selected or updates the current sections in the database
 
-
-
-        $cem_data = [
-            'Region' => $this->region_selected,
-            'CemeteryName' => $cem_name,
-            'Town' => $this->town_selected,
-            'NumberOfSections' => count($this->sections),
-            'TotalGraves' =>  $t_graves,
-            'AvailableGraves' =>  $t_graves,
-            'id' => count($this->cemeteries) + 1,
-        ];
-
-        // dd($cem_data);
         if ($this->cemeteries_selected == 'other') {
+
+
+
+            $cem_data = [
+                'Region' => $this->region_selected,
+                'CemeteryName' => $cem_name,
+                'Town' => $this->town_selected,
+                'NumberOfSections' => count($this->sections),
+                'TotalGraves' =>  $t_graves,
+                'AvailableGraves' =>  $t_graves,
+                'CemeteryID' => count($this->cemeteries) + 1,
+            ];
+
             Cemeteries::create(
 
                 $cem_data
             );
         } else {
+            $cem_data = [
+                'Region' => $this->region_selected,
+
+                'Town' => $this->town_selected,
+                'NumberOfSections' => count($this->sections),
+                'TotalGraves' =>  $t_graves,
+                'AvailableGraves' =>  $t_graves,
+                'CemeteryID' => count($this->cemeteries) + 1,
+            ];
+
             Cemeteries::updateOrInsert(
                 ['CemeteryID' => $this->cemeteries_selected],
                 $cem_data
@@ -104,6 +110,29 @@ class GraveAdmin extends Component
         }
 
 
+
+
+
+
+        /*[
+
+            'CemeteryID' => $this->cemeteries_selected,
+            'SectionCode' => $section_id,
+            'TotalGraves' => $this->number_of_graves,
+            'AvailableGraves' => $this->number_of_graves,
+        ] */
+        //adding the sections to the database
+
+        foreach ($this->sections as $sec) {
+
+            Sections::create([
+                'SectionID' => $sec['SectionCode'],
+                'CemeteryID' => $sec['CemeteryID'],
+                'SectionCode' => 'Section ' . $sec['SectionCode'],
+                'TotalGraves' => $sec['TotalGraves'],
+                'AvailableGraves' => $sec['AvailableGraves'],
+            ]);
+        }
 
         $this->dispatchBrowserEvent('swal', [
             'title' => 'Grave Yard Added',
