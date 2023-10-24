@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('TotalGraves');
             $table->string('AvailableGraves');
             $table->timestamps();
+
+
         });
     }
 
