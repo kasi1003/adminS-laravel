@@ -10,6 +10,20 @@ class EditGraveyard extends Component
 {
     public $showEditModal = false;
     public $selectedCemetery;
+    public $cemeteries;
+    public $sections;
+    public function mount()
+    {
+        // Fetch cemetery data from your database
+        $this->cemeteries = Cemeteries::all();
+        $this->sections = Sections::all();
+
+    }
+    public function render()
+    {
+        
+        return view('livewire.edit-graveyard');   
+    }
 
     public function openEditModal($cemeteryId)
     {
@@ -30,13 +44,6 @@ class EditGraveyard extends Component
         $this->selectedCemetery->save();
         $this->showEditModal = false;
     }
-
-    public function render()
-    {
-        $cemeteries = Cemeteries::all();
-        $sections = Sections::all(); // Retrieve data from the Sections model
-
-        return view('livewire.edit-graveyard', compact('cemeteries', 'sections'));
-    }
-        
+   
+  
 }

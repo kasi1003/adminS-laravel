@@ -3,5 +3,5 @@
 @section('content')
     <div>
         @livewire('grave-admin')
-    </div>
+    </div>    
 @endsection
