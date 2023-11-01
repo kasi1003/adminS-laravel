@@ -9,17 +9,7 @@ use App\Models\AdminS;
 
 class AdminController extends Controller
 {
-    public function showRegions()
-    {
-        $regions = AdminS::all();
-        return view('addGraveyards', ['regions' => $regions]);
-    }
-    public function getTowns($regionId)
-    {
-        $towns = AdminS::where('region_id', $regionId)->get(); // Use the adminS model
-
-        return view('towns', ['towns' => $towns]);
-    }
+    
     public function grave_admin()
     {
 
@@ -33,5 +23,6 @@ class AdminController extends Controller
 
         return view('graves.edit');
     }
+    
 
 }

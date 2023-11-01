@@ -16,13 +16,14 @@ return new class extends Migration
         Schema::create('grave_sections', function (Blueprint $table) {
             $table->id();
             $table->string('SectionID');
-            $table->string('CemeteryID');
+            $table->string('CemeteryID'); // Keep it as a string
             $table->string('SectionCode');
             $table->string('TotalGraves');
             $table->string('AvailableGraves');
             $table->timestamps();
 
-
+            // Define the foreign key relationship to the cemetery table
+            $table->foreign('CemeteryID')->references('CemeteryID')->on('cemetery');
         });
     }
 
@@ -33,6 +34,9 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('grave_sections', function (Blueprint $table) {
+            $table->dropForeign(['CemeteryID']);
+        });
         Schema::dropIfExists('grave_sections');
     }
 };

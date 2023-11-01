@@ -24,6 +24,7 @@ class EditGraveyard extends Component
         
         return view('livewire.edit-graveyard');   
     }
+    
 
     public function openEditModal($cemeteryId)
     {
@@ -44,6 +45,24 @@ class EditGraveyard extends Component
         $this->selectedCemetery->save();
         $this->showEditModal = false;
     }
-   
+    public function deleteCemetery($cemeteryId)
+    {
+        // Find the cemetery by ID
+        $cemetery = Cemeteries::find($cemeteryId);
+
+        if ($cemetery) {
+            // Get the CemeteryID
+            $cemeteryId = $cemetery->CemeteryID;
+
+            // Delete the cemetery
+            $cemetery->delete();
+
+            // Delete related sections in the grave_sections table
+            Sections::where('CemeteryID', $cemeteryId)->delete();
+        }
+
+    
+    }
+
   
 }

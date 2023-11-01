@@ -68,13 +68,30 @@ class GraveAdmin extends Component
 
 
         if ($this->cemeteries_selected != 'other') {
-            $cem_name = $this->cemeteries_selected;
+            $cem_id = $this->cemeteries_selected;
+
+        }else{
+            // Create a new cemetery
+        $cem_name = $this->grave_name;
+        $cem_id = count($this->cemeteries) + 1;
+
+        $cem_data = [
+            'Region' => $this->region_selected,
+            'CemeteryName' => $cem_name,
+            'Town' => $this->town_selected,
+            'NumberOfSections' => count($this->sections),
+            'TotalGraves' => $t_graves,
+            'AvailableGraves' => $t_graves,
+            'CemeteryID' => $cem_id,
+        ];
+
+        Cemeteries::create($cem_data);
         }
 
 
         // creates new cemetery if other is selected or updates the current sections in the database
 
-        if ($this->cemeteries_selected == 'other') {
+        /*if ($this->cemeteries_selected == 'other') {
             $cem_name = $this->grave_name;
 
 
@@ -107,7 +124,7 @@ class GraveAdmin extends Component
                 ['CemeteryID' => $this->cemeteries_selected],
                 $cem_data
             );
-        }
+        }*/
 
 
 
@@ -127,7 +144,7 @@ class GraveAdmin extends Component
 
             Sections::create([
                 'SectionID' => $sec['SectionCode'],
-                'CemeteryID' => $sec['CemeteryID'],
+                'CemeteryID' => $cem_id,
                 'SectionCode' => 'Section ' . $sec['SectionCode'],
                 'TotalGraves' => $sec['TotalGraves'],
                 'AvailableGraves' => $sec['AvailableGraves'],
