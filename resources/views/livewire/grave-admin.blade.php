@@ -53,13 +53,14 @@
                     </div>
 
                 </div>
-                @if ($cemeteries_selected == 'other')
-                    <div class="mb-3">
+                <div class="mb-3">
+                    @if ($cemeteries_selected == 'other' || $editCemeteryName)
                         <label for="graveyardName" class="form-label">Graveyard Name</label>
                         <input type="text" class="form-control" id="graveyardName" name="graveyardName"
                             placeholder="Enter Graveyard Name" wire:model="grave_name" />
-                    </div>
-                @endif
+                    @endif
+                </div>
+
                 <!--section details-->
                 <div class="mb-3">
                     <label for="sectionNumber" class="form-label">Number of sections in Cemetary</label>
@@ -80,7 +81,8 @@
 
                 @if (count($this->sections) == $grave_number && count($this->sections) > 0)
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <a type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#sectionModal">preview
+                    <a type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#sectionModal">preview
                         Section(s)</a>
                 @else
                     <a type="button" class="btn btn-primary green" wire:click="addSection">Add

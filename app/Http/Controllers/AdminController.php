@@ -23,6 +23,13 @@ class AdminController extends Controller
 
         return view('graves.edit');
     }
+    public function burial_records()
+    {
+
+
+        return view('graves.records');
+    }
+    
     
 
 }

@@ -27,6 +27,7 @@ Route::get('/getTowns/{regionId}', [AdminController::class, 'getTowns']);
 
 //this is the line i was sayoing is wrong
 Route::get('/edit-graveyard',  [AdminController::class, 'edit_graveyard']);
+Route::get('/burial-records',  [AdminController::class, 'burial_records']);
 
 //administration route to add and modify the grave yards
 Route::get('/graveyard-admin', [AdminController::class, 'grave_admin'])->name('grave.admin');

@@ -1,47 +1,39 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use App\Models\Sections;
+use Illuminate\Http\Request;
 use App\Models\Cemeteries;
 use App\Models\Regions;
-use App\Models\Sections;
 use App\Models\Towns;
-use DB;
-use Livewire\Component;
 
-class GraveAdmin extends Component
+
+
+class EditGrave extends Controller
 {
-
     //variables
+
     public $region_selected;
     public $town_selected;
     public $grave_name;
     public $grave_number;
-    public $cemeteries_selected;
     public $number_of_graves;
     public $sections = [];
     public $addSections = true;
     public $cemeteries;
-
+    public $cemetery;
+    public $regions;
+    public $cemeteries_selected = 'other'; // Initialize with 'other' to hide the cemetery name input
     public $editCemeteryName = false;
 
-    //this function is only called once when the page loads
-    public function mount()
-    {
-        $this->load_data();
-    }
-    //here we will load the data from the db needed for the form to be populated
-    public function load_data()
-    {
-    }
     public function render()
     {
 
 
         $regions = Regions::all();
         $towns = Towns::all();
-        $this->cemeteries = Cemeteries::all();
-        //dd($this->cemeteries);
 
 
         //here we will get all the towns that are related to the region selected
@@ -56,24 +48,44 @@ class GraveAdmin extends Component
             'towns' => $towns,
             'regions' => $regions,
 
+
         ]);
+
+
+
+
+
+
+    }
+    public function index()
+    {
+        $regions = Regions::all();
+        $towns = Towns::all();
+
+
+        //here we will get all the towns that are related to the region selected
+        if ($this->region_selected != '') {
+            $towns = Towns::where('region_id', $this->region_selected)->get();
+        }
+
+
+
+
+
+
+
+        $cemeteries = Cemeteries::all();
+        $sections = Sections::all();
+        return view('edit-cem', compact('cemeteries'));
     }
     public function updating($propertyName, $value)
     {
         if ($propertyName === 'cemeteries_selected') {
-            if ($value != 'other') {
-                // Existing cemetery selected, allow editing of cemetery name
-                $this->editCemeteryName = true;
-            } else {
-                // 'Other' selected, disable editing of cemetery name
-                $this->editCemeteryName = false;
-            }
+            $this->editCemeteryName = $value !== 'other';
         }
     }
-
     public function addGrave()
     {
-
 
         //cemetery id which will link to the sections
         $cem_id = count($this->cemeteries) + 1;
@@ -86,53 +98,17 @@ class GraveAdmin extends Component
 
 
         if ($this->cemeteries_selected != 'other') {
-            // Existing cemetery selected, update the data in both tables
-            $cem_id = $this->cemeteries_selected;
-            $cem_name = $this->grave_name;
 
-            // Check if the Graveyard Name input is empty
-            if (empty($cem_name)) {
-                $defaultCemetery = $this->cemeteries->where('CemeteryID', $cem_id)->first();
-                $cem_name = $defaultCemetery->CemeteryName ?? '';
-            }
-
-
-            $cem_data = [
-                'Region' => $this->region_selected,
-                'CemeteryName' => $cem_name,
-                'Town' => $this->town_selected,
-                'NumberOfSections' => count($this->sections),
-                'TotalGraves' => $t_graves,
-                'AvailableGraves' => $t_graves,
-                'CemeteryID' => $cem_id,
-            ];
-
-            // Update the cemetery data
-            Cemeteries::where('CemeteryID', $cem_id)->update($cem_data);
-
-            // Convert the array to a collection
-            $sectionsCollection = collect($this->sections);
-
-            // Get the IDs of sections to be updated
-            $sectionIds = $sectionsCollection->pluck('id');
-
-            // Update existing sections with the same CemeteryID
-            Sections::where('CemeteryID', $cem_id)
-                ->whereIn('id', $sectionIds)
-                ->update([
-                    'TotalGraves' => $sec['TotalGraves'],
-                    'AvailableGraves' => $sec['TotalGraves'],
-                    'SectionCode' => DB::raw('CONCAT("Section ", id)'),
-                    // Update SectionCode based on the 'id'
-                ]);
-
-            // Delete sections with the same CemeteryID that weren't updated
-            Sections::where('CemeteryID', $cem_id)
-                ->whereNotIn('id', $sectionIds)
-                ->delete();
 
 
         } else {
+            // Clear the select inputs
+            $this->region_selected = null;
+            $this->town_selected = null;
+            $this->sections = []; // Assuming $sections is an array
+            $this->cemeteries_selected = null; // Add this line to clear CemeteryName
+            $this->grave_number = null;
+
             // Create a new cemetery
             $cem_name = $this->grave_name;
             $cem_id = count($this->cemeteries) + 1;
@@ -218,42 +194,34 @@ class GraveAdmin extends Component
             'icon' => 'success',
             'iconColor' => 'green',
         ]);
-    }
-    public function modGrave($id, $type_of_mod)
-    {
-        //to delete the grave
-        if ($type_of_mod == 'delete') {
-            # code...
-        }
-        //to edit the grave
-        if ($type_of_mod == 'edit') {
-            # code...
-        }
-        dd($this->sections);
+
+
     }
 
-    public function addSection()
+
+    public function update(Request $request, $id)
     {
+        $request->validate([
+            'CemeteryName' => 'required',
+            'Region' => 'required',
+            'NumberOfSections' => 'required',
+            'TotalGraves' => 'required|numeric',
+            'AvailableGraves' => 'required|numeric',
 
-        $section_id = count($this->sections) + 1;
-
-        array_push($this->sections, [
-
-            'CemeteryID' => $this->cemeteries_selected,
-            'SectionCode' => $section_id,
-            'TotalGraves' => $this->number_of_graves,
-            'AvailableGraves' => $this->number_of_graves,
         ]);
-
-        $this->number_of_graves = "";
-
-
-
-        $this->dispatchBrowserEvent('swal', [
-            'title' => 'Section Added',
-            'icon' => 'success',
-            'iconColor' => 'green',
-        ]);
-        // session()->flash('message', 'Section Added');
+        $cemeteries = Cemeteries::find($id);
+        $cemeteries->update($request->all());
+        return redirect()->route('/resources/views/edit-cem.blade.php')->with('success', 'Updated Successfully');
+    }
+    public function edit($id)
+    {
+        $cemeteries = Cemeteries::find($id);
+        return view('/resources/views/edit-cem.blade.php', compact('post'));
+    }
+    public function destroy($id)
+    {
+        $cemeteries = Cemeteries::find($id);
+        $cemeteries->delete();
+        return redirect()->route('/resources/views/edit-cem.blade.php')->with('success', 'Post deleted successfully');
     }
 }
