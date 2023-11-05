@@ -19,6 +19,7 @@
                     </div>
                 </div>
                 
+                
 
                 <div class="mb-3">
                     <div>
@@ -26,7 +27,7 @@
                     </div>
                     <div class="mb-3">
                         <select id="section_select" name="section_select" class="form-select p-2"
-                            aria-label="Default select example" style="width:100%;" wire:model="town_selected">
+                            aria-label="Default select example" style="width:100%;" wire:model="section_select">
                             <option selected>Select Section</option>
                             @foreach ($sectionOptions as $section)
                                 <option value="{{ $section->SectionCode }}_{{ $section->CemeteryID }}">{{ $section->SectionCode }}</option>
@@ -103,4 +104,17 @@
 
         </div>
     </div>
+    <script>
+        window.addEventListener('swal', function(e) {
+            Swal.fire({
+                title: e.detail.title,
+                iconColor: e.detail.iconColor,
+                icon: e.detail.icon,
+                timer: 1000,
+                showConfirmButton: false,
+            })
+
+
+        });
+    </script>
 </div>

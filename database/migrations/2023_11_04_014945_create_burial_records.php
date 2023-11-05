@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('CemeteryID'); // Keep it as a string
             $table->string('SectionCode');
+            $table->string('CemeteryName'); // Keep it as a string
             $table->string('GraveNumber');
+            $table->string('Surname');
             $table->string('Name'); // Keep it as a string
             $table->date('DateOfBirth');
             $table->string('DeathNumber'); // Keep it as a string
