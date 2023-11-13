@@ -1,7 +1,5 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
     <div>
         @livewire('grave-admin')
-    </div>    
-@endsection
+    </div>
+</x-app-layout>

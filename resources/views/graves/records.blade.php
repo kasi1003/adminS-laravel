@@ -1,7 +1,5 @@
-@extends('layouts.app')
-
-@section('content')
-<div>
-    @livewire('burial-records')
-</div>
-@endsection
+<x-app-layout>
+    <div>
+        @livewire('burial-records')
+    </div>
+</x-app-layout>

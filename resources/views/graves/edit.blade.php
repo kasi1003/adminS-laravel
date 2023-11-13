@@ -1,7 +1,5 @@
-@extends('layouts.app')
-
-@section('content')
-<div>
-    @livewire('edit-graveyard')
-</div>
-@endsection
+<x-app-layout>
+    <div>
+        @livewire('edit-graveyard')
+    </div>
+</x-app-layout>

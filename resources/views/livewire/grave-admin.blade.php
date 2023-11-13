@@ -10,6 +10,7 @@
                         <label for="graveyardLocation" class="form-label">Graveyard Location</label>
                     </div>
                     <div class="mb-3">
+                        <!-- Example: Binding the region select to Livewire property -->
                         <select id="regionSelect" name="graveyardLocation" class="form-select p-2"
                             aria-label="Default select example" style="width:100%;" wire:model="region_selected">
                             <option selected>Select Region</option>
@@ -17,6 +18,7 @@
                                 <option value="{{ $region->id }}">{{ $region->region_name }}</option>
                             @endforeach
                         </select>
+
                     </div>
 
                 </div>
