@@ -84,7 +84,7 @@
                 @if (count($this->sections) == $grave_number && count($this->sections) > 0)
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <a type="button" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#sectionModal">preview
+                        data-bs-target="#sectionModal">Preview
                         Section(s)</a>
                 @else
                     <a type="button" class="btn btn-primary green" wire:click="addSection">Add
