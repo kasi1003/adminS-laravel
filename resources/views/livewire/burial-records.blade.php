@@ -60,7 +60,7 @@
                         <div class="input-group mb-3">
 
                             <input type="text" id="name" name="name" class="form-control" placeholder="Name"
-                                aria-label="Name" aria-describedby="basic-addon1">
+                                aria-label="Name" aria-describedby="basic-addon1" wire:model="name">
                         </div>
 
 
@@ -72,7 +72,7 @@
                         <div class="input-group mb-3">
 
                             <input type="text" id="surname" name="surname" class="form-control"
-                                placeholder="Surname" aria-label="Surname" aria-describedby="basic-addon2">
+                                placeholder="Surname" aria-label="Surname" aria-describedby="basic-addon2" wire:model="surname">
                         </div>
 
 
@@ -85,7 +85,7 @@
 
                             <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-control"
                                 placeholder="Enter Persons Birthday" aria-label="Date of Birth"
-                                aria-describedby="basic-addon3">
+                                aria-describedby="basic-addon3" wire:model="date_of_birth">
                         </div>
                     </div>
                     <div class="mb-3">
@@ -96,7 +96,7 @@
 
                             <input type="date" id="dateOfDeath" name="dateOfDeath" class="form-control"
                                 placeholder="Enter Date of Death" aria-label="Date of Birth"
-                                aria-describedby="basic-addon3">
+                                aria-describedby="basic-addon3" wire:model="date_of_death">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>

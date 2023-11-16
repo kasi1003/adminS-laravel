@@ -97,11 +97,7 @@ class BurialRecords extends Component
     }
     public function addRecord()
     {
-        // Validate the selected_grave and section_select
-        if (
-            $this->selected_grave && $this->section_select && $this->name && $this->surname && $this->date_of_birth
-            && $this->date_of_death && $this->deathNumber
-        ) {
+        
             // Find the selected cemetery
             $cemetery = Cemeteries::where('CemeteryName', $this->cemeteries_selected)->first();
 
@@ -127,6 +123,7 @@ class BurialRecords extends Component
                 // Create a new BurialRecordsMod record
                 BurialRecordsMod::create($data);
 
+
                 // Reset the form input values
                 $this->selected_grave = null;
                 $this->name = null;
@@ -140,7 +137,7 @@ class BurialRecords extends Component
                     'iconColor' => 'green',
                 ]);
             }
-        }
+        
     }
 }
 
