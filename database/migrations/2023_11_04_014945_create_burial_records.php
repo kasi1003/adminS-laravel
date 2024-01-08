@@ -28,7 +28,6 @@ return new class extends Migration
 
             $table->foreign('CemeteryID')->references('CemeteryID')->on('cemetery');
             $table->foreign('SectionCode')->references('SectionCode')->on('grave_sections');
-
         });
     }
 

@@ -50,6 +50,21 @@
                             </select>
                         </div>
                     </div>
+                    <div class="mb-3">
+                        <div>
+                            <label for="graveNumberSelect" class="form-label">Select Grave Number</label>
+                        </div>
+                        <div class="mb-3">
+                            <select id="grave_number_select" name="grave_number_select" class="form-select p-2"
+                                aria-label="Default select example" style="width:100%;" wire:model="selected_grave">
+                                <option selected>Select Grave Number</option>
+                                @foreach ($availableGraves as $grave)
+                                    <option value="{{ $grave }}">{{ $grave }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
 
 
 
@@ -72,7 +87,8 @@
                         <div class="input-group mb-3">
 
                             <input type="text" id="surname" name="surname" class="form-control"
-                                placeholder="Surname" aria-label="Surname" aria-describedby="basic-addon2" wire:model="surname">
+                                placeholder="Surname" aria-label="Surname" aria-describedby="basic-addon2"
+                                wire:model="surname">
                         </div>
 
 

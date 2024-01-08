@@ -22,7 +22,9 @@ class BurialRecords extends Component
     public $date_of_birth;
     public $death_number;
     public $section_code;
-
+    public $sections;
+    public $availableGraves = [];
+    
 
     public $buried_records;
     public $cemeteries_selected;
@@ -36,7 +38,22 @@ class BurialRecords extends Component
     public function load_data()
     {
         $this->cemeteries = Cemeteries::all();
+
+        // Fetch the total number of graves for the selected cemetery
+        $cemetery = Cemeteries::where('CemeteryName', $this->cemeteries_selected)->first();
+
+        $totalGraves = $cemetery ? $cemetery->TotalGraves : 0;
+
+        // Debugging statements
+        dd($this->cemeteries_selected, $totalGraves, $cemetery);
+
+        // Generate an array of available grave numbers based on TotalGraves
+        $this->availableGraves = range(1, $totalGraves);
+
+        // Exclude grave numbers that have already been selected
+        $this->availableGraves = array_diff($this->availableGraves, [$this->selected_grave]);
     }
+
 
     public function updatedCemeteriesSelected()
     {
@@ -97,47 +114,52 @@ class BurialRecords extends Component
     }
     public function addRecord()
     {
-        
-            // Find the selected cemetery
-            $cemetery = Cemeteries::where('CemeteryName', $this->cemeteries_selected)->first();
+        // Find the selected cemetery
+        $cemetery = Cemeteries::where('CemeteryName', $this->cemeteries_selected)->first();
 
-            if ($cemetery) {
-                // Decrease the AvailableGraves by 1
-                $cemetery->decrement('AvailableGraves');
+        if ($cemetery) {
+            // Decrease the AvailableGraves by 1
+            $cemetery->decrement('AvailableGraves');
 
-                // Create the DeathNumber by combining CemeteryName, SectionCode, and selected_grave
-                $deathNumber = $this->cemeteries_selected . $this->section_select . $this->selected_grave;
+            // Create the DeathNumber by combining CemeteryName, SectionCode, and selected_grave
+            $deathNumber = $this->cemeteries_selected . $this->section_select . $this->selected_grave;
 
-                // Create a data array for the new record
-                $data = [
-                    'CemeteryID' => $cemetery->CemeteryID,
-                    'SectionCode' => $this->section_select,
-                    'GraveNumber' => $this->selected_grave,
-                    'Name' => $this->name,
-                    'Surname' => $this->surname,
-                    'DateOfBirth' => $this->date_of_birth,
-                    'DateOfDeath' => $this->date_of_death,
-                    'DeathNumber' => $deathNumber,
-                ];
+            // Create a data array for the new record
+            $data = [
+                'CemeteryID' => $cemetery->CemeteryID,
+                'SectionCode' => $this->section_select,
+                'GraveNumber' => $this->selected_grave,
+                'Name' => $this->name,
+                'Surname' => $this->surname,
+                'DateOfBirth' => $this->date_of_birth,
+                'DateOfDeath' => $this->date_of_death,
+                'DeathNumber' => $deathNumber,
+            ];
 
-                // Create a new BurialRecordsMod record
-                BurialRecordsMod::create($data);
+            // Create a new BurialRecordsMod record
+            BurialRecordsMod::create($data);
 
+            // Call the method to update available grave numbers
+            $this->load_data();
 
-                // Reset the form input values
-                $this->selected_grave = null;
-                $this->name = null;
-                $this->surname = null;
-                $this->date_of_birth = null;
-                $this->date_of_death = null;
+            // Reset the form input values
+            $this->selected_grave = null;
+            $this->name = null;
+            $this->surname = null;
+            $this->date_of_birth = null;
+            $this->date_of_death = null;
 
-                $this->dispatchBrowserEvent('swal', [
-                    'title' => 'Record Added',
-                    'icon' => 'success',
-                    'iconColor' => 'green',
-                ]);
-            }
-        
+            $this->dispatchBrowserEvent('swal', [
+                'title' => 'Record Added',
+                'icon' => 'success',
+                'iconColor' => 'green',
+            ]);
+        }
+    }
+
+    public function removeSelectedGrave()
+    {
+        // Remove the selected grave from the availableGraves array
+        $this->availableGraves = array_diff($this->availableGraves, [$this->selected_grave]);
     }
 }
-

@@ -27,7 +27,7 @@
                         <td>{{ $cemetery->AvailableGraves }}</td>
                         <td>
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary">Edit</button>
+                            <button wire:click="redirectToAdminPage({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">Edit</button>
 
                             <button wire:click="deleteCemetery({{ $cemetery->CemeteryID }})" class="btn btn-danger">Delete</button>
 

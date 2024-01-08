@@ -3,7 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
 
 
     //this is the line i was sayoing is wrong
-    Route::get('/edit-graveyard', [AdminController::class, 'edit_graveyard']);
+    Route::get('/edit-graveyard', [AdminController::class, 'edit_graveyard'])->name('grave.edit');
     Route::get('/burial-records', [AdminController::class, 'burial_records'])->name('grave.records');
 
     //administration route to add and modify the grave yards

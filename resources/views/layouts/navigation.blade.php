@@ -26,6 +26,11 @@
                         {{ __('Manage Burial Records') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('grave.edit')" :active="request()->routeIs('grave.edit')">
+                        {{ __('Edit Graveyard') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->

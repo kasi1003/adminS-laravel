@@ -4,7 +4,15 @@
         <div class="card-body">
             <!--form to add a graveyard-->
             <form wire:submit.prevent="addGrave">
-
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="mb-3">
                     <div>
                         <label for="graveyardLocation" class="form-label">Graveyard Location</label>
@@ -24,20 +32,18 @@
                 </div>
                 <div class="mb-3">
                     <div>
-                        <label for="townLocation" class="form-label">Town Location</label>
+                        <label for="townSelect" class="form-label">Town Location</label>
                     </div>
                     <div class="mb-3">
-                        <select id="townSelect" name="townLocation" class="form-select p-2"
-                            aria-label="Default select example" style="width:100%;" wire:model="town_selected">
-
+                        <select id="townSelect" name="townLocation" class="form-select p-2" aria-label="Default select example" style="width:100%;" wire:model="town_selected">
                             <option selected>Select Town</option>
                             @foreach ($towns as $town)
                                 <option value="{{ $town->id }}">{{ $town->town_name }}</option>
                             @endforeach
                         </select>
                     </div>
-
                 </div>
+                
                 <div class="mb-3">
                     <div>
                         <label for="cemeteries_selected" class="form-label"> Cemetery</label>
@@ -81,6 +87,7 @@
                     </div>
                 @endif
 
+
                 @if (count($this->sections) == $grave_number && count($this->sections) > 0)
                     <button type="submit" class="btn btn-primary">Submit</button>
                     <a type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -122,6 +129,7 @@
                                     @foreach ($sections as $section_item)
                                         <tr>
                                             <th scope="row">{{ $section_item['CemeteryID'] }}</th>
+
                                             <td>{{ $section_item['SectionCode'] }}</td>
                                             <td>{{ $section_item['TotalGraves'] }}</td>
                                             <td>{{ $section_item['AvailableGraves'] }}</td>

@@ -13,6 +13,7 @@ class BurialRecordsMod extends Model
         'GraveNumber',
         'CemeteryID',
         'SectionCode',
+        'Surname',
         'Name',
         'DateOfBirth',
         'DateOfDeath',

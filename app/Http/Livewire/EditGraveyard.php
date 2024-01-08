@@ -18,13 +18,23 @@ class EditGraveyard extends Component
         $this->cemeteries = Cemeteries::all();
         $this->sections = Sections::all();
 
+        
     }
     public function render()
     {
-        
-        return view('livewire.edit-graveyard');   
+
+        return view('livewire.edit-graveyard');
     }
-    
+    public function redirectToAdminPage($cemeteryId)
+    {
+        // Store the selected cemetery details in session
+        $selectedCemeteryDetails = Cemeteries::find($cemeteryId);
+        session(['selectedCemeteryDetails' => $selectedCemeteryDetails]);
+
+        // Redirect to the admin page
+        return redirect()->to('/graveyard-admin');
+    }
+
 
     public function openEditModal($cemeteryId)
     {
@@ -60,9 +70,5 @@ class EditGraveyard extends Component
             // Delete related sections in the grave_sections table
             Sections::where('CemeteryID', $cemeteryId)->delete();
         }
-
-    
     }
-
-  
 }
