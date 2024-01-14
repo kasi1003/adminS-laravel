@@ -29,7 +29,10 @@ class AdminController extends Controller
 
         return view('graves.records');
     }
-    
+    public function quotationsFun()
+    {
+        return view('graves.quotas');
+    }
     
 
 }

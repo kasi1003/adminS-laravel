@@ -45,7 +45,7 @@ class BurialRecords extends Component
         $totalGraves = $cemetery ? $cemetery->TotalGraves : 0;
 
         // Debugging statements
-        dd($this->cemeteries_selected, $totalGraves, $cemetery);
+        //dd($this->cemeteries_selected, $totalGraves, $cemetery);
 
         // Generate an array of available grave numbers based on TotalGraves
         $this->availableGraves = range(1, $totalGraves);

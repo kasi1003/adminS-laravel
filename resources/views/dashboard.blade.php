@@ -16,14 +16,17 @@
                             </div>
                         </div>
                     </a>
-                    
+
                 </div>
                 <div class="col-md-6">
-                    <div class="card m-3">
-                        <div class="card-body mx-auto" style="height: 10rem; display:flex; align-items:center;">
-                            <h5 class="card-title">Manage Burial Records</h5>
+                    <a href="{{ route('grave.records') }}" class="card-link">
+
+                        <div class="card m-3">
+                            <div class="card-body mx-auto" style="height: 10rem; display:flex; align-items:center;">
+                                <h5 class="card-title">Manage Burial Records</h5>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-md-12">
                     <div class="card m-3">

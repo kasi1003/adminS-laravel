@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     //this is the line i was sayoing is wrong
     Route::get('/edit-graveyard', [AdminController::class, 'edit_graveyard'])->name('grave.edit');
     Route::get('/burial-records', [AdminController::class, 'burial_records'])->name('grave.records');
+    Route::get('/quotations', [AdminController::class, 'quotationsFun'])->name('grave.quotas');
 
     //administration route to add and modify the grave yards
     Route::get('/graveyard-admin', [AdminController::class, 'grave_admin'])->name('grave.admin');
