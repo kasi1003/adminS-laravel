@@ -10,7 +10,8 @@ class Towns extends Model
     use HasFactory;
     protected $table = 'towns';
     protected $fillable = [
-        'town_name',
-        'region_id',
+        'town_id',
+        'region_id', 
+        'name'
     ];
 }

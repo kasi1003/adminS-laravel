@@ -14,18 +14,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('cemetery', function (Blueprint $table) {
-            $table->id();
-            $table->string('CemeteryID')->nullable();
-            $table->string('Region')->nullable();
+            $table->increments('CemeteryID'); // Adding auto-increment primary key
             $table->string('CemeteryName')->nullable();
-            $table->string('Town')->nullable();
+            $table->unsignedInteger('Town')->nullable();
             $table->string('NumberOfSections')->nullable();
             $table->string('TotalGraves')->nullable();
             $table->string('AvailableGraves')->nullable();
-
+            $table->binary('SvgMap')->nullable(); // Adding blob column for SVG map, allowing NULL values
             $table->timestamps();
 
-
+            $table->foreign('Town')->references('town_id')->on('towns')->onDelete('cascade');
         });
     }
 

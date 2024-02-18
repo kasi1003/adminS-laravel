@@ -23,8 +23,9 @@
                             aria-label="Default select example" style="width:100%;" wire:model="region_selected">
                             <option selected>Select Region</option>
                             @foreach ($regions as $region)
-                                <option value="{{ $region->id }}">{{ $region->region_name }}</option>
+                                <option value="{{ $region->region_id }}">{{ $region->name }}</option>
                             @endforeach
+
                         </select>
 
                     </div>
@@ -35,15 +36,17 @@
                         <label for="townSelect" class="form-label">Town Location</label>
                     </div>
                     <div class="mb-3">
-                        <select id="townSelect" name="townLocation" class="form-select p-2" aria-label="Default select example" style="width:100%;" wire:model="town_selected">
+                        <select id="townSelect" name="townLocation" class="form-select p-2"
+                                aria-label="Default select example" style="width:100%;" wire:model="town_selected">
                             <option selected>Select Town</option>
                             @foreach ($towns as $town)
-                                <option value="{{ $town->id }}">{{ $town->town_name }}</option>
+                                <option value="{{ $town->town_id }}">{{ $town->town_name }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
                 
+
                 <div class="mb-3">
                     <div>
                         <label for="cemeteries_selected" class="form-label"> Cemetery</label>

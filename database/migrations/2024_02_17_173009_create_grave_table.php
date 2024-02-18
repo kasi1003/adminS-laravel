@@ -13,16 +13,24 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('grave_sections', function (Blueprint $table) {
+        Schema::create('grave', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
-            $table->string('SectionCode')->unique(); // Adding varchar column for section code
+            $table->string('SectionCode');
+             // Adding varchar column for section code
+            $table->unsignedInteger('GraveNum');
+            $table->tinyInteger('GraveStatus');
             $table->unsignedInteger('TotalGraves'); // Adding int column for total graves
             $table->unsignedInteger('AvailableGraves'); // Adding int column for available graves
-            $table->timestamps(); // Adding created_at and updated_at columns
+            $table->string('BuriedPersonsName');
+            $table->date('DateOfBirth');
+            $table->date('DateOfDeath');
+            $table->string('DeathCode');
 
-            // Adding foreign key constraint
+            $table->timestamps(); 
+
             $table->foreign('CemeteryID')->references('CemeteryID')->on('cemetery')->onDelete('cascade');
+            $table->foreign('SectionCode')->references('SectionCode')->on('grave_sections')->onDelete('cascade');
         });
     }
 
@@ -33,7 +41,6 @@ return new class extends Migration
      */
     public function down()
     {
-        
-        Schema::dropIfExists('grave_sections');
+        Schema::dropIfExists('grave');
     }
 };

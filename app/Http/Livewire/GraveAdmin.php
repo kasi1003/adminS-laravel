@@ -58,25 +58,25 @@ class GraveAdmin extends Component
     public function render()
     {
 
-
-        $regions = Regions::all();
-        $towns = Towns::all();
         $this->cemeteries = Cemeteries::all();
+        $regions = Regions::all();
+        $towns = [];
+
         //dd($this->cemeteries);
 
 
         //here we will get all the towns that are related to the region selected
         if ($this->region_selected != '') {
+
             $towns = Towns::where('region_id', $this->region_selected)->get();
+
+            // Debugging statement to check if towns are assigned to the variable
+            dd("After fetching towns", $towns);
         }
-
-
-
 
         return view('livewire.grave-admin', [
             'towns' => $towns,
             'regions' => $regions,
-
         ]);
     }
     public function updating($propertyName, $value)
@@ -120,10 +120,10 @@ class GraveAdmin extends Component
 
     public function addGrave()
     {
-        
 
-      
-        
+
+
+
 
 
         //cemetery id which will link to the sections
@@ -252,7 +252,7 @@ class GraveAdmin extends Component
 
     public function addSection()
     {
-        
+
 
 
         $section_id = count($this->sections) + 1;

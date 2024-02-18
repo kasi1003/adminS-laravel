@@ -31,7 +31,7 @@
                 <div class="col-md-12">
                     <div class="card m-3">
                         <div class="card-body mx-auto" style="height: 10rem ; display:flex; align-items:center;">
-                            <h5 class="card-title">Add Service provider</h5>
+                            <h5 class="card-title">Quotations</h5>
                         </div>
                     </div>
                 </div>

@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Regions extends Model
 {
+
     use HasFactory;
     protected $table = 'regions';
-    protected $fillable = [
-        'region_name'
-    ];
+protected $fillable =['region_id', 'name'];
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\BurialRecordsMod;
+use App\Models\Graves;
 use App\Models\Cemeteries;
 use App\Models\Regions;
 use App\Models\Sections;
@@ -78,8 +78,19 @@ class BurialRecords extends Component
     }
 
 
+    public function render()
+    {
+        $this->sections = Sections::all();
 
 
+        $buried_records = Graves::all();
+
+        return view('livewire.burial-records', [
+            'buried_records' => $buried_records,
+            'sectionOptions' => $this->getSectionOptions(),
+            'availableGraves' => $this->getAvailableGraves()
+        ]);
+    }
     public function getAvailableGraves()
     {
         $availableGraves = [];
@@ -97,21 +108,6 @@ class BurialRecords extends Component
         return $availableGraves;
     }
 
-
-
-    public function render()
-    {
-        $this->sections = Sections::all();
-
-
-        $buried_records = BurialRecordsMod::all();
-
-        return view('livewire.burial-records', [
-            'buried_records' => $buried_records,
-            'sectionOptions' => $this->getSectionOptions(),
-            'availableGraves' => $this->getAvailableGraves(),
-        ]);
-    }
     public function addRecord()
     {
         // Find the selected cemetery
@@ -136,8 +132,8 @@ class BurialRecords extends Component
                 'DeathNumber' => $deathNumber,
             ];
 
-            // Create a new BurialRecordsMod record
-            BurialRecordsMod::create($data);
+            // Create a new Grave record
+            Graves::create($data);
 
             // Call the method to update available grave numbers
             $this->load_data();
