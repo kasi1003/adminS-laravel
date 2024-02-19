@@ -8,10 +8,10 @@ use App\Models\Sections;
 use App\Models\Towns;
 use DB;
 use Livewire\Component;
+use Illuminate\Support\Facades\Http;
 
 class GraveAdmin extends Component
 {
-
     //variables
     public $region_selected;
     public $town_selected;
@@ -22,62 +22,58 @@ class GraveAdmin extends Component
     public $sections = [];
     public $addSections = true;
     public $cemeteries;
-
     public $editMode = false;
     public $selectedCemetery;
+    public $regions = [];
+    public $towns = [];
 
     public $editCemeteryName = false;
 
     //this function is only called once when the page loads
-    public function mount()
-    {
-        // Fetch the selected cemetery data based on the stored session data
-        $selectedCemeteryDetails = session('selectedCemeteryDetails');
-
-        if ($selectedCemeteryDetails) {
-            $this->region_selected = $selectedCemeteryDetails->Region;
-            $this->town_selected = $selectedCemeteryDetails->Town;
-            $this->cemeteries_selected = $selectedCemeteryDetails->CemeteryID;
-            $this->grave_name = $selectedCemeteryDetails->CemeteryName;
-
-            // Populate other properties similarly
-            // Set $editCemeteryName based on the condition
-            $this->editCemeteryName = $this->cemeteries_selected == 'other' || empty($this->selectedRowCemeteryName);
-
-            // Set $editMode to true when editing a row
-            $this->editMode = true;
-        }
-
-        // Clear the session data
-        session()->forget('selectedCemeteryDetails');
-    }
-    //here we will load the data from the db needed for the form to be populated
     public function load_data()
     {
+        try {
+            $response = Http::get('http://localhost:8000/api/regions');
+            if ($response->successful()) {
+                $this->regions = $response->json();
+            } else {
+                // Handle unsuccessful response
+                // You may log errors or set a default value for $this->regions
+                $this->regions = [];
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions
+            // Log errors or set a default value for $this->regions
+            $this->regions = [];
+        }
+    }
+
+    // Call load_data() method when the component mounts
+    public function mount()
+    {
+        $this->load_data();
     }
     public function render()
     {
 
-        $this->cemeteries = Cemeteries::all();
-        $regions = Regions::all();
-        $towns = [];
-
-        //dd($this->cemeteries);
-
-
-        //here we will get all the towns that are related to the region selected
-        if ($this->region_selected != '') {
-
-            $towns = Towns::where('region_id', $this->region_selected)->get();
-
-            // Debugging statement to check if towns are assigned to the variable
-            dd("After fetching towns", $towns);
-        }
-
         return view('livewire.grave-admin', [
-            'towns' => $towns,
-            'regions' => $regions,
+
+            'regions' => $this->regions
+
         ]);
+    }
+    public function updatedRegionSelected($regionId)
+    {
+        try {
+            $response = Http::get('http://localhost:8000/api/towns/' . $regionId);
+            if ($response->successful()) {
+                $this->towns = $response->json();
+            } else {
+                $this->towns = [];
+            }
+        } catch (\Exception $e) {
+            $this->towns = [];
+        }
     }
     public function updating($propertyName, $value)
     {
@@ -120,12 +116,6 @@ class GraveAdmin extends Component
 
     public function addGrave()
     {
-
-
-
-
-
-
         //cemetery id which will link to the sections
         $cem_id = count($this->cemeteries) + 1;
         $t_graves = 0;
@@ -195,8 +185,6 @@ class GraveAdmin extends Component
             Cemeteries::create($cem_data);
         }
 
-
-
         //adding the sections to the database
 
         foreach ($this->sections as $index => $sec) {
@@ -211,6 +199,25 @@ class GraveAdmin extends Component
                     'AvailableGraves' => $sec['AvailableGraves'],
                 ]
             );
+        }
+        //populate graves table
+        // Retrieve the newly inserted record from grave_sections
+        $newSection = Sections::where('CemeteryID', $cem_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($newSection) {
+            // Calculate GraveNum based on AvailableGraves
+            $availableGraves = $newSection->AvailableGraves;
+
+            for ($i = 1; $i <= $availableGraves; $i++) {
+                // Insert records into the graves table using raw SQL query
+                DB::insert('INSERT INTO graves (CemeteryID, SectionCode, GraveNum) VALUES (?, ?, ?)', [
+                    $newSection->CemeteryID,
+                    $newSection->SectionCode,
+                    $i,
+                ]);
+            }
         }
         // Clear Livewire component properties
         $this->region_selected = null;
@@ -228,6 +235,26 @@ class GraveAdmin extends Component
             'icon' => 'success',
             'iconColor' => 'green',
         ]);
+
+        //populate graves table
+        // Retrieve the newly inserted record from grave_sections
+        $newSection = Sections::where('CemeteryID', $cem_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($newSection) {
+            // Calculate GraveNum based on AvailableGraves
+            $availableGraves = $newSection->AvailableGraves;
+
+            for ($i = 1; $i <= $availableGraves; $i++) {
+                // Insert records into the graves table using raw SQL query
+                DB::insert('INSERT INTO graves (CemeteryID, SectionCode, GraveNum) VALUES (?, ?, ?)', [
+                    $newSection->CemeteryID,
+                    $newSection->SectionCode,
+                    $i,
+                ]);
+            }
+        }
 
         // Redirect to the same page after form submission
         return redirect()->to('/graveyard-admin');

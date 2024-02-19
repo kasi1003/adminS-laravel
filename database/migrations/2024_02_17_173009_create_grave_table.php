@@ -19,13 +19,13 @@ return new class extends Migration
             $table->string('SectionCode');
              // Adding varchar column for section code
             $table->unsignedInteger('GraveNum');
-            $table->tinyInteger('GraveStatus');
+            $table->tinyInteger('GraveStatus')->nullable();
             $table->unsignedInteger('TotalGraves'); // Adding int column for total graves
             $table->unsignedInteger('AvailableGraves'); // Adding int column for available graves
-            $table->string('BuriedPersonsName');
-            $table->date('DateOfBirth');
-            $table->date('DateOfDeath');
-            $table->string('DeathCode');
+            $table->string('BuriedPersonsName')->nullable();
+            $table->date('DateOfBirth')->nullable();
+            $table->date('DateOfDeath')->nullable();
+            $table->string('DeathCode')->nullable();
 
             $table->timestamps(); 
 
