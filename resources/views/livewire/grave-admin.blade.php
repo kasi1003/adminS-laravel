@@ -7,9 +7,11 @@
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
+                            @if ($cemeteries)
+                                @foreach ($cemeteries as $cemetery)
+                                    <option value="{{ $cemetery[CemeteryID] }}">{{ $cemetery[CemeteryName] }}</option>
+                                @endforeach
+                            @endif
                         </ul>
                     </div>
                 @endif
@@ -23,7 +25,7 @@
                             aria-label="Default select example" style="width:100%;" wire:model="region_selected">
                             <option selected>Select Region</option>
                             @foreach ($regions as $region)
-                                <option value="{{ $region->region_id }}">{{ $region->name }}</option>
+                                <option value="{{ $region['region_id'] }}">{{ $region['name'] }}</option>
                             @endforeach
 
                         </select>
@@ -37,15 +39,15 @@
                     </div>
                     <div class="mb-3">
                         <select id="townSelect" name="townLocation" class="form-select p-2"
-                                aria-label="Default select example" style="width:100%;" wire:model="town_selected">
+                            aria-label="Default select example" style="width:100%;" wire:model="town_selected">
                             <option selected>Select Town</option>
                             @foreach ($towns as $town)
-                                <option value="{{ $town->town_id }}">{{ $town->town_name }}</option>
+                                <option value="{{ $town[town_id] }}">{{ $town[town_name] }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-                
+
 
                 <div class="mb-3">
                     <div>
@@ -56,8 +58,8 @@
                             style="width:100%;" wire:model="cemeteries_selected">
 
                             <option selected>Select Cemetery</option>
-                            @foreach ($cemeteries as $cemetry)
-                                <option value="{{ $cemetry->CemeteryID }}">{{ $cemetry->CemeteryName }}</option>
+                            @foreach ($cemeteries as $cemetery)
+                                <option value="{{ $cemetery[CemeteryID] }}">{{ $cemetery[CemeteryName] }}</option>
                             @endforeach
                             <option value="other">Other</option>
                         </select>

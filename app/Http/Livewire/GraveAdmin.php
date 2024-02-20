@@ -33,8 +33,10 @@ class GraveAdmin extends Component
     public function load_data()
     {
         try {
+            // Make a GET request to the API endpoint
             $response = Http::get('http://localhost:8000/api/regions');
             if ($response->successful()) {
+                // Update Livewire property with received data
                 $this->regions = $response->json();
             } else {
                 // Handle unsuccessful response
@@ -56,11 +58,7 @@ class GraveAdmin extends Component
     public function render()
     {
 
-        return view('livewire.grave-admin', [
-
-            'regions' => $this->regions
-
-        ]);
+        return view('livewire.grave-admin');
     }
     public function updatedRegionSelected($regionId)
     {
@@ -139,7 +137,6 @@ class GraveAdmin extends Component
 
 
             $cem_data = [
-                'Region' => $this->region_selected,
                 'CemeteryName' => $cem_name,
                 'Town' => $this->town_selected,
                 'NumberOfSections' => count($this->sections),
@@ -168,96 +165,52 @@ class GraveAdmin extends Component
                 ]);
             }
         } else {
-            // Create a new cemetery
-            $cem_name = $this->grave_name;
-            $cem_id = count($this->cemeteries) + 1;
-
-            $cem_data = [
-                'Region' => $this->region_selected,
-                'CemeteryName' => $cem_name,
-                'Town' => $this->town_selected,
-                'NumberOfSections' => count($this->sections),
-                'TotalGraves' => $t_graves,
-                'AvailableGraves' => $t_graves,
-                'CemeteryID' => $cem_id,
+            // Prepare data to send to the API
+            $data = [
+                'grave_name' => $this->grave_name,
+                'town_selected' => $this->town_selected,
+                'grave_number' => $this->grave_number,
+                'total_graves' => $this->number_of_graves,
+                'sections' => $this->sections,
             ];
 
-            Cemeteries::create($cem_data);
-        }
+            try {
+                // Make a POST request to the API endpoint
+                $response = Http::post('http://localhost:8000/api/cemeteryPost', $data);
 
-        //adding the sections to the database
+                if ($response->successful()) {
+                    // Clear Livewire component properties
+                    $this->region_selected = null;
+                    $this->town_selected = null;
+                    $this->cemeteries_selected = null;
+                    $this->editCemeteryName = false;
+                    $this->grave_name = null;
+                    $this->grave_number = null;
+                    $this->number_of_graves = null;
+                    $this->sections = [];
 
-        foreach ($this->sections as $index => $sec) {
-            // Calculate the section ID starting from 1
-            $sectionID = $index + 1;
+                    // Dispatch a SweetAlert message for successful submission
+                    $this->dispatchBrowserEvent('swal', [
+                        'title' => 'Grave Yard Added',
+                        'icon' => 'success',
+                        'iconColor' => 'green',
+                    ]);
 
-            Sections::updateOrCreate(
-                ['CemeteryID' => $cem_id, 'SectionID' => $sectionID],
-                [
-                    'SectionCode' => 'Section ' . $sectionID,
-                    'TotalGraves' => $sec['TotalGraves'],
-                    'AvailableGraves' => $sec['AvailableGraves'],
-                ]
-            );
-        }
-        //populate graves table
-        // Retrieve the newly inserted record from grave_sections
-        $newSection = Sections::where('CemeteryID', $cem_id)
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        if ($newSection) {
-            // Calculate GraveNum based on AvailableGraves
-            $availableGraves = $newSection->AvailableGraves;
-
-            for ($i = 1; $i <= $availableGraves; $i++) {
-                // Insert records into the graves table using raw SQL query
-                DB::insert('INSERT INTO graves (CemeteryID, SectionCode, GraveNum) VALUES (?, ?, ?)', [
-                    $newSection->CemeteryID,
-                    $newSection->SectionCode,
-                    $i,
-                ]);
+                    // Redirect to the same page after form submission
+                    return redirect()->to('/graveyard-admin');
+                } else {
+                    // Handle unsuccessful API response
+                    // You may want to log errors or display an error message to the user
+                    // For now, we'll just return back to the same page
+                    return back()->withErrors(['message' => 'Failed to submit form. Please try again.']);
+                }
+            } catch (\Exception $e) {
+                // Handle exceptions
+                // Log errors or display an error message to the user
+                // For now, we'll just return back to the same page
+                return back()->withErrors(['message' => 'An unexpected error occurred. Please try again.']);
             }
         }
-        // Clear Livewire component properties
-        $this->region_selected = null;
-        $this->town_selected = null;
-        $this->cemeteries_selected = null;
-        $this->editCemeteryName = false;
-        $this->grave_name = null;
-        $this->grave_number = null;
-        $this->number_of_graves = null;
-        $this->sections = [];
-
-        // Dispatch a SweetAlert message for successful submission
-        $this->dispatchBrowserEvent('swal', [
-            'title' => 'Grave Yard Added',
-            'icon' => 'success',
-            'iconColor' => 'green',
-        ]);
-
-        //populate graves table
-        // Retrieve the newly inserted record from grave_sections
-        $newSection = Sections::where('CemeteryID', $cem_id)
-            ->orderBy('created_at', 'desc')
-            ->first();
-
-        if ($newSection) {
-            // Calculate GraveNum based on AvailableGraves
-            $availableGraves = $newSection->AvailableGraves;
-
-            for ($i = 1; $i <= $availableGraves; $i++) {
-                // Insert records into the graves table using raw SQL query
-                DB::insert('INSERT INTO graves (CemeteryID, SectionCode, GraveNum) VALUES (?, ?, ?)', [
-                    $newSection->CemeteryID,
-                    $newSection->SectionCode,
-                    $i,
-                ]);
-            }
-        }
-
-        // Redirect to the same page after form submission
-        return redirect()->to('/graveyard-admin');
     }
     public function updated($propertyName)
     {
