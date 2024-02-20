@@ -9,6 +9,6 @@ class Cemeteries extends Model
 {
     use HasFactory;
     protected $table = 'cemetery';
-    protected $fillable = ['CemeteryID', 'CemeteryName', 'Town', 'NumberOfSections', 'TotalGraves', 'AvailableGraves', 'SvgMap'];
+    protected $fillable = ['CemeteryName', 'Town', 'NumberOfSections', 'TotalGraves', 'AvailableGraves', 'SvgMap'];
 
 }

@@ -20,8 +20,6 @@ return new class extends Migration
              // Adding varchar column for section code
             $table->unsignedInteger('GraveNum');
             $table->tinyInteger('GraveStatus')->nullable();
-            $table->unsignedInteger('TotalGraves'); // Adding int column for total graves
-            $table->unsignedInteger('AvailableGraves'); // Adding int column for available graves
             $table->string('BuriedPersonsName')->nullable();
             $table->date('DateOfBirth')->nullable();
             $table->date('DateOfDeath')->nullable();

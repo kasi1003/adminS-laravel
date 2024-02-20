@@ -29,7 +29,7 @@ class RegionSeeder extends Seeder
             ['name' => 'Erongo'],
             ['name' => 'Khomas'],
             ['name' => 'Hardap'],
-            ['name' => 'Karas'],
+            ['name' => 'Karas']
         ];
 
         // Insert data into regions table

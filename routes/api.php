@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\TownController;
 use App\Http\Controllers\Api\CemeteriesController;
 use App\Http\Controllers\Api\GraveyardController;
+use App\Http\Controllers\Api\GraveController;
 
 
 /*
@@ -27,3 +28,4 @@ Route::get('/regions', [RegionController::class, 'index']);
 Route::get('/towns/{region_id}', [TownController::class, 'index']);
 Route::get('/cemeteries/names', [CemeteriesController::class, 'getCemeteryNames']);
 Route::post('/cemeteryPost', [GraveyardController::class, 'store']);
+Route::put('/gravesUpdate/{CemeteryID}/{SectionCode}/{GraveNum}', [GraveController::class, 'updateGrave']);
