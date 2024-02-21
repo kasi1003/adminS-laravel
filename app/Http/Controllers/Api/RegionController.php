@@ -10,7 +10,7 @@ class RegionController extends Controller
 {
     public function index()
     {
-        $regions = Regions::select('region_id','name')->get();
+        $regions = Regions::select('name')->get();
         return response()->json($regions);
     }
 }

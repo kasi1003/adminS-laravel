@@ -19,14 +19,14 @@ class GraveAdmin extends Component
     public $grave_number;
     public $cemeteries_selected;
     public $number_of_graves;
-    public $sections = [];
     public $addSections = true;
     public $cemeteries;
     public $editMode = false;
     public $selectedCemetery;
+    public $sections = [];
     public $regions = [];
     public $towns = [];
-
+    public $isLoading = true;
     public $editCemeteryName = false;
 
     //this function is only called once when the page loads
@@ -35,6 +35,7 @@ class GraveAdmin extends Component
         try {
             // Make a GET request to the API endpoint
             $response = Http::get('http://localhost:8000/api/regions');
+            
             if ($response->successful()) {
                 // Update Livewire property with received data
                 $this->regions = $response->json();
@@ -47,13 +48,18 @@ class GraveAdmin extends Component
             // Handle exceptions
             // Log errors or set a default value for $this->regions
             $this->regions = [];
+        } finally {
+            // Set isLoading to false once the data has been loaded (success or failure)
+            $this->isLoading = false;
         }
+        
     }
 
     // Call load_data() method when the component mounts
     public function mount()
     {
         $this->load_data();
+        
     }
     public function render()
     {
@@ -100,16 +106,6 @@ class GraveAdmin extends Component
                 $this->editCemeteryName = false;
             }
         }
-    }
-    public function rules()
-    {
-        return [
-            'region_selected' => 'required',
-            'town_selected' => 'required',
-            'cemeteries_selected' => 'required',
-            'grave_name' => 'required_if:cemeteries_selected,other',
-            // Add more rules for other properties if needed
-        ];
     }
 
     public function addGrave()
@@ -232,23 +228,19 @@ class GraveAdmin extends Component
 
     public function addSection()
     {
-
-
-
+        // Add a new section to the $sections array
         $section_id = count($this->sections) + 1;
 
         array_push($this->sections, [
-
-            'CemeteryID' => $this->cemeteries_selected,
-            'SectionCode' => $section_id,
+            'SectionCode' => 'Section ' . $section_id, // You may need to adjust this based on your API requirements
             'TotalGraves' => $this->number_of_graves,
             'AvailableGraves' => $this->number_of_graves,
         ]);
 
-        $this->number_of_graves = "";
+        // Clear the input field after adding the section
+        $this->number_of_graves = null;
 
-
-
+        // Dispatch a success message
         $this->dispatchBrowserEvent('swal', [
             'title' => 'Section Added',
             'icon' => 'success',
