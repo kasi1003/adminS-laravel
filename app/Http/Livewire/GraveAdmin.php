@@ -30,40 +30,38 @@ class GraveAdmin extends Component
     public $editCemeteryName = false;
 
     //this function is only called once when the page loads
-    
+
     public function mount()
     {
         $this->load_data();
-        
+
     }
-    public function load_data()
-    {
+     //here we will load the data from the db needed for the form to be populated
+     public function load_data()
+     {
         $this->regions = Regions::all();
-        $this->cemeteries = Cemeteries::all(); // Load cemeteries data
-
-
-        
-    }
-
-    // Call load_data() method when the component mounts
-    public function render()
-    {
-
-        return view('livewire.grave-admin', [
-            'regions' => $this->regions,
-            'cemeteries' => $this->cemeteries
-        ]);  
-      }
+        $this->cemeteries = Cemeteries::all();
+     }
+     public function render()
+     {
+         return view('livewire.grave-admin', [
+             'regions' => $this->regions,
+             'towns' => $this->towns,
+         ]);
+     }
+     public function updatedRegionSelected($value)
+     {
+         if ($value) {
+             // Make an API request to fetch towns based on the selected region
+             $response = Http::get("http://localhost:8000/api/towns/{$value}");
+             
+             // Update the towns dropdown options with the response data
+             $this->towns = $response->json();
+             
+         }
+     }
     // Livewire Component
-public function updatedRegionSelected($value)
-{
-    // Make an API request to fetch towns based on the selected region
-    $response = Http::get("http://localhost:8000/api/towns/{$value}");
-
-    // Update the towns dropdown options with the response data
-    $this->towns = $response->json();
-    dd($this->towns);
-}
+    
 
     public function updating($propertyName, $value)
     {

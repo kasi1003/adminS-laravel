@@ -37,21 +37,21 @@
 
                 </div>
                 <!-- Blade View -->
-<div class="mb-3">
-    <div>
-        <label for="townSelect" class="form-label">Town Location</label>
-    </div>
-    <div class="mb-3">
-        <select id="townSelect" name="townLocation" class="form-select p-2"
-            aria-label="Default select example" style="width:100%;" wire:model="town_selected" wire:change="updatedRegionSelected($event.target.value)">
+                <div class="mb-3">
+                    <div>
+                        <label for="townSelect" class="form-label">Town Location</label>
+                    </div>
+                    <div class="mb-3">
+                    <select id="townSelect" name="townLocation" class="form-select p-2"
+            aria-label="Default select example" style="width:100%;" wire:model="town_selected">
             <option selected>Select Town</option>
+            <!-- Loop through the towns data to populate the dropdown -->
             @foreach ($towns as $town)
-            <option value="{{ $town['name'] }}">{{ $town['name'] }}</option>
-            @endforeach
+    <option value="{{ $town->town_id }}">{{ $town->name }}</option>
+@endforeach
         </select>
-    </div>
-</div>
-
+                    </div>
+                </div>
 
 
                 <div class="mb-3">
@@ -87,15 +87,16 @@
                         placeholder="Enter Number of Cemetery Sections" wire:model="grave_number" />
                 </div>
                 <!--if user puts the numer of sections in cemetery, it should display the same number of inputs with the section code placeholder-->
-                @if (count($this->sections) < $grave_number) <div class="mb-3" id="gravePerSecContainer">
+                @if (count($this->sections) < $grave_number) 
+                <div class="mb-3" id="gravePerSecContainer">
                     <label for="numberOfGraves" class="form-label">Graves in section
                         {{ count($sections) > 0 ? count($sections) + 1 : 1 }}</label>
 
                     <input type="number" class="form-control" id="numberOfGraves" name="numberOfGraves"
                         placeholder="Enter Number of Graves for section" wire:model="number_of_graves" />
 
-        </div>
-        @endif
+                </div>
+                @endif
 
 
         @if (count($this->sections) == $grave_number && count($this->sections) > 0)

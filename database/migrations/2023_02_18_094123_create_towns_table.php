@@ -21,6 +21,7 @@ return new class extends Migration
 
             // Adding foreign key constraint
             $table->foreign('region_id')->references('region_id')->on('regions')->onDelete('cascade');
+            $table->index('region_id');
         });
     }
 
