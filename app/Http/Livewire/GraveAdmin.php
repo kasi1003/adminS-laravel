@@ -30,55 +30,41 @@ class GraveAdmin extends Component
     public $editCemeteryName = false;
 
     //this function is only called once when the page loads
-    public function load_data()
-    {
-        try {
-            // Make a GET request to the API endpoint
-            $response = Http::get('http://localhost:8000/api/regions');
-            
-            if ($response->successful()) {
-                // Update Livewire property with received data
-                $this->regions = $response->json();
-            } else {
-                // Handle unsuccessful response
-                // You may log errors or set a default value for $this->regions
-                $this->regions = [];
-            }
-        } catch (\Exception $e) {
-            // Handle exceptions
-            // Log errors or set a default value for $this->regions
-            $this->regions = [];
-        } finally {
-            // Set isLoading to false once the data has been loaded (success or failure)
-            $this->isLoading = false;
-        }
-        
-    }
-
-    // Call load_data() method when the component mounts
+    
     public function mount()
     {
         $this->load_data();
         
     }
+    public function load_data()
+    {
+        $this->regions = Regions::all();
+        $this->cemeteries = Cemeteries::all(); // Load cemeteries data
+
+
+        
+    }
+
+    // Call load_data() method when the component mounts
     public function render()
     {
 
-        return view('livewire.grave-admin');
-    }
-    public function updatedRegionSelected($regionId)
-    {
-        try {
-            $response = Http::get('http://localhost:8000/api/towns/' . $regionId);
-            if ($response->successful()) {
-                $this->towns = $response->json();
-            } else {
-                $this->towns = [];
-            }
-        } catch (\Exception $e) {
-            $this->towns = [];
-        }
-    }
+        return view('livewire.grave-admin', [
+            'regions' => $this->regions,
+            'cemeteries' => $this->cemeteries
+        ]);  
+      }
+    // Livewire Component
+public function updatedRegionSelected($value)
+{
+    // Make an API request to fetch towns based on the selected region
+    $response = Http::get("http://localhost:8000/api/towns/{$value}");
+
+    // Update the towns dropdown options with the response data
+    $this->towns = $response->json();
+    dd($this->towns);
+}
+
     public function updating($propertyName, $value)
     {
         if ($propertyName === 'cemeteries_selected') {

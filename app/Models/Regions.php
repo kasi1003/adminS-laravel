@@ -10,5 +10,6 @@ class Regions extends Model
 
     use HasFactory;
     protected $table = 'regions';
-protected $fillable =['region_id', 'name'];
+    protected $primaryKey = 'region_id';
+    protected $fillable = ['name'];
 }

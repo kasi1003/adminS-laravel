@@ -36,21 +36,22 @@
                     </div>
 
                 </div>
-                <div class="mb-3">
-                    <div>
-                        <label for="townSelect" class="form-label">Town Location</label>
-                    </div>
-                    <div class="mb-3">
-                        <select id="townSelect" name="townLocation" class="form-select p-2"
-                            aria-label="Default select example" style="width:100%;" wire:model="town_selected">
-                            <option selected>Select Town</option>
-@foreach ($towns as $town)
-<option value="{{ $town->town_id }}">{{ $town->town_name }}</option>
-@endforeach
+                <!-- Blade View -->
+<div class="mb-3">
+    <div>
+        <label for="townSelect" class="form-label">Town Location</label>
+    </div>
+    <div class="mb-3">
+        <select id="townSelect" name="townLocation" class="form-select p-2"
+            aria-label="Default select example" style="width:100%;" wire:model="town_selected" wire:change="updatedRegionSelected($event.target.value)">
+            <option selected>Select Town</option>
+            @foreach ($towns as $town)
+            <option value="{{ $town['name'] }}">{{ $town['name'] }}</option>
+            @endforeach
+        </select>
+    </div>
+</div>
 
-                        </select>
-                    </div>
-                </div>
 
 
                 <div class="mb-3">
