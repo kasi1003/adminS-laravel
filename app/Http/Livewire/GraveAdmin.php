@@ -41,56 +41,53 @@ class GraveAdmin extends Component
      {
         $this->regions = Regions::all();
         $this->cemeteries = Cemeteries::all();
+        
      }
      public function render()
      {
+        $towns = Towns::all();
+        //here we will get all the towns that are related to the region selected
+        if ($this->region_selected != '') {
+            $towns = Towns::where('region_id', $this->region_selected)->get();
+        }
+
          return view('livewire.grave-admin', [
              'regions' => $this->regions,
-             'towns' => $this->towns,
+             'towns' => $towns,
          ]);
      }
-     public function updatedRegionSelected($value)
-     {
-         if ($value) {
-             // Make an API request to fetch towns based on the selected region
-             $response = Http::get("http://localhost:8000/api/towns/{$value}");
-             
-             // Update the towns dropdown options with the response data
-             $this->towns = $response->json();
-             
-         }
-     }
-    // Livewire Component
+   
+
     
 
-    public function updating($propertyName, $value)
-    {
-        if ($propertyName === 'cemeteries_selected') {
-            if ($value != 'other') {
-                // Existing cemetery selected, allow editing of cemetery name
-                $this->editCemeteryName = true;
-
-                // Fetch default data for the selected cemetery and set Livewire properties
-                $selectedCemetery = Cemeteries::find($value); // Replace with your actual model
-                if ($selectedCemetery) {
-                    $this->region_selected = $selectedCemetery->Region;
-                    $this->town_selected = $selectedCemetery->Town;
-
-                    // Populate the number_of_graves input only if it's null
-                    if ($this->number_of_graves === null) {
-                        $this->number_of_graves = $selectedCemetery->defaultNumberOfGraves;
-                    }
-
-                    // Other properties are updated similarly
-
-                    $this->grave_name = $selectedCemetery->CemeteryName;
-                }
-            } else {
-                // 'Other' selected, disable editing of cemetery name
-                $this->editCemeteryName = false;
-            }
-        }
-    }
+     public function updating($propertyName, $value)
+     {
+         if ($propertyName === 'cemeteries_selected') {
+             if ($value != 'other') {
+                 // Existing cemetery selected, allow editing of cemetery name
+                 $this->editCemeteryName = true;
+ 
+                 // Fetch default data for the selected cemetery and set Livewire properties
+                 $selectedCemetery = Cemeteries::find($value); // Replace with your actual model
+                 if ($selectedCemetery) {
+                     $this->region_selected = $selectedCemetery->Region;
+                     $this->town_selected = $selectedCemetery->Town;
+ 
+                     // Populate the number_of_graves input only if it's null
+                     if ($this->number_of_graves === null) {
+                         $this->number_of_graves = $selectedCemetery->defaultNumberOfGraves;
+                     }
+ 
+                     // Other properties are updated similarly
+ 
+                     $this->grave_name = $selectedCemetery->CemeteryName;
+                 }
+             } else {
+                 // 'Other' selected, disable editing of cemetery name
+                 $this->editCemeteryName = false;
+             }
+         }
+     }
 
     public function addGrave()
     {
@@ -146,17 +143,23 @@ class GraveAdmin extends Component
             }
         } else {
             // Prepare data to send to the API
-            $data = [
+            /* $data = [
                 'grave_name' => $this->grave_name,
                 'town_selected' => $this->town_selected,
                 'grave_number' => $this->grave_number,
                 'total_graves' => $this->number_of_graves,
                 'sections' => $this->sections,
-            ];
+            ]; */
 
             try {
                 // Make a POST request to the API endpoint
-                $response = Http::post('http://localhost:8000/api/cemeteryPost', $data);
+                $response = Http::post('http://localhost:8000/api/cemeteryPost', [
+                    'grave_name' => $this->grave_name,
+                    'town_selected' => $this->town_selected,
+                    'grave_number' => $this->grave_number,
+                    'total_graves' => $this->number_of_graves,
+                    'sections' => $this->sections,
+                ]);
 
                 if ($response->successful()) {
                     // Clear Livewire component properties
@@ -216,6 +219,8 @@ class GraveAdmin extends Component
         $section_id = count($this->sections) + 1;
 
         array_push($this->sections, [
+            
+            'CemeteryID' => $this->cemeteries_selected,
             'SectionCode' => 'Section ' . $section_id, // You may need to adjust this based on your API requirements
             'TotalGraves' => $this->number_of_graves,
             'AvailableGraves' => $this->number_of_graves,

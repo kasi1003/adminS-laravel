@@ -14,6 +14,7 @@ class GraveyardController extends Controller
     {
         // Validate the incoming request if necessary
 // Create a new cemetery record
+        
         $cemetery = Cemeteries::create([
             'CemeteryName' => $request->input('grave_name'),
             'Town' => $request->input('town_selected'),

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CemeteriesController;
 use App\Http\Controllers\Api\GraveyardController;
 use App\Http\Controllers\Api\GraveController;
 
+use App\Http\Controllers\Api\GraveApi;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 
 });
-Route::get('/regions', [RegionController::class, 'index']);
-Route::get('/towns/{region_id}', [TownController::class, 'index']);
-Route::get('/cemeteries/names', [CemeteriesController::class, 'getCemeteryNames']);
-Route::post('/cemeteryPost', [GraveyardController::class, 'store']);
-Route::put('/gravesUpdate/{CemeteryID}/{SectionCode}/{GraveNum}', [GraveController::class, 'updateGrave']);
+Route::get('/regions', [GraveApi::class, 'showRegions'])->name('region');
+Route::get('/towns/{region_id}', [GraveApi::class, 'showTowns'])->name('town');
+
+Route::get('/cemNames', [GraveApi::class, 'getCemeteryNames'])->name('cemNames');
+Route::post('/cemeteryPost', [GraveApi::class, 'store'])->name('cemeteryPost');
+Route::put('/gravesUpdate/{CemeteryID}/{SectionCode}/{GraveNum}', [GraveApi::class, 'updateGrave'])->name('gravesUpdate');
+Route::delete('/cemDelete/{CemeteryID}',[GraveApi::class, 'deleteGraveyard'])->name('cemDelete');
