@@ -34,60 +34,58 @@ class GraveAdmin extends Component
     public function mount()
     {
         $this->load_data();
-
     }
-     //here we will load the data from the db needed for the form to be populated
-     public function load_data()
-     {
+    //here we will load the data from the db needed for the form to be populated
+    public function load_data()
+    {
         $this->regions = Regions::all();
         $this->cemeteries = Cemeteries::all();
-        
-     }
-     public function render()
-     {
+    }
+    public function render()
+    {
         $towns = Towns::all();
         //here we will get all the towns that are related to the region selected
         if ($this->region_selected != '') {
             $towns = Towns::where('region_id', $this->region_selected)->get();
         }
 
-         return view('livewire.grave-admin', [
-             'regions' => $this->regions,
-             'towns' => $towns,
-         ]);
-     }
-   
+        return view('livewire.grave-admin', [
+            'regions' => $this->regions,
+            'towns' => $towns,
+        ]);
+    }
 
-    
 
-     public function updating($propertyName, $value)
-     {
-         if ($propertyName === 'cemeteries_selected') {
-             if ($value != 'other') {
-                 // Existing cemetery selected, allow editing of cemetery name
-                 $this->editCemeteryName = true;
- 
-                 // Fetch default data for the selected cemetery and set Livewire properties
-                 $selectedCemetery = Cemeteries::find($value); // Replace with your actual model
-                 if ($selectedCemetery) {
-                     $this->region_selected = $selectedCemetery->Region;
-                     $this->town_selected = $selectedCemetery->Town;
- 
-                     // Populate the number_of_graves input only if it's null
-                     if ($this->number_of_graves === null) {
-                         $this->number_of_graves = $selectedCemetery->defaultNumberOfGraves;
-                     }
- 
-                     // Other properties are updated similarly
- 
-                     $this->grave_name = $selectedCemetery->CemeteryName;
-                 }
-             } else {
-                 // 'Other' selected, disable editing of cemetery name
-                 $this->editCemeteryName = false;
-             }
-         }
-     }
+
+
+    public function updating($propertyName, $value)
+    {
+        if ($propertyName === 'cemeteries_selected') {
+            if ($value != 'other') {
+                // Existing cemetery selected, allow editing of cemetery name
+                $this->editCemeteryName = true;
+
+                // Fetch default data for the selected cemetery and set Livewire properties
+                $selectedCemetery = Cemeteries::find($value); // Replace with your actual model
+                if ($selectedCemetery) {
+                    $this->region_selected = $selectedCemetery->Region;
+                    $this->town_selected = $selectedCemetery->Town;
+
+                    // Populate the number_of_graves input only if it's null
+                    if ($this->number_of_graves === null) {
+                        $this->number_of_graves = $selectedCemetery->defaultNumberOfGraves;
+                    }
+
+                    // Other properties are updated similarly
+
+                    $this->grave_name = $selectedCemetery->CemeteryName;
+                }
+            } else {
+                // 'Other' selected, disable editing of cemetery name
+                $this->editCemeteryName = false;
+            }
+        }
+    }
 
     public function addGrave()
     {
@@ -143,57 +141,37 @@ class GraveAdmin extends Component
             }
         } else {
             // Prepare data to send to the API
-            /* $data = [
+
+            // Make a POST request to the API endpoint
+            $response = Http::post('http://localhost:8000/api/cemeteryPost', [
                 'grave_name' => $this->grave_name,
                 'town_selected' => $this->town_selected,
                 'grave_number' => $this->grave_number,
                 'total_graves' => $this->number_of_graves,
                 'sections' => $this->sections,
-            ]; */
+            ]);
+            // Check if the API request was successful
+            if ($response->successful()) {
+                // Reset form data after successful submission
+                $this->resetForm();
 
-            try {
-                // Make a POST request to the API endpoint
-                $response = Http::post('http://localhost:8000/api/cemeteryPost', [
-                    'grave_name' => $this->grave_name,
-                    'town_selected' => $this->town_selected,
-                    'grave_number' => $this->grave_number,
-                    'total_graves' => $this->number_of_graves,
-                    'sections' => $this->sections,
-                ]);
-
-                if ($response->successful()) {
-                    // Clear Livewire component properties
-                    $this->region_selected = null;
-                    $this->town_selected = null;
-                    $this->cemeteries_selected = null;
-                    $this->editCemeteryName = false;
-                    $this->grave_name = null;
-                    $this->grave_number = null;
-                    $this->number_of_graves = null;
-                    $this->sections = [];
-
-                    // Dispatch a SweetAlert message for successful submission
-                    $this->dispatchBrowserEvent('swal', [
-                        'title' => 'Grave Yard Added',
-                        'icon' => 'success',
-                        'iconColor' => 'green',
-                    ]);
-
-                    // Redirect to the same page after form submission
-                    return redirect()->to('/graveyard-admin');
-                } else {
-                    // Handle unsuccessful API response
-                    // You may want to log errors or display an error message to the user
-                    // For now, we'll just return back to the same page
-                    return back()->withErrors(['message' => 'Failed to submit form. Please try again.']);
-                }
-            } catch (\Exception $e) {
-                // Handle exceptions
-                // Log errors or display an error message to the user
-                // For now, we'll just return back to the same page
-                return back()->withErrors(['message' => 'An unexpected error occurred. Please try again.']);
+                // Optionally, display a success message to the user
+                session()->flash('success', 'Graveyard and graves added successfully');
+            } else {
+                // Optionally, handle errors and display a message to the user
+                session()->flash('error', 'Failed to add graveyard and graves');
             }
         }
+    }
+    private function resetForm()
+    {
+        $this->region_selected = null;
+        $this->town_selected = null;
+        $this->cemeteries_selected = null;
+        $this->grave_name = null;
+        $this->grave_number = null;
+        $this->sections = [];
+        $this->number_of_graves = null;
     }
     public function updated($propertyName)
     {
@@ -219,7 +197,7 @@ class GraveAdmin extends Component
         $section_id = count($this->sections) + 1;
 
         array_push($this->sections, [
-            
+
             'CemeteryID' => $this->cemeteries_selected,
             'SectionCode' => 'Section ' . $section_id, // You may need to adjust this based on your API requirements
             'TotalGraves' => $this->number_of_graves,
