@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
             $table->string('SectionCode')->unique(false); // Adding varchar column for section code
+            $table->unsignedInteger('Rows')->unique(false);; // Adding int column for total graves
+
             $table->unsignedInteger('TotalGraves'); // Adding int column for total graves
             $table->unsignedInteger('AvailableGraves'); // Adding int column for available graves
             $table->timestamps(); // Adding created_at and updated_at columns

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
             $table->string('SectionCode');
-             // Adding varchar column for section code
+            $table->unsignedInteger('Rows');
             $table->unsignedInteger('GraveNum');
             $table->tinyInteger('GraveStatus')->nullable();
             $table->string('BuriedPersonsName')->nullable();
@@ -25,10 +25,12 @@ return new class extends Migration
             $table->date('DateOfDeath')->nullable();
             $table->string('DeathCode')->nullable();
 
-            $table->timestamps(); 
+            $table->timestamps();
 
             $table->foreign('CemeteryID')->references('CemeteryID')->on('cemetery')->onDelete('cascade');
             $table->foreign('SectionCode')->references('SectionCode')->on('grave_sections')->onDelete('cascade');
+            $table->foreign('Rows')->references('Rows')->on('grave_sections')->onDelete('cascade');
+
         });
     }
 
