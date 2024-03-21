@@ -13,23 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('grave', function (Blueprint $table) {
+        Schema::create('rows', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
             $table->string('SectionCode');
             $table->unsignedInteger('RowID');
             $table->unsignedInteger('GraveNum');
             $table->tinyInteger('GraveStatus')->nullable();
-            $table->string('BuriedPersonsName')->nullable();
-            $table->date('DateOfBirth')->nullable();
-            $table->date('DateOfDeath')->nullable();
-            $table->string('DeathCode')->nullable();
-
             $table->timestamps();
 
             $table->foreign('CemeteryID')->references('CemeteryID')->on('cemetery')->onDelete('cascade');
             $table->foreign('SectionCode')->references('SectionCode')->on('grave_sections')->onDelete('cascade');
-
         });
     }
 
@@ -40,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('grave');
+        Schema::dropIfExists('rows');
     }
 };

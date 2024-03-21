@@ -28,30 +28,41 @@ class GraveAdmin extends Component
     public $towns = [];
     public $isLoading = true;
     public $editCemeteryName = false;
+    public $number_of_rows = [];
+    public $search = '';
 
     //this function is only called once when the page loads
 
     public function mount()
     {
         $this->load_data();
+        $this->loadTowns();
+
+
+    }
+    public function loadTowns()
+    {
+        $this->isLoading = true;
+        $this->towns = Towns::where('name', 'like', '%' . $this->search . '%')->get();
+        $this->isLoading = false;
+
     }
     //here we will load the data from the db needed for the form to be populated
     public function load_data()
     {
+        $this->number_of_rows = [];
         $this->regions = Regions::all();
         $this->cemeteries = Cemeteries::all();
+
+        $this->towns = Towns::all();
+
     }
     public function render()
     {
-        $towns = Towns::all();
-        //here we will get all the towns that are related to the region selected
-        if ($this->region_selected != '') {
-            $towns = Towns::where('region_id', $this->region_selected)->get();
-        }
-
+       
+        $this->loadTowns();
         return view('livewire.grave-admin', [
             'regions' => $this->regions,
-            'towns' => $towns,
         ]);
     }
 

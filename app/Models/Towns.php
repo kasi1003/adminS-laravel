@@ -9,6 +9,8 @@ class Towns extends Model
 {
     use HasFactory;
     protected $table = 'towns';
+    protected $primaryKey = 'region_id';
+
     protected $fillable = [
         
         'region_id', 

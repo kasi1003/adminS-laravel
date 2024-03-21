@@ -11,7 +11,5 @@ class Graves extends Model
     use HasFactory;
     protected $table = 'grave';
 
-    protected $fillable = ['CemeteryID', 'SectionCode','GraveNum', 'GraveStatus', 'BuriedPersonsName', 'DateOfBirth','DateOfDeath', 'DeathCode'];
-
-
+    protected $fillable = ['CemeteryID', 'SectionCode', 'RowID', 'GraveNum', 'GraveStatus', 'BuriedPersonsName', 'DateOfBirth', 'DateOfDeath', 'DeathCode'];
 }
