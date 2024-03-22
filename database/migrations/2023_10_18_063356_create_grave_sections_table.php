@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('SectionCode')->unique(false); // Adding varchar column for section code
             $table->unsignedInteger('Rows'); // Adding int column for total graves
 
-            //$table->unsignedInteger('TotalGraves'); // Adding int column for total graves
-            //$table->unsignedInteger('AvailableGraves'); // Adding int column for available graves
+            /* $table->unsignedInteger('TotalGraves'); // Adding int column for total graves
+            $table->unsignedInteger('AvailableGraves'); // Adding int column for available graves */
             $table->timestamps(); // Adding created_at and updated_at columns
 
             // Adding foreign key constraint

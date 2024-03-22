@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
             $table->string('SectionCode');
             $table->unsignedInteger('RowID');
-            $table->unsignedInteger('GraveNum');
-            $table->tinyInteger('GraveStatus')->nullable();
+            $table->unsignedInteger('TotalGraves'); // Adding int column for total graves
+            $table->unsignedInteger('AvailableGraves');            
             $table->timestamps();
 
             $table->foreign('CemeteryID')->references('CemeteryID')->on('cemetery')->onDelete('cascade');

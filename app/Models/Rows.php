@@ -13,7 +13,6 @@ class Rows extends Model
         'RowID',
         'CemeteryID',
         'SectionCode',
-        'RowID',
         'AvailableGraves',
         'TotalGraves'
     ];
