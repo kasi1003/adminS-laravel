@@ -25,6 +25,7 @@ class GraveApi extends Controller
             'townLocation' => 'required|integer',
             'graveyardNumber' => 'required|integer',
             'numberOfRows.*' => 'required|integer',
+            'numberOfGraves.*.*' => 'required|integer',
 
         ]);
 
@@ -55,16 +56,35 @@ class GraveApi extends Controller
                     'Rows' => $validatedData['numberOfRows'][$i], // Store numberOfRows for each section
                     // Add other model attributes here
                 ];
+                
+                // Add rows data for each section
+                $rowsData = [];
+                for ($j = 0; $j < $validatedData['numberOfRows'][$i]; $j++) {
+                    $rowID = 'R_' . $cemeteryID . '_' . ($i + 1) . '_' . ($j + 1); // Increment $j by 1 to start from 1
 
-               
+                    // Add row data to the array
+                    $rowsData[] = [
+                        'CemeteryID' => $cemeteryID,
+                        'SectionCode' => $sectionCode,
+                        'RowID' => $rowID,
+                        'AvailableGraves' => $validatedData['numberOfGraves'][$i][$j], // Store numberOfGraves for each row
+                        'TotalGraves' => $validatedData['numberOfGraves'][$i][$j], // Store numberOfGraves for each row
+
+                        // Add other model attributes here
+                    ];
+                }
+                Rows::insert($rowsData);
+
             }
-            // Bulk insert all sections into the database
+
+            // Bulk insert all sections into the databas
             Sections::insert($sectionsData);
+
             // Bulk insert all rows into the database
             // Commit the transaction
             DB::commit();
             // Return a success response
-            return response()->json(['message' => 'Cemetery data saved successfully', 'cemetery' => $cemetery, 'sections' => $sectionsData], 201);
+            return response()->json(['message' => 'Cemetery data saved successfully', 'cemetery' => $cemetery, 'sections' => $sectionsData, 'rows' => $rowsData], 201);
         } catch (\Exception $e) {
             // Rollback the transaction if an error occurs
             DB::rollBack();

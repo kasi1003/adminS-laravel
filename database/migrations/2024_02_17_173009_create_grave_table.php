@@ -28,7 +28,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('CemeteryID')->references('CemeteryID')->on('cemetery')->onDelete('cascade');
-            $table->foreign('SectionCode')->references('SectionCode')->on('grave_sections')->onDelete('cascade');
 
         });
     }

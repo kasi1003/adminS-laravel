@@ -17,13 +17,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
             $table->string('SectionCode');
-            $table->unsignedInteger('RowID');
+            $table->string('RowID');
             $table->unsignedInteger('TotalGraves'); // Adding int column for total graves
             $table->unsignedInteger('AvailableGraves');            
             $table->timestamps();
 
             $table->foreign('CemeteryID')->references('CemeteryID')->on('cemetery')->onDelete('cascade');
-            $table->foreign('SectionCode')->references('SectionCode')->on('grave_sections')->onDelete('cascade');
         });
     }
 

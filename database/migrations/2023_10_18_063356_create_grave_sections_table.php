@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('grave_sections', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
-            $table->string('SectionCode')->unique(false); // Adding varchar column for section code
+            $table->string('SectionCode'); // Adding varchar column for section code
             $table->unsignedInteger('Rows'); // Adding int column for total graves
 
             
