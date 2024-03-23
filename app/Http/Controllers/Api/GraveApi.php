@@ -19,30 +19,58 @@ class GraveApi extends Controller
 {
     public function store(Request $request)
     {
-        $cemeteryData = [
-            'CemeteryName' => $request->input('grave_name'),
-            'Town' => $request->input('town_selected'),
-            'NumberOfSections' => $request->input('grave_number')
-        ];
-        
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'graveyardName' => 'required|string',
+            'townLocation' => 'required|integer',
+            'graveyardNumber' => 'required|integer',
+            'numberOfRows.*' => 'required|integer',
+
+        ]);
+
+        // Start a database transaction
         DB::beginTransaction();
+
         try {
-
-            $cemetery = Cemeteries::create($cemeteryData);
-
-            // Retrieve the ID of the newly created cemetery
+            // Create a new instance of the Cemeteries model and fill it with validated data
+            $cemetery = Cemeteries::create([
+                'CemeteryName' => $validatedData['graveyardName'],
+                'Town' => $validatedData['townLocation'],
+                'NumberOfSections' => $validatedData['graveyardNumber'],
+                // Add other model attributes here
+            ]);
+            // Create sections based on the number of sections
+            // Get the CemeteryID after creating the cemetery
             $cemeteryID = $cemetery->getKey();
+            // Prepare an array to store the data for all sections
+            $sectionsData = [];
+            // Loop through each section and prepare data for insertion
+            for ($i = 0; $i < $validatedData['graveyardNumber']; $i++) {
+                $sectionCode = 'S_' . $cemeteryID . '_' . ($i + 1); // Increment $i by 1 to start from 1
 
+                // Add section data to the array
+                $sectionsData[] = [
+                    'CemeteryID' => $cemeteryID,
+                    'SectionCode' => $sectionCode,
+                    'Rows' => $validatedData['numberOfRows'][$i], // Store numberOfRows for each section
+                    // Add other model attributes here
+                ];
 
-            
+               
+            }
+            // Bulk insert all sections into the database
+            Sections::insert($sectionsData);
+            // Bulk insert all rows into the database
+            // Commit the transaction
             DB::commit();
-
-            return response()->json(['message' => 'Graveyard, sections, and graves added successfully', 'Cemeteries'=>$cemeteryData ], 201);
+            // Return a success response
+            return response()->json(['message' => 'Cemetery data saved successfully', 'cemetery' => $cemetery, 'sections' => $sectionsData], 201);
         } catch (\Exception $e) {
-            // Rollback the transaction if any step fails
-            DB::rollback();
+            // Rollback the transaction if an error occurs
+            DB::rollBack();
 
-            return response()->json(['error' => 'Failed to add graveyard and graves'], 500);
+            // Return an error response
+            return response()->json(['message' => 'Failed to save cemetery data. ' . $e->getMessage()], 500);
         }
     }
 }

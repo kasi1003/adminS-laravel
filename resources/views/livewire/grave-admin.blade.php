@@ -35,7 +35,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                 </div>
 
 
@@ -73,15 +73,15 @@
                 </div>
                 <!--if user puts the numer of sections in cemetery, it should display the same number of inputs with the section code placeholder-->
                 <!-- Inside the form -->
-                @if (count($sections) < $grave_number)
-                    @for ($i = 0; $i < $grave_number; $i++)
+                @if (count($sections) < $graveyardNumber)
+                    @for ($i = 0; $i < $graveyardNumber; $i++)
                         <div class="mb-3">
                             <label for="numberOfRows{{ $i }}" class="form-label">Rows in Section
                                 {{ $i + 1 }}</label>
                             <input type="number" class="form-control" id="numberOfRows{{ $i }}"
-                                name="numberOfRows{{ $i }}"
-                                placeholder="Enter Number of Rows for section {{ $i + 1 }}"
-                                wire:model="number_of_rows.{{ $i }}" />
+                                name="numberOfRows[]" <!-- Change name attribute to an array -->
+                            placeholder="Enter Number of Rows for section {{ $i + 1 }}"
+                            wire:model="number_of_rows.{{ $i }}" />
                         </div>
 
                         @if (isset($number_of_rows[$i]) && $number_of_rows[$i] > 0)

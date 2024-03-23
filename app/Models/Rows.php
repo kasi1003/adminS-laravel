@@ -10,9 +10,10 @@ class Rows extends Model
     use HasFactory;
     protected $table = 'rows';
     protected $fillable = [
-        'RowID',
+        
         'CemeteryID',
         'SectionCode',
+        'RowID',
         'AvailableGraves',
         'TotalGraves'
     ];
