@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
             $table->string('SectionCode');
-            $table->unsignedInteger('RowID');
+            $table->string('RowID');
             $table->unsignedInteger('GraveNum');
             $table->tinyInteger('GraveStatus')->nullable();
             $table->string('BuriedPersonsName')->nullable();

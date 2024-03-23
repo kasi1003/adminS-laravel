@@ -56,7 +56,7 @@ class GraveApi extends Controller
                     'Rows' => $validatedData['numberOfRows'][$i], // Store numberOfRows for each section
                     // Add other model attributes here
                 ];
-                
+
                 // Add rows data for each section
                 $rowsData = [];
                 for ($j = 0; $j < $validatedData['numberOfRows'][$i]; $j++) {
@@ -72,9 +72,24 @@ class GraveApi extends Controller
 
                         // Add other model attributes here
                     ];
+                    // Create graves based on the available graves in the row
+                    for ($k = 0; $k < $validatedData['numberOfGraves'][$i][$j]; $k++) {
+                        $graveNum = $k + 1; // Increment $k by 1 to start from 1
+
+                        // Create a new grave and fill it with data
+                        $grave = [
+                            'CemeteryID' => $cemeteryID,
+                            'SectionCode' => $sectionCode,
+                            'RowID' => $rowID,
+                            'GraveNum' => $graveNum,
+                            // Add other model attributes here
+                        ];
+
+                        // Insert the grave into the database
+                        Graves::create($grave);
+                    }
                 }
                 Rows::insert($rowsData);
-
             }
 
             // Bulk insert all sections into the databas
@@ -84,7 +99,7 @@ class GraveApi extends Controller
             // Commit the transaction
             DB::commit();
             // Return a success response
-            return response()->json(['message' => 'Cemetery data saved successfully', 'cemetery' => $cemetery, 'sections' => $sectionsData, 'rows' => $rowsData], 201);
+            return response()->json(['message' => 'Cemetery data saved successfully', 'cemetery' => $cemetery, 'sections' => $sectionsData, 'rows' => $rowsData, 'graves' => $grave], 201);
         } catch (\Exception $e) {
             // Rollback the transaction if an error occurs
             DB::rollBack();
