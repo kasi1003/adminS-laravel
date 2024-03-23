@@ -73,15 +73,15 @@
                 </div>
                 <!--if user puts the numer of sections in cemetery, it should display the same number of inputs with the section code placeholder-->
                 <!-- Inside the form -->
-                @if (count($sections) < $graveyardNumber)
-                    @for ($i = 0; $i < $graveyardNumber; $i++)
+                @if (count($sections) < $grave_number)
+                    @for ($i = 0; $i < $grave_number; $i++)
                         <div class="mb-3">
                             <label for="numberOfRows{{ $i }}" class="form-label">Rows in Section
                                 {{ $i + 1 }}</label>
                             <input type="number" class="form-control" id="numberOfRows{{ $i }}"
-                                name="numberOfRows[]" <!-- Change name attribute to an array -->
-                            placeholder="Enter Number of Rows for section {{ $i + 1 }}"
-                            wire:model="number_of_rows.{{ $i }}" />
+                                name="numberOfRows{{ $i }}"
+                                placeholder="Enter Number of Rows for section {{ $i + 1 }}"
+                                wire:model="number_of_rows.{{ $i }}" />
                         </div>
 
                         @if (isset($number_of_rows[$i]) && $number_of_rows[$i] > 0)
@@ -100,67 +100,22 @@
                         @endif
                     @endfor
                 @endif
-
+                <button type="submit" class="btn btn-primary">Submit</button>
 
 
 
             </form>
 
-            <!-- Modal -->
-            <div class="modal fade" id="sectionModal" tabindex="-1" aria-labelledby="sectionModalLable"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="sectionModalLable">Modal title</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Cemetery ID </th>
-                                        <th scope="col">Section Code</th>
-                                        <th scope="col">Total Graves</th>
-                                        <th scope="col">Available Graves</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-group-divider">
+            <script>
+                // Display SweetAlert alert if success is true
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Cemetery data saved successfully',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            </script>
 
-                                    @foreach ($sections as $section_item)
-                                        <tr>
-                                            <th scope="row">{{ $section_item['CemeteryID'] }}</th>
-
-                                            <td>{{ $section_item['SectionCode'] }}</td>
-                                            <td>{{ $section_item['TotalGraves'] }}</td>
-                                            <td>{{ $section_item['AvailableGraves'] }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    <script>
-        window.addEventListener('swal', function(e) {
-            Swal.fire({
-                title: e.detail.title,
-                iconColor: e.detail.iconColor,
-                icon: e.detail.icon,
-                timer: 1000,
-                showConfirmButton: false,
-            })
-
-
-        });
-    </script>
 </div>

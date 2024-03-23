@@ -37,15 +37,12 @@ class GraveAdmin extends Component
     {
         $this->load_data();
         $this->loadTowns();
-
-
     }
     public function loadTowns()
     {
         $this->isLoading = true;
         $this->towns = Towns::where('name', 'like', '%' . $this->search . '%')->get();
         $this->isLoading = false;
-
     }
     //here we will load the data from the db needed for the form to be populated
     public function load_data()
@@ -55,11 +52,10 @@ class GraveAdmin extends Component
         $this->cemeteries = Cemeteries::all();
 
         $this->towns = Towns::all();
-
     }
     public function render()
     {
-       
+
         $this->loadTowns();
         return view('livewire.grave-admin', [
             'regions' => $this->regions,
@@ -151,18 +147,19 @@ class GraveAdmin extends Component
                 ]);
             }
         } else {
-            // Prepare data to send to the API
-
+            // Prepare data for adding graves to an existing cemetery
+            $validatedData = [
+                'graveyardName' => $this->grave_name, // Use the selected cemetery name
+                'townLocation' => $this->town_selected,
+                'graveyardNumber' => $this->grave_number,
+                'numberOfRows' => $this->number_of_rows,
+                'numberOfGraves' => $this->number_of_graves,
+            ];
             // Make a POST request to the API endpoint
-            $response = Http::post('http://localhost:8000/api/cemeteryPost', [
-                'grave_name' => $this->grave_name,
-                'town_selected' => $this->town_selected,
-                'grave_number' => $this->grave_number,
-                'total_graves' => $this->number_of_graves,
-                'sections' => $this->sections,
-            ]);
+            $response = Http::post('http://localhost:8000/api/cemeteryPost', $validatedData );
             // Check if the API request was successful
             if ($response->successful()) {
+
                 // Reset form data after successful submission
                 $this->resetForm();
 
@@ -176,13 +173,13 @@ class GraveAdmin extends Component
     }
     private function resetForm()
     {
-        $this->region_selected = null;
         $this->town_selected = null;
         $this->cemeteries_selected = null;
         $this->grave_name = null;
         $this->grave_number = null;
         $this->sections = [];
-        $this->number_of_graves = null;
+        $this->number_of_graves = [];
+        $this->number_of_rows = [];
     }
     public function updated($propertyName)
     {
