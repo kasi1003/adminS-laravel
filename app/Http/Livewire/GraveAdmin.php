@@ -96,56 +96,11 @@ class GraveAdmin extends Component
 
     public function addGrave()
     {
-        //cemetery id which will link to the sections
-        $cem_id = count($this->cemeteries) + 1;
-        $t_graves = 0;
-        //calculating then total graves to put into the cemetery table
-
-        foreach ($this->sections as $sec) {
-            $t_graves = $t_graves + $sec['TotalGraves'];
-        }
-
 
         if ($this->cemeteries_selected != 'other') {
             // Existing cemetery selected, update the data in both tables
-            $cem_id = $this->cemeteries_selected;
-            $cem_name = $this->grave_name;
-
-            // Check if the Graveyard Name input is empty
-            if (empty($cem_name)) {
-                $defaultCemetery = $this->cemeteries->where('CemeteryID', $cem_id)->first();
-                $cem_name = $defaultCemetery->CemeteryName ?? '';
-            }
 
 
-            $cem_data = [
-                'CemeteryName' => $cem_name,
-                'Town' => $this->town_selected,
-                'NumberOfSections' => count($this->sections),
-                'TotalGraves' => $t_graves,
-                'AvailableGraves' => $t_graves,
-                'CemeteryID' => $cem_id,
-            ];
-
-            // Update the cemetery data
-            Cemeteries::where('CemeteryID', $cem_id)->update($cem_data);
-
-            // Delete existing sections with the same CemeteryID
-            Sections::where('CemeteryID', $cem_id)->delete();
-
-            // Create new sections based on the new inputs
-            foreach ($this->sections as $index => $sec) {
-                // Calculate the section ID starting from 1
-                $sectionID = $index + 1;
-
-                Sections::create([
-                    'SectionID' => $sectionID,
-                    'CemeteryID' => $cem_id,
-                    'SectionCode' => 'Section ' . $sectionID,
-                    'TotalGraves' => $sec['TotalGraves'],
-                    'AvailableGraves' => $sec['AvailableGraves'],
-                ]);
-            }
         } else {
             // Prepare data for adding graves to an existing cemetery
             $validatedData = [
@@ -156,17 +111,31 @@ class GraveAdmin extends Component
                 'numberOfGraves' => $this->number_of_graves,
             ];
             // Make a POST request to the API endpoint
-            $response = Http::post('http://localhost:8000/api/cemeteryPost', $validatedData );
+            $response = Http::post('http://localhost:8000/api/cemeteryPost', $validatedData);
             // Check if the API request was successful
             if ($response->successful()) {
 
                 // Reset form data after successful submission
+                // Show SweetAlert for successful submission
+                $this->dispatchBrowserEvent('swal', [
+                    'title' => 'Success!',
+                    'text' => 'Cemetery data saved successfully',
+                    'icon' => 'success',
+                    'confirmButtonText' => 'OK'
+                ]);
                 $this->resetForm();
 
                 // Optionally, display a success message to the user
                 session()->flash('success', 'Graveyard and graves added successfully');
             } else {
                 // Optionally, handle errors and display a message to the user
+                // Show SweetAlert for failed submission
+                $this->dispatchBrowserEvent('swal', [
+                    'title' => 'Error!',
+                    'text' => 'Failed to submit cemetery data',
+                    'icon' => 'error',
+                    'confirmButtonText' => 'OK'
+                ]);
                 session()->flash('error', 'Failed to add graveyard and graves');
             }
         }

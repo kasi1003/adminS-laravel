@@ -26,9 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 });
 Route::get('/regions', [GraveApi::class, 'showRegions'])->name('region');
-Route::get('/towns/{region_id}', [GraveApi::class, 'showTowns'])->name('town');
-
-Route::get('/cemNames', [GraveApi::class, 'getCemeteryNames'])->name('cemNames');
 Route::post('/cemeteryPost', [GraveApi::class, 'store']);
-Route::put('/gravesUpdate/{CemeteryID}/{SectionCode}/{GraveNum}', [GraveApi::class, 'updateGrave'])->name('gravesUpdate');
 Route::delete('/cemDelete/{CemeteryID}',[GraveApi::class, 'deleteGraveyard'])->name('cemDelete');
+Route::put('/editCem/{CemeteryID}', [GraveApi::class, 'update']);

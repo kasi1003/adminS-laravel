@@ -11,4 +11,10 @@ class Cemeteries extends Model
     protected $table = 'cemetery';
     protected $primaryKey = 'CemeteryID';
     protected $fillable = ['CemeteryName', 'Town', 'NumberOfSections', 'TotalGraves', 'AvailableGraves', 'SvgMap'];
+
+     // Define the relationship with sections
+     public function sections()
+     {
+         return $this->hasMany(Sections::class, 'CemeteryID', 'CemeteryID');
+     }
 }
