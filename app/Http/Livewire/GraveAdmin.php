@@ -99,8 +99,28 @@ class GraveAdmin extends Component
 
         if ($this->cemeteries_selected != 'other') {
             // Existing cemetery selected, update the data in both tables
+            $cemeteryID = $this->cemeteries_selected;
 
+            // Prepare data for updating the cemetery
+            $validatedData = [
+                'graveyardName' => $this->grave_name, // Use the selected cemetery name
+                'townLocation' => $this->town_selected,
+                'graveyardNumber' => $this->grave_number,
+                'numberOfRows' => $this->number_of_rows,
+                'numberOfGraves' => $this->number_of_graves,
+            ];
 
+            // Make a PUT request to the API endpoint with the cemetery ID
+            $response = Http::put('http://localhost:8000/api/editCem/' . $cemeteryID, $validatedData);
+
+            // Handle the response accordingly
+            if ($response->successful()) {
+                // Cemetery data updated successfully
+                // Show success message to the user
+            } else {
+                // Failed to update cemetery data
+                // Show error message to the user
+            }
         } else {
             // Prepare data for adding graves to an existing cemetery
             $validatedData = [
