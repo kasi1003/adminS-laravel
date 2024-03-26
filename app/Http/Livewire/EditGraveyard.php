@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Cemeteries;
 use App\Models\Sections;
 use Livewire\Component;
+use Illuminate\Support\Facades\Http;
 
 class EditGraveyard extends Component
 {
@@ -55,20 +56,19 @@ class EditGraveyard extends Component
         $this->selectedCemetery->save();
         $this->showEditModal = false;
     }
-    public function deleteCemetery($cemeteryId)
+    // Livewire component
+    public function deleteCemetery($cemeteryID)
     {
-        // Find the cemetery by ID
-        $cemetery = Cemeteries::find($cemeteryId);
+        // Make a DELETE request to the API endpoint to delete records associated with the selected cemetery ID
+        $response = Http::delete('http://localhost:8000/api/deleteCem/' . $cemeteryID);
 
-        if ($cemetery) {
-            // Get the CemeteryID
-            $cemeteryId = $cemetery->CemeteryID;
-
-            // Delete the cemetery
-            $cemetery->delete();
-
-            // Delete related sections in the grave_sections table
-            Sections::where('CemeteryID', $cemeteryId)->delete();
+        // Handle the response accordingly
+        if ($response->successful()) {
+            // Records deleted successfully
+            // Optionally, you can show a success message to the user
+        } else {
+            // Failed to delete records
+            // Optionally, you can show an error message to the user
         }
     }
 }
