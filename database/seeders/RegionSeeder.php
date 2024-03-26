@@ -17,8 +17,7 @@ class RegionSeeder extends Seeder
     {
         $regions = [
             ['name' => 'Zambezi'],
-            ['name' => 'Kavango West'],
-            ['name' => 'Kavango East'],
+            ['name' => 'Kavango'],
             ['name' => 'Kunene'],
             ['name' => 'Omusati'],
             ['name' => 'Ohangwena'],
