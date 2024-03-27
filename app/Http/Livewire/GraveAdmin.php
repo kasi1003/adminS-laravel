@@ -188,9 +188,16 @@ class GraveAdmin extends Component
             $cemetery = Cemeteries::find($cemeteryId);
             if ($cemetery) {
                 $this->newGraveyardName = $cemetery->CemeteryName; // Set the cemetery name as the value for the input field
+                //dd($this->newGraveyardName);
             }
         } else {
             $this->newGraveyardName = null;
+        }
+        // If cemetery selected is 'other' and editCemeteryName is true, set grave_name to newGraveyardName
+        if ($this->cemeteries_selected !== 'other' && $this->editCemeteryName) {
+            $this->grave_name = $this->newGraveyardName;
+        } else {
+            $this->grave_name = null; // Reset grave_name if cemetery selected is not 'other' or editCemeteryName is false
         }
     }
     public function updateCemeterySelect($cemeteryId)
