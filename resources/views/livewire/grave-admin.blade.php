@@ -62,6 +62,7 @@
                         <input type="text" class="form-control" id="graveyardName" name="graveyardName" placeholder="Enter Graveyard Name" wire:model="grave_name" />
                         @endif
                     </div>
+                    
 
                     <!--section details-->
                     <div class="mb-3">

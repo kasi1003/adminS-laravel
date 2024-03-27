@@ -27,10 +27,11 @@ class GraveAdmin extends Component
     public $regions = [];
     public $towns = [];
     public $isLoading = true;
-    public $editCemeteryName = false;
+    public $editCemeteryName;
     public $number_of_rows = [];
     public $search = '';
-
+    public $selectedCemeteryId;
+    public $newGraveyardName;
     //this function is only called once when the page loads
 
     public function mount()
@@ -175,6 +176,25 @@ class GraveAdmin extends Component
         $this->number_of_graves = [];
         $this->number_of_rows = [];
     }
-    
-    
+    protected $listeners = ['editCemetery', 'updateCemeterySelect'];
+
+    public function editCemetery($cemeteryId)
+    {
+        $this->cemeteries_selected = $cemeteryId;
+        $this->editCemeteryName = $cemeteryId !== 'other';
+
+        // Fetch the cemetery name corresponding to the selected cemetery ID
+        if ($this->editCemeteryName) {
+            $cemetery = Cemeteries::find($cemeteryId);
+            if ($cemetery) {
+                $this->newGraveyardName = $cemetery->CemeteryName; // Set the cemetery name as the value for the input field
+            }
+        } else {
+            $this->newGraveyardName = null;
+        }
+    }
+    public function updateCemeterySelect($cemeteryId)
+    {
+        $this->cemeteries_selected = $cemeteryId;
+    }
 }

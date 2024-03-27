@@ -13,6 +13,9 @@ class EditGraveyard extends Component
     public $selectedCemetery;
     public $cemeteries;
     public $sections;
+    public $cemeteryId;
+
+
     public function mount()
     {
         // Fetch cemetery data from your database
@@ -26,36 +29,17 @@ class EditGraveyard extends Component
 
         return view('livewire.edit-graveyard');
     }
-    public function redirectToAdminPage($cemeteryId)
+    
+
+
+   
+    public function editCemetery($cemeteryId)
     {
-        // Store the selected cemetery details in session
-        $selectedCemeteryDetails = Cemeteries::find($cemeteryId);
-        session(['selectedCemeteryDetails' => $selectedCemeteryDetails]);
+        $this->emit('editCemetery', $cemeteryId);
+        $this->emit('updateCemeterySelect', $cemeteryId); // Emit the event to update the selected cemetery in the form component
 
-        // Redirect to the admin page
-        return redirect()->to('/graveyard-admin');
     }
-
-
-    public function openEditModal($cemeteryId)
-    {
-        $this->selectedCemetery = Cemeteries::find($cemeteryId);
-        $this->showEditModal = true;
-    }
-
-    public function saveChanges()
-    {
-        $this->validate([
-            'selectedCemetery.CemeteryName' => 'required',
-            'selectedCemetery.Town' => 'required',
-            'selectedCemetery.NumberOfSections' => 'required|integer',
-            'selectedCemetery.TotalGraves' => 'required|integer',
-            'selectedCemetery.AvailableGraves' => 'required|integer',
-        ]);
-
-        $this->selectedCemetery->save();
-        $this->showEditModal = false;
-    }
+    
     // Livewire component
     public function deleteCemetery($cemeteryID)
     {
