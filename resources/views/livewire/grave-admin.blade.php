@@ -51,7 +51,7 @@
                                 <option value="{{ $cemetery->CemeteryID }}">{{ $cemetery->CemeteryName }}</option>
                                 @endforeach
 
-                                <option value="other">Other</option>
+                                <option value="other">Create New Cemetery</option>
                             </select>
                         </div>
 
