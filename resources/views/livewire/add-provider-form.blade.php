@@ -1,5 +1,7 @@
 <div style="width: 40%">
     <div class="card mt-5" style="width: 100%;">
+    <div class="card-header">Create Cemetery</div>
+
         <div class="card-body">
             <form wire.submit="addProvider">
                 <div class="mb-3 d-flex flex-column">

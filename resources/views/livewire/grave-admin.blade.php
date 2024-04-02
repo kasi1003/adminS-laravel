@@ -1,6 +1,8 @@
 <div style="width: 40%;">
     
         <div class="card mt-5 ml-5">
+        <div class="card-header">Add Cemetery</div>
+
             <div class="card-body">
                 <!--form to add a graveyard-->
                 <form wire:submit="addGrave">

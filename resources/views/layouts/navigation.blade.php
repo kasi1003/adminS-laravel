@@ -31,6 +31,11 @@
                         {{ __('Manage Service Providers') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('quotations')" :active="request()->routeIs('quotations')">
+                        {{ __('Manage Manage Quotations') }}
+                    </x-nav-link>
+                </div>
                 
             </div>
 

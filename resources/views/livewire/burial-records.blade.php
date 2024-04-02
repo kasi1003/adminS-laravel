@@ -1,8 +1,8 @@
     <div style="width: 40%;">
         <div class="card bg-light mb-3 mx-auto mt-3">
-            <div class="card-header">Edit Cemetery</div>
+            <div class="card-header">Add Burial Record</div>
             <div class="card-body">
-                <form wire:submit.prevent="addRecord">
+                <form wire:submit="addRecord">
                     <div class="mb-3">
                         <div>
                             <label for="cemeteries_selected" class="form-label">Cemetery</label>

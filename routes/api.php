@@ -6,7 +6,7 @@ use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\TownController;
 use App\Http\Controllers\Api\CemeteriesController;
 use App\Http\Controllers\Api\GraveyardController;
-use App\Http\Controllers\Api\GraveController;
+use App\Http\Controllers\Api\BurialRecordsApi;
 
 use App\Http\Controllers\Api\GraveApi;
 
@@ -29,3 +29,4 @@ Route::get('/regions', [GraveApi::class, 'showRegions'])->name('region');
 Route::post('/postCem', [GraveApi::class, 'store']);
 Route::delete('/deleteCem/{CemeteryID}',[GraveApi::class, 'delete']);
 Route::put('/editCem/{CemeteryID}', [GraveApi::class, 'update']);
+Route::put('/addBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'update']);

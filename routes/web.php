@@ -40,6 +40,9 @@ Route::middleware('auth')->group(function () {
         return view('burial-records-view');
     })->name('burialRecords');
 
+    Route::get('/quotations', function () {
+        return view('quotation-view');
+    })->name('quotations');
     Auth::routes();
 
 

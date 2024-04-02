@@ -1,4 +1,4 @@
-<div style="width: 60%;">
+<div>
     <div class="card mt-5" style="width: 100%;">
         <div class="card-header">Show Service Providers</div>
 
