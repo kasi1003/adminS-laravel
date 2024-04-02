@@ -9,17 +9,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="row">
                 <div class="col-md-6">
-                    <a href="{{ route('grave.admin') }}" class="card-link">
+                    <a href="{{ route('addGraveyards') }}" class="card-link">
                         <div class="card m-3">
                             <div class="card-body mx-auto" style="height: 10rem; display: flex; align-items: center;">
                                 <h5 class="card-title">Manage Graveyards</h5>
                             </div>
                         </div>
                     </a>
-
                 </div>
+
                 <div class="col-md-6">
-                    <a href="{{ route('grave.records') }}" class="card-link">
+                    <a href="{{ route('burialRecords') }}" class="card-link">
 
                         <div class="card m-3">
                             <div class="card-body mx-auto" style="height: 10rem; display:flex; align-items:center;">
@@ -29,11 +29,13 @@
                     </a>
                 </div>
                 <div class="col-md-12">
-                    <div class="card m-3">
-                        <div class="card-body mx-auto" style="height: 10rem ; display:flex; align-items:center;">
-                            <h5 class="card-title">Service Providers</h5>
+                    <a href="{{ route('serviceProviders') }}" class="card-link">
+                        <div class="card m-3">
+                            <div class="card-body mx-auto" style="height: 10rem ; display:flex; align-items:center;">
+                                <h5 class="card-title">Service Providers</h5>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>

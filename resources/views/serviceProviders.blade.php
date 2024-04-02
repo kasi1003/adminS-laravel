@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <div class="container flex">
-        <livewire:add-provider-form/>
+        <livewire:add-provider-form />
         <livewire:display-provider />
 
     </div>

@@ -1,5 +1,7 @@
-<div>
-    <div class="table-responsive">
+<div  style="width: 65%;">
+    <div class="card mt-5">
+        <div class="card-body">
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -43,4 +45,8 @@
 
     </div>
 
+          
+        </div>
+    </div>
+    
 </div>

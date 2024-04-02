@@ -8,6 +8,11 @@
                 </div>
 
                 <div class="mb-3 d-flex flex-column">
+                    <label for="motto" class="form-label">Service Provider Name</label>
+                    <input type="text" wire:model="motto" placeholder="Enter Service Provider Motto">
+                </div>
+
+                <div class="mb-3 d-flex flex-column">
                     <label for="email" class="form-label">Service Provider Email</label>
                     <input type="text" wire:model="email" placeholder="Enter Service Provider Email">
                 </div>
@@ -31,6 +36,10 @@
 
                         @if(isset($showServiceDescription[$i]) && $showServiceDescription[$i]) <label for="serviceDescriptions{{$i}}" class="form-label">Product Description for Service {{$i+1}}</label>
                         <input type="text" wire:model="serviceDescriptions.{{$i}}" placeholder="Enter Product Description" id="description{{$i}}">
+                        <!-- Generate input for product price -->
+                        <label for="servicePrices{{$i}}" class="form-label">Product Price for Service {{$i+1}}</label>
+                        <input type="number" wire:model="servicePrices.{{$i}}" placeholder="Enter Product Price" id="price{{$i}}">
+
                         @endif
 
 

@@ -1,7 +1,6 @@
-<div class="row">
-    <div class="col-md-6">
-        <div class="card mt-5 ml-5" style="width: 95%;">
-            <h1 class="card-header">Add a Graveyard</h1>
+<div style="width: 40%;">
+    
+        <div class="card mt-5 ml-5">
             <div class="card-body">
                 <!--form to add a graveyard-->
                 <form wire:submit="addGrave">
@@ -93,15 +92,8 @@
 
         </form>
     </div>
-</div>
+
 </div>
 <!-- edit-graveyard component -->
-<div class="col-md-6">
-    <div class="card mt-5 ml-5" style="width: 95%;">
-        <h1 class="card-header">Edit Graveyard</h1>
-        <div class="card-body">
-            <livewire:edit-graveyard />
-        </div>
-    </div>
-</div>
+
 </div>

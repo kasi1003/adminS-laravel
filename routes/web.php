@@ -27,20 +27,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/addGraveyard', [AdminController::class, 'showRegions']);
-    Route::get('/getTowns/{regionId}', [AdminController::class, 'getTowns']);
-
-
-
-    //this is the line i was sayoing is wrong
-    Route::get('/edit-graveyard', [AdminController::class, 'edit_graveyard'])->name('grave.edit');
-    Route::get('/burial-records', [AdminController::class, 'burial_records'])->name('grave.records');
-    Route::get('/quotations', [AdminController::class, 'quotationsFun'])->name('grave.quotas');
-    Route::get('/service-providers', function () {
+    
+    Route::get('/serviceProviders', function () {
         return view('serviceProviders');
-    });
-    //administration route to add and modify the grave yards
-    Route::get('/graveyard-admin', [AdminController::class, 'grave_admin'])->name('grave.admin');
+    })->name('serviceProviders');
+
+    Route::get('/addGraveyards', function () {
+        return view('addGraveyards');
+    })->name('addGraveyards');
+
+    Route::get('/burialRecords', function () {
+        return view('burial-records-view');
+    })->name('burialRecords');
+
     Auth::routes();
 
 

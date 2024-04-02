@@ -17,20 +17,21 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('grave.admin')" :active="request()->routeIs('grave.admin')">
+                    <x-nav-link :href="route('addGraveyards')" :active="request()->routeIs('addGraveyards')">
                         {{ __('Manage Graveyards') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('grave.records')" :active="request()->routeIs('grave.records')">
+                    <x-nav-link :href="route('burialRecords')" :active="request()->routeIs('burialRecords')">
                         {{ __('Manage Burial Records') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('grave.edit')" :active="request()->routeIs('grave.edit')">
-                        {{ __('Edit Graveyard') }}
+                    <x-nav-link :href="route('serviceProviders')" :active="request()->routeIs('serviceProviders')">
+                        {{ __('Manage Service Providers') }}
                     </x-nav-link>
                 </div>
+                
             </div>
 
             <!-- Settings Dropdown -->

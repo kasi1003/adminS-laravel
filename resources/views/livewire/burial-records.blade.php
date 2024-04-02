@@ -1,5 +1,5 @@
-    <div>
-        <div class="card bg-light mb-3 mx-auto mt-3" style="width: 85%;">
+    <div style="width: 40%;">
+        <div class="card bg-light mb-3 mx-auto mt-3">
             <div class="card-header">Edit Cemetery</div>
             <div class="card-body">
                 <form wire:submit.prevent="addRecord">
