@@ -30,3 +30,4 @@ Route::post('/postCem', [GraveApi::class, 'store']);
 Route::delete('/deleteCem/{CemeteryID}',[GraveApi::class, 'delete']);
 Route::put('/editCem/{CemeteryID}', [GraveApi::class, 'update']);
 Route::put('/addBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'update']);
+Route::put('/deleteBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'delete']);
