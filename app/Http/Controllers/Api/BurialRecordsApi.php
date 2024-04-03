@@ -54,46 +54,45 @@ class BurialRecordsApi extends Controller
         }
     }
     public function delete(Request $request, $cemeteryID, $sectionCode, $rowID, $graveNum)
-{
-    try {
-        // Start a transaction
-        DB::beginTransaction();
+    {
+        try {
+            // Start a transaction
+            DB::beginTransaction();
 
-        // Delete the specified column values
-        $affectedRows = Graves::where('CemeteryID', $cemeteryID)
-            ->where('SectionCode', $sectionCode)
-            ->where('RowID', $rowID)
-            ->where('GraveNum', $graveNum)
-            ->update([
-                'GraveStatus' => null,
-                'BuriedPersonsName' => null,
-                'DateOfBirth' => null,
-                'DateOfDeath' => null,
-                'DeathCode' => null,
-            ]);
+            // Delete the specified column values
+            $affectedRows = Graves::where('CemeteryID', $cemeteryID)
+                ->where('SectionCode', $sectionCode)
+                ->where('RowID', $rowID)
+                ->where('GraveNum', $graveNum)
+                ->update([
+                    'GraveStatus' => null,
+                    'BuriedPersonsName' => null,
+                    'DateOfBirth' => null,
+                    'DateOfDeath' => null,
+                    'DeathCode' => null,
+                ]);
 
-        // Fetch the updated Grave record
-        $updatedGrave = Graves::where('CemeteryID', $cemeteryID)
-            ->where('SectionCode', $sectionCode)
-            ->where('RowID', $rowID)
-            ->where('GraveNum', $graveNum)
-            ->firstOrFail();
+            // Fetch the updated Grave record
+            $updatedGrave = Graves::where('CemeteryID', $cemeteryID)
+                ->where('SectionCode', $sectionCode)
+                ->where('RowID', $rowID)
+                ->where('GraveNum', $graveNum)
+                ->firstOrFail();
 
-        // Commit the transaction
-        DB::commit();
+            // Commit the transaction
+            DB::commit();
 
-        // Optionally, you can include cemetery, section, row along with the updated grave in the response
-        return response()->json([
-            'message' => 'Specified column values deleted successfully',
-            'grave' => $updatedGrave
-        ], 200);
-    } catch (\Exception $e) {
-        // Rollback the transaction if an error occurs
-        DB::rollBack();
+            // Optionally, you can include cemetery, section, row along with the updated grave in the response
+            return response()->json([
+                'message' => 'Specified column values deleted successfully',
+                'grave' => $updatedGrave
+            ], 200);
+        } catch (\Exception $e) {
+            // Rollback the transaction if an error occurs
+            DB::rollBack();
 
-        // Return an error response
-        return response()->json(['message' => 'Failed to delete specified column values. ' . $e->getMessage()], 500);
+            // Return an error response
+            return response()->json(['message' => 'Failed to delete specified column values. ' . $e->getMessage()], 500);
+        }
     }
-}
-
 }

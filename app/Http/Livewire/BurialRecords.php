@@ -11,8 +11,11 @@ use Livewire\Component;
 
 class BurialRecords extends Component
 {
-    public $selected_grave; // Add this property to store the selected grave number
 
+    public $rows = [];
+    public $cemeteries_selected;
+    public $section_selected;
+    public $selected_grave;
     public $cemeteries;
     public $section_select;
     public $grave_number_select;
@@ -24,11 +27,8 @@ class BurialRecords extends Component
     public $section_code;
     public $sections;
     public $availableGraves = [];
-    
-
     public $buried_records;
-    public $cemeteries_selected;
-    public $section_selected; // Add this property to store the selected section
+    // Add this property to store the selected section
 
     public function mount()
     {
@@ -38,20 +38,6 @@ class BurialRecords extends Component
     public function load_data()
     {
         $this->cemeteries = Cemeteries::all();
-
-        // Fetch the total number of graves for the selected cemetery
-        $cemetery = Cemeteries::where('CemeteryName', $this->cemeteries_selected)->first();
-
-        $totalGraves = $cemetery ? $cemetery->TotalGraves : 0;
-
-        // Debugging statements
-        //dd($this->cemeteries_selected, $totalGraves, $cemetery);
-
-        // Generate an array of available grave numbers based on TotalGraves
-        $this->availableGraves = range(1, $totalGraves);
-
-        // Exclude grave numbers that have already been selected
-        $this->availableGraves = array_diff($this->availableGraves, [$this->selected_grave]);
     }
 
 
@@ -76,37 +62,41 @@ class BurialRecords extends Component
 
         return $sections;
     }
+    public function getRowOptions()
+    {
+        $rows = [];
 
+        if ($this->section_select) {
+            [$sectionCode, $cemeteryID] = explode('_', $this->section_select);
+
+            // Retrieve RowIDs with the same CemeteryID and SectionCode
+            $rows = Graves::where('CemeteryID', $cemeteryID)
+                ->where('SectionCode', $sectionCode)
+                ->pluck('RowID')
+                ->unique()
+                ->toArray();
+        }
+
+        return $rows;
+    }
 
     public function render()
     {
         $this->sections = Sections::all();
 
 
-        $buried_records = Graves::all();
+        $rows = Graves::pluck('RowID')->unique()->toArray();
+
 
         return view('livewire.burial-records', [
-            'buried_records' => $buried_records,
+            'buried_records' => Graves::all(),
             'sectionOptions' => $this->getSectionOptions(),
-            'availableGraves' => $this->getAvailableGraves()
+            'rowOptions' => $this->getRowOptions(),
+      
         ]);
     }
-    public function getAvailableGraves()
-    {
-        $availableGraves = [];
 
-        if ($this->cemeteries_selected != 'other') {
-            // Find the selected cemetery
-            $cemetery = Cemeteries::where('CemeteryName', $this->cemeteries_selected)->first();
 
-            if ($cemetery) {
-                // Retrieve the AvailableGraves for the selected cemetery
-                $availableGraves = range(1, $cemetery->AvailableGraves);
-            }
-        }
-
-        return $availableGraves;
-    }
 
     public function addRecord()
     {
@@ -151,11 +141,5 @@ class BurialRecords extends Component
                 'iconColor' => 'green',
             ]);
         }
-    }
-
-    public function removeSelectedGrave()
-    {
-        // Remove the selected grave from the availableGraves array
-        $this->availableGraves = array_diff($this->availableGraves, [$this->selected_grave]);
     }
 }
