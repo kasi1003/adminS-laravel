@@ -43,11 +43,13 @@
                             <select id="row_select" name="row_select" class="form-select p-2" style="width:100%;" wire:model="row_select">
                                 <option selected>Select Row</option>
                                 @foreach ($rowOptions as $row)
-                                <option value="{{ $row->RowID }}_{{$row->SectionCode}}_{{$row->CemeteryID}}">{{ $row->RowID }}</option>
+                                <option value="{{ $row->id }}_{{ $row->RowID }}">{{ $row->RowID }}</option>
                                 @endforeach
+
                             </select>
                         </div>
                     </div>
+
 
 
                     <div class="mb-3">

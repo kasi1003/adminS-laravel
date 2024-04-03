@@ -13,6 +13,8 @@ class BurialRecords extends Component
 {
 
     public $rows = [];
+    public $rowOptions = [];
+
     public $cemeteries_selected;
     public $section_selected;
     public $selected_grave;
@@ -62,23 +64,21 @@ class BurialRecords extends Component
 
         return $sections;
     }
-    public function getRowOptions()
+    public function updatedSectionSelect($value)
     {
-        $rows = [];
+        // Extract CemeteryID and SectionCode from the selected value
+        list($sectionCode, $cemeteryId) = explode('_', $value);
+        // Fetch the CemeteryID using the Cemetery name
+        $cemetery = Cemeteries::where('CemeteryName', $this->cemeteries_selected)->first();
 
-        if ($this->section_select) {
-            [$sectionCode, $cemeteryID] = explode('_', $this->section_select);
-
-            // Retrieve RowIDs with the same CemeteryID and SectionCode
-            $rows = Graves::where('CemeteryID', $cemeteryID)
-                ->where('SectionCode', $sectionCode)
-                ->pluck('RowID')
-                ->unique()
-                ->toArray();
-        }
-
-        return $rows;
+        // Fetch RowID values based on CemeteryID and SectionCode
+        $this->rowOptions = Graves::select('RowID')
+            ->where('CemeteryID', $cemetery)
+            ->where('SectionCode', $sectionCode)
+            ->distinct()
+            ->get();
     }
+
 
     public function render()
     {
@@ -91,8 +91,7 @@ class BurialRecords extends Component
         return view('livewire.burial-records', [
             'buried_records' => Graves::all(),
             'sectionOptions' => $this->getSectionOptions(),
-            'rowOptions' => $this->getRowOptions(),
-      
+
         ]);
     }
 

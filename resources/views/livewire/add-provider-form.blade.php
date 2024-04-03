@@ -4,11 +4,7 @@
 
         <div class="card-body">
             <form wire.submit="addProvider">
-                <div class="mb-3 d-flex flex-column">
-                    <label for="name" class="form-label">Service Provider Name</label>
-                    <input type="text" wire:model="name" placeholder="Enter Service Provider Name">
-                </div>
-
+                
                 <div class="mb-3 d-flex flex-column">
                     <label for="motto" class="form-label">Service Provider Name</label>
                     <input type="text" wire:model="motto" placeholder="Enter Service Provider Motto">
