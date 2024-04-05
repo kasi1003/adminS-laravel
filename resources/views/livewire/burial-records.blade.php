@@ -41,8 +41,8 @@
                         <div class="mb-3">
                             <select id="row_select" name="row_select" class="form-select p-2" style="width:100%;" wire:model="row_select">
                                 <option selected>Select Row</option>
-                                @foreach ($rowOptions as $row)
-                                <option value="{{ $row }}">{{ $row }}</option>
+                                @foreach ($rowOptions as $rows)
+                                <option value="{{ $rows }}">{{ $rows }}</option>
                                 @endforeach
                             </select>
                         </div>
