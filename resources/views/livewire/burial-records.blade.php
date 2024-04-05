@@ -27,7 +27,7 @@
                             <select id="section_select" name="section_select" class="form-select p-2" aria-label="Default select example" style="width:100%;" wire:model="section_select">
                                 <option selected>Select Section</option>
                                 @foreach ($sectionOptions as $section)
-                                <option value="{{ $section->SectionCode }}_{{ $section->CemeteryID }}">
+                                <option value="{{ $section->SectionCode }}">
                                     {{ $section->SectionCode }}
                                 </option>
                                 @endforeach

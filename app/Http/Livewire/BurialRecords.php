@@ -17,7 +17,6 @@ use Livewire\Component;
 class BurialRecords extends Component
 {
 
-    public $rows = [];
     public $rowOptions = [];
     public $section_code_selected;
     public $cemeteries_selected;
@@ -77,7 +76,7 @@ class BurialRecords extends Component
             // Retrieve rows associated with the selected section
             $sectionCode = $this->section_select;
 
-            $rows = Rows::where('SectionCode','=', $sectionCode)->get('RowID');
+            $rows = Rows::where('SectionCode', $sectionCode)->pluck('RowID');
             dd($rows->toArray());
 
         }
