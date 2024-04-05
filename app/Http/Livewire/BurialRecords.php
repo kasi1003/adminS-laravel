@@ -76,7 +76,10 @@ class BurialRecords extends Component
         if ($this->section_select) {
             // Retrieve rows associated with the selected section
             $sectionCode = $this->section_select;
-            $rows = Rows::where('SectionCode', $sectionCode)->pluck('RowID');
+
+            $rows = Rows::where('SectionCode','=', $sectionCode)->get('RowID');
+            dd($rows->toArray());
+
         }
 
         return $rows;
