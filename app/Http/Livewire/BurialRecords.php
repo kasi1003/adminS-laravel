@@ -85,42 +85,7 @@ class BurialRecords extends Component
     }
 
 
-    /* 
-    public function updatedSectionSelected()
-    {
-        // Check if a section is selected
-        if ($this->section_select) {
-            // Call API to fetch rows based on SectionCode
-            $response = $this->fetchRowsFromAPI($this->section_select);
-
-            // If response is successful and contains rowIDs, update rowOptions
-            if ($response && isset($response['rowIDs'])) {
-                $this->rowOptions = $response['rowIDs'];
-            }
-        } else {
-            // Clear rowOptions if no section is selected
-            $this->rowOptions = [];
-        }
-    }
-
-    public function fetchRowsFromAPI($sectionCode)
-    {
-        // Construct API endpoint URL using sectionCode
-        $url = url("http://localhost:8000/api/getRows/{$sectionCode}");
-
-        // Fetch data from API using HTTP client
-        $response = Http::get($url);
-        Log::info('API Response:', ['url' => $url, 'response' => $response->json()]);
-        // Check if API request is successful
-        if ($response->successful()) {
-            // Return JSON response
-            return $response->json();
-        } else {
-            // Handle error if API request fails
-            Log::error("RowID not found for section code: $sectionCode");
-            return null;
-        }
-    } */
+    
     public function render()
     {
         return view('livewire.burial-records', [
