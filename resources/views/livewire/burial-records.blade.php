@@ -34,7 +34,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="mb-3">
                         <div>
                             <label for="row_select" class="form-label">Select Row</label>
@@ -43,12 +42,12 @@
                             <select id="row_select" name="row_select" class="form-select p-2" style="width:100%;" wire:model="row_select">
                                 <option selected>Select Row</option>
                                 @foreach ($rowOptions as $row)
-                                <option value="{{ $row->id }}_{{ $row->RowID }}">{{ $row->RowID }}</option>
+                                <option value="{{ $row }}">{{ $row }}</option>
                                 @endforeach
-
                             </select>
                         </div>
                     </div>
+
 
 
 

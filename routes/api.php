@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\TownController;
 use App\Http\Controllers\Api\CemeteriesController;
 use App\Http\Controllers\Api\GraveyardController;
 use App\Http\Controllers\Api\BurialRecordsApi;
-
+use App\Http\Controllers\Api\GetRows;
 use App\Http\Controllers\Api\GraveApi;
 
 /*
@@ -31,3 +31,4 @@ Route::delete('/deleteCem/{CemeteryID}',[GraveApi::class, 'delete']);
 Route::put('/editCem/{CemeteryID}', [GraveApi::class, 'update']);
 Route::put('/addBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'update']);
 Route::put('/deleteBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'delete']);
+Route::get('/getRows/{SectionCode}', [GetRows::class, 'getRows']);
