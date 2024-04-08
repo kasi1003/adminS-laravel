@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 
 use App\Models\Rows;
 use App\Models\Cemeteries;
-use App\Models\Regions;
+use App\Models\Graves;
 use App\Models\Sections;
 use App\Models\Towns;
 use Livewire\Component;
