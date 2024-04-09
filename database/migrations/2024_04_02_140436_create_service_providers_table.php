@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('Email');
             $table->unsignedInteger('ContactNumber');
 
-            $table->unsignedInteger('TotalBurials');
-            $table->unsignedInteger('SuccessfulBurials');
-            $table->unsignedInteger('UnsuccessfulBurials');
+            $table->unsignedInteger('TotalBurials')->nullable();
+            $table->unsignedInteger('SuccessfulBurials')->nullable();
+            $table->unsignedInteger('UnsuccessfulBurials')->nullable();
 
 
             $table->timestamps();

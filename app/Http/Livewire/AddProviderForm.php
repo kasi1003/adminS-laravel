@@ -60,9 +60,9 @@ class AddProviderForm extends Component
 
         // Check if the request was successful
         if ($response->successful()) {
+            // Optionally, show a success message or perform other actions
             // Reset form fields after successful submission
             $this->resetForm();
-            // Optionally, show a success message or perform other actions
         } else {
             // Handle errors if the request was not successful
             // You can log errors, display error messages, etc.
@@ -71,6 +71,7 @@ class AddProviderForm extends Component
             // You can then display $errorMessage to the user or handle it as needed
         }
     }
+
     private function resetForm()
     {
         // Reset form fields after successful submission
