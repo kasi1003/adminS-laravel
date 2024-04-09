@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('ServiceName'); // Adding varchar column for section code
             $table->string('Description'); // Adding varchar column for section code
+            $table->decimal('Price', 10, 2);
             $table->unsignedBigInteger('ProviderId'); // Adding int column for total graves
 
             $table->foreign('ProviderId')->references('id')->on('service_providers')->onDelete('cascade');

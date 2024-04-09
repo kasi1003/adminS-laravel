@@ -6,14 +6,21 @@ use Livewire\Component;
 
 class AddProviderForm extends Component
 {
+    public $name;
+    public $motto;
+    public $email;
+    public $cellphoneNumber;
     public $numberOfServices;
     public $serviceNames = [];
-    public $name;
-    public $email;
-    public $number;
-    public $serviceDescriptions =[];
-    public $servicePrices;
+    
+    public $serviceDescriptions = [];
+    public $servicePrices = [];
+
     public $showServiceDescription = [];
+
+
+
+
 
 
 
@@ -24,9 +31,13 @@ class AddProviderForm extends Component
     }
     public function generateServiceDescriptionField($index)
     {
-        $this->showServiceDescription[$index] = true;
+        // Reset serviceNames array based on numberOfServices
+        $this->serviceNames = array_fill(0, $index, '');
+        $this->serviceDescriptions = array_fill(0, $index, '');
+        $this->servicePrices = array_fill(0, $index, '');
+        $this->showServiceDescription = array_fill(0, $index, false);
     }
-    
+
     public function updatedServiceNames($value, $index)
     {
         if (!empty($value)) {
