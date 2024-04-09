@@ -30,6 +30,7 @@
                 </div>
 
                 @if($numberOfServices > 0)
+                
                 <div class="mb-3 d-flex flex-column">
                     @for($i = 0; $i < $numberOfServices; $i++) <div class="mb-3 d-flex flex-column">
                         <label for="service{{$i}}" class="form-label">Service {{$i+1}} Name</label>

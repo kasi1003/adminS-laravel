@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Http;
 
 class AddProviderForm extends Component
 {
@@ -12,7 +13,7 @@ class AddProviderForm extends Component
     public $cellphoneNumber;
     public $numberOfServices;
     public $serviceNames = [];
-    
+
     public $serviceDescriptions = [];
     public $servicePrices = [];
 
@@ -31,13 +32,8 @@ class AddProviderForm extends Component
     }
     public function generateServiceDescriptionField($index)
     {
-        // Reset serviceNames array based on numberOfServices
-        $this->serviceNames = array_fill(0, $index, '');
-        $this->serviceDescriptions = array_fill(0, $index, '');
-        $this->servicePrices = array_fill(0, $index, '');
-        $this->showServiceDescription = array_fill(0, $index, false);
+        $this->showServiceDescription[$index] = true;
     }
-
     public function updatedServiceNames($value, $index)
     {
         if (!empty($value)) {
@@ -48,5 +44,43 @@ class AddProviderForm extends Component
 
     public function addProvider()
     {
+        $data = [
+            'name' => $this->name,
+            'motto' => $this->motto,
+            'email' => $this->email,
+            'cellphoneNumber' => $this->cellphoneNumber,
+            'numberOfServices' => $this->numberOfServices,
+            'serviceNames' => $this->serviceNames,
+            'serviceDescriptions' => $this->serviceDescriptions,
+            'servicePrices' => $this->servicePrices,
+        ];
+
+        // Make an HTTP POST request to your API endpoint
+        $response = Http::post('http://localhost:8000/api/postProvider', $data);
+
+        // Check if the request was successful
+        if ($response->successful()) {
+            // Reset form fields after successful submission
+            $this->resetForm();
+            // Optionally, show a success message or perform other actions
+        } else {
+            // Handle errors if the request was not successful
+            // You can log errors, display error messages, etc.
+            // For example:
+            $errorMessage = $response->json()['message'];
+            // You can then display $errorMessage to the user or handle it as needed
+        }
+    }
+    private function resetForm()
+    {
+        // Reset form fields after successful submission
+        $this->name = '';
+        $this->motto = '';
+        $this->email = '';
+        $this->cellphoneNumber = '';
+        $this->numberOfServices = '';
+        $this->serviceNames = [];
+        $this->serviceDescriptions = [];
+        $this->servicePrices = [];
     }
 }
