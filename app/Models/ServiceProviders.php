@@ -11,5 +11,5 @@ class ServiceProviders extends Model
     protected $table = 'service_providers';
 
 
-    protected $fillable = ['Name', 'Motto', 'Email', 'ContactNumber'];
+    protected $fillable = ['Name', 'Motto', 'Email', 'ContactNumber', 'TotalBurials', 'SuccessfulBurials', 'UnsuccessfulBurials'];
 }

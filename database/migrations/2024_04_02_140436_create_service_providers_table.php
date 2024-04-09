@@ -19,6 +19,12 @@ return new class extends Migration
             $table->string('Motto');
             $table->string('Email');
             $table->unsignedInteger('ContactNumber');
+
+            $table->unsignedInteger('TotalBurials');
+            $table->unsignedInteger('SuccessfulBurials');
+            $table->unsignedInteger('UnsuccessfulBurials');
+
+
             $table->timestamps();
         });
     }
