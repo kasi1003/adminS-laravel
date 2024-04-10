@@ -77,7 +77,7 @@ class BurialRecords extends Component
             $sectionCode = $this->section_select;
 
             $rows = Rows::where('SectionCode', $sectionCode)->pluck('RowID');
-            dd($rows->toArray());
+            //dd($rows->toArray());
 
         }
 

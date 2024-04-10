@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\DB;
 use App\Models\ServiceProviders;
 use App\Models\Services;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -69,6 +70,9 @@ class ServiceProviderApi extends Controller
     }
     public function update(Request $request, $id)
     {
+        // Log or echo the value of $id to inspect it
+        //Log::info('Received ID: ' . $id);
+
         // Validate the incoming request data
         $validatedData = $request->validate([
             'name' => 'required|string',
@@ -85,9 +89,7 @@ class ServiceProviderApi extends Controller
         DB::beginTransaction();
 
         try {
-            // Find the ServiceProvider by ID and delete it
-            ServiceProviders::destroy($id);
-
+        
             // Delete all associated services for the deleted ServiceProvider
             Services::where('ProviderId', $id)->delete();
             // Find the ServiceProvider by ID
@@ -101,10 +103,6 @@ class ServiceProviderApi extends Controller
                 'ContactNumber' => $validatedData['cellphoneNumber'],
                 // Add other model attributes here
             ]);
-
-            // Delete existing services associated with the ServiceProvider
-            $provider->services()->delete();
-
             // Prepare data for bulk insertion of services
             $servicesData = [];
             for ($i = 0; $i < $validatedData['numberOfServices']; $i++) {
@@ -139,14 +137,10 @@ class ServiceProviderApi extends Controller
 
         try {
             // Find the ServiceProvider by ID
-            $provider = ServiceProviders::findOrFail($id);
+            ServiceProviders::where('id', $id)->delete();
 
             // Delete all associated services for the ServiceProvider
             Services::where('ProviderId', $id)->delete();
-
-            // Delete the ServiceProvider
-            $provider->delete();
-
             // Commit the transaction
             DB::commit();
 

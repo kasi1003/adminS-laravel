@@ -10,6 +10,5 @@ class ServiceProviders extends Model
     use HasFactory;
     protected $table = 'service_providers';
 
-
     protected $fillable = ['Name', 'Motto', 'Email', 'ContactNumber', 'TotalBurials', 'SuccessfulBurials', 'UnsuccessfulBurials'];
 }

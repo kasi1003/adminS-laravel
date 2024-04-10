@@ -13,10 +13,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($serviceProviders as $provider)
                         <tr>
-
+                            <td>{{ $provider->Name }}</td>
+                            <td>{{ $provider->ContactNumber }}</td>
+                            <td>{{ $provider->Email }}</td>
                         </tr>
-
+                        @endforeach
                     </tbody>
                 </table>
             </div>
