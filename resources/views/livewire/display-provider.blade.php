@@ -10,6 +10,8 @@
                             <th scope="col">Service Provider Name</th>
                             <th scope="col">Contact Number</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Action</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -18,7 +20,17 @@
                             <td>{{ $provider->Name }}</td>
                             <td>{{ $provider->ContactNumber }}</td>
                             <td>{{ $provider->Email }}</td>
+                            <td>
+                                <button wire:click="editProvider({{ $provider->id }}) type=" button" class="btn btn-primary">Edit</button>
+                                <button wire:click="deleteProvider({{ $provider->id }})" type="button" class="btn btn-danger">Delete</button>
+                                <div wire:loading.remove wire:target="deleteProvider({{ $provider->id }})">
+                                    <!-- Optionally, you can show a loading spinner or text -->
+                                </div>
+
+                            </td>
+
                         </tr>
+
                         @endforeach
                     </tbody>
                 </table>

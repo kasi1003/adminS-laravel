@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
-
 use App\Models\Rows;
 use App\Models\Cemeteries;
 use App\Models\Graves;
@@ -16,90 +15,77 @@ use Livewire\Component;
 
 class BurialRecords extends Component
 {
-
-    public $rowOptions = [];
-    public $section_code_selected;
-    public $cemeteries_selected;
-    public $section_selected;
-    public $selected_grave;
     public $cemeteries;
-    public $section_select;
-    public $grave_number_select;
-    public $name;
-    public $surname;
-    public $date_of_death;
-    public $date_of_birth;
-    public $death_number;
-    public $section_code;
-    public $sections;
-    public $availableGraves = [];
-    public $buried_records;
-    // Add this property to store the selected section
+    public $sections = [];
+    public $rows = [];
+    public $graveNumbers = [];
+
+    public $selectedCemetery;
+    public $selectedSection;
+    public $selectedRow;
+    public $selectedGraveNum;
 
     public function mount()
     {
-        $this->load_data();
-    }
-
-    public function load_data()
-    {
         $this->cemeteries = Cemeteries::all();
-        $this->cemeteries_selected = null;
-        $this->section_select = null;
     }
 
-
-    public function updatedCemeteriesSelected()
+    public function updatedSelectedCemetery($value)
     {
-        $this->section_select = null; // Clear the previous selection when a new cemetery is chosen
+        $this->sections = Sections::where('CemeteryID', $value)->get();
+        $this->selectedSection = null; // Reset selected section when changing cemetery
+        $this->rows = []; // Reset rows when changing cemetery
+        $this->selectedRow = null; // Reset selected row when changing cemetery
+        $this->graveNumbers = []; // Reset grave numbers when changing cemetery
+        $this->selectedGraveNum = null; // Reset selected grave number when changing cemetery
     }
 
-    public function getSectionOptions()
+    public function updatedSelectedSection($value)
     {
-        $sections = [];
-
-        if ($this->cemeteries_selected != 'other') {
-            // Find the selected cemetery
-            $cemetery = Cemeteries::where('CemeteryName', $this->cemeteries_selected)->first();
-
-            if ($cemetery) {
-                // Retrieve sections with the same CemeteryID
-                $sections = Sections::where('CemeteryID', $cemetery->CemeteryID)->get();
-            }
-        }
-        return $sections;
+        $this->rows = Rows::where('SectionCode', $value)->get();
+        $this->selectedRow = null; // Reset selected row when changing section
+        $this->graveNumbers = []; // Reset grave numbers when changing section
+        $this->selectedGraveNum = null; // Reset selected grave number when changing section
     }
-    public function getRowOptions()
+
+    public function updatedSelectedRow($value)
     {
-        $rows = [];
-        if ($this->section_select) {
-            // Retrieve rows associated with the selected section
-            $sectionCode = $this->section_select;
-
-            $rows = Rows::where('SectionCode', $sectionCode)->pluck('RowID');
-            //dd($rows->toArray());
-
-        }
-
-        return $rows;
+        $this->graveNumbers = Graves::where('RowID', $value)->pluck('GraveNum', 'id')->toArray();
+        $this->selectedGraveNumber = null; // Reset selected grave number when changing row
     }
 
-
-    
     public function render()
     {
-        return view('livewire.burial-records', [
-            'sectionOptions' => $this->getSectionOptions(),
-            'rowOptions' => $this->getRowOptions()
-
-
-
-        ]);
+        return view('livewire.burial-records');
     }
-
-
 
     public function addRecord()
     {
+        // Validate your input data
+        $this->validate([
+            'selectedCemetery' => 'required',
+            'selectedSection' => 'required',
+            'selectedRow' => 'required',
+            'selectedGraveNum' => 'required', // Add validation for grave number if necessary
+        ]);
+    
+        // Placeholder logic for adding the record
+        // You can replace this with your actual logic to create a new record in the database
+        // For demonstration purposes, I'm just logging the selected values
+        Log::info('Cemetery: ' . $this->selectedCemetery);
+        Log::info('Section: ' . $this->selectedSection);
+        Log::info('Row: ' . $this->selectedRow);
+        Log::info('Grave Number: ' . $this->selectedGraveNum);
+    
+        // Reset the form fields after adding the record
+        $this->reset([
+            'selectedSection',
+            'selectedRow',
+            'selectedGraveNum',
+        ]);
+    
+        // Optionally, you can emit an event to trigger any updates in other components or notify the user
+        $this->emit('recordAdded', 'Record added successfully!');
     }
+    
 }
