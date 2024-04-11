@@ -15,6 +15,7 @@ use Livewire\Component;
 
 class BurialRecords extends Component
 {
+    public $selectedGraveNumber;
     public $cemeteries;
     public $sections = [];
     public $rows = [];
