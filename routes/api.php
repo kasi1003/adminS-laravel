@@ -6,10 +6,9 @@ use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\TownController;
 use App\Http\Controllers\Api\CemeteriesController;
 use App\Http\Controllers\Api\GraveyardController;
-use App\Http\Controllers\Api\BurialRecordsApi;
-use App\Http\Controllers\Api\GetRows;
+use App\Http\Controllers\Api\GraveController;
+
 use App\Http\Controllers\Api\GraveApi;
-use App\Http\Controllers\Api\ServiceProviderApi;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,14 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 });
 Route::get('/regions', [GraveApi::class, 'showRegions'])->name('region');
-Route::post('/postCem', [GraveApi::class, 'store']);
-
-Route::delete('/deleteCem/{CemeteryID}',[GraveApi::class, 'delete']);
+Route::post('/cemeteryPost', [GraveApi::class, 'store']);
+Route::delete('/cemDelete/{CemeteryID}',[GraveApi::class, 'deleteGraveyard'])->name('cemDelete');
 Route::put('/editCem/{CemeteryID}', [GraveApi::class, 'update']);
-Route::put('/addBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'update']);
-Route::put('/deleteBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'delete']);
-Route::get('/getRows/{SectionCode}', [GetRows::class, 'getRows']);
-
-Route::post('/postProvider', [ServiceProviderApi::class, 'store']);
-Route::put('/editProvider/{id}', [ServiceProviderApi::class, 'update']);
-Route::delete('/deleteProvider/{id}',[ServiceProviderApi::class, 'delete']);
