@@ -32,7 +32,8 @@
                 @if($numberOfServices > 0)
                 
                 <div class="mb-3 d-flex flex-column">
-                    @for($i = 0; $i < $numberOfServices; $i++) <div class="mb-3 d-flex flex-column">
+                    @for($i = 0; $i < $numberOfServices; $i++) 
+                    <div class="mb-3 d-flex flex-column">
                         <label for="service{{$i}}" class="form-label">Service {{$i+1}} Name</label>
                         <input type="text" wire:model="serviceNames.{{$i}}" placeholder="Enter Service Name" id="service{{$i}}">
 
@@ -45,10 +46,10 @@
                         @endif
 
 
+                    </div>
+                    @endfor
                 </div>
-                @endfor
-        </div>
-        @endif
+                @endif
 
         <div>
             <button class="btn btn-primary" type="submit">Submit</button>

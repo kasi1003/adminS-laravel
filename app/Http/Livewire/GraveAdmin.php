@@ -118,7 +118,7 @@ class GraveAdmin extends Component
             ];
 
             // Make a PUT request to the API endpoint with the cemetery ID
-            $response = Http::put('http://localhost:8000/api/editCem/' . $cemeteryID, $validatedData);
+            $response = Http::put('http://localhost:8000/api/editCem' . $cemeteryID, $validatedData);
 
             // Handle the response accordingly
             if ($response->successful()) {

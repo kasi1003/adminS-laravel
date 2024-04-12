@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AddProviderForm extends Component
 {
@@ -28,6 +29,8 @@ class AddProviderForm extends Component
 
     public function render()
     {
+       
+
         return view('livewire.add-provider-form');
     }
     public function generateServiceDescriptionField($index)
@@ -54,6 +57,7 @@ class AddProviderForm extends Component
             'serviceDescriptions' => $this->serviceDescriptions,
             'servicePrices' => $this->servicePrices,
         ];
+        dd('Data sent to API:', $data);
 
         // Make an HTTP POST request to your API endpoint
         $response = Http::post('http://localhost:8000/api/postProvider', $data);
