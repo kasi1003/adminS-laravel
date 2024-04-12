@@ -109,6 +109,7 @@ class GraveApi extends Controller
             return response()->json(['message' => 'Failed to save cemetery data. ' . $e->getMessage()], 500);
         }
     }
+    //Update records
     public function update(Request $request, $cemeteryID)
     {
         // Validate the incoming request data
@@ -181,5 +182,14 @@ class GraveApi extends Controller
             // Return an error response
             return response()->json(['message' => 'Failed to update cemetery data. ' . $e->getMessage()], 500);
         }
+    }
+    //delete records
+    public function delete(Request $request, $cemeteryID)
+    {
+        // Delete records associated with the selected cemetery ID from Sections, Rows, and Graves models
+        Cemeteries::where('CemeteryID', $cemeteryID)->delete();
+        Sections::where('CemeteryID', $cemeteryID)->delete();
+        Rows::where('CemeteryID', $cemeteryID)->delete();
+        Graves::where('CemeteryID', $cemeteryID)->delete();
     }
 }
