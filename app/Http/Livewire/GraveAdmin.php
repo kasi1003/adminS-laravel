@@ -27,11 +27,10 @@ class GraveAdmin extends Component
     public $regions = [];
     public $towns = [];
     public $isLoading = true;
-    public $editCemeteryName;
+    public $editCemeteryName = false;
     public $number_of_rows = [];
     public $search = '';
-    public $selectedCemeteryId;
-    public $newGraveyardName;
+
     //this function is only called once when the page loads
 
     public function mount()
@@ -99,14 +98,8 @@ class GraveAdmin extends Component
     {
 
         if ($this->cemeteries_selected != 'other') {
-            // Fetch the primary key value of the selected cemetery
-            $cemetery = Cemeteries::find($this->cemeteries_selected);
-            if (!$cemetery) {
-                // Handle the case where the selected cemetery is not found
-                // Return an error message or redirect the user
-                return;
-            }
-            $cemeteryID = $cemetery->CemeteryID;
+            // Existing cemetery selected, update the data in both tables
+            $cemeteryID = $this->cemeteries_selected;
 
             // Prepare data for updating the cemetery
             $validatedData = [
@@ -138,7 +131,7 @@ class GraveAdmin extends Component
                 'numberOfGraves' => $this->number_of_graves,
             ];
             // Make a POST request to the API endpoint
-            $response = Http::post('http://localhost:8000/api/postCem', $validatedData);
+            $response = Http::post('http://localhost:8000/api/cemeteryPost', $validatedData);
             // Check if the API request was successful
             if ($response->successful()) {
 
@@ -148,6 +141,7 @@ class GraveAdmin extends Component
                     'title' => 'Success!',
                     'text' => 'Cemetery data saved successfully',
                     'icon' => 'success',
+                    'confirmButtonText' => 'OK'
                 ]);
                 $this->resetForm();
 
@@ -176,32 +170,46 @@ class GraveAdmin extends Component
         $this->number_of_graves = [];
         $this->number_of_rows = [];
     }
-    protected $listeners = ['editCemetery', 'updateCemeterySelect'];
-
-    public function editCemetery($cemeteryId)
+    public function updated($propertyName)
     {
-        $this->cemeteries_selected = $cemeteryId;
-        $this->editCemeteryName = $cemeteryId !== 'other';
-
-        // Fetch the cemetery name corresponding to the selected cemetery ID
-        if ($this->editCemeteryName) {
-            $cemetery = Cemeteries::find($cemeteryId);
-            if ($cemetery) {
-                $this->newGraveyardName = $cemetery->CemeteryName; // Set the cemetery name as the value for the input field
-                //dd($this->newGraveyardName);
-            }
-        } else {
-            $this->newGraveyardName = null;
-        }
-        // If cemetery selected is 'other' and editCemeteryName is true, set grave_name to newGraveyardName
-        if ($this->cemeteries_selected !== 'other' && $this->editCemeteryName) {
-            $this->grave_name = $this->newGraveyardName;
-        } else {
-            $this->grave_name = null; // Reset grave_name if cemetery selected is not 'other' or editCemeteryName is false
-        }
+        // Clear any previous validation errors when the user starts typing
+        $this->resetErrorBag($propertyName);
     }
-    public function updateCemeterySelect($cemeteryId)
+    public function modGrave($id, $type_of_mod)
     {
-        $this->cemeteries_selected = $cemeteryId;
+        //to delete the grave
+        if ($type_of_mod == 'delete') {
+            # code...
+        }
+        //to edit the grave
+        if ($type_of_mod == 'edit') {
+            # code...
+        }
+        dd($this->sections);
+    }
+
+    public function addSection()
+    {
+        // Add a new section to the $sections array
+        $section_id = count($this->sections) + 1;
+
+        array_push($this->sections, [
+
+            'CemeteryID' => $this->cemeteries_selected,
+            'SectionCode' => 'Section ' . $section_id, // You may need to adjust this based on your API requirements
+            'TotalGraves' => $this->number_of_graves,
+            'AvailableGraves' => $this->number_of_graves,
+        ]);
+
+        // Clear the input field after adding the section
+        $this->number_of_graves = null;
+
+        // Dispatch a success message
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Section Added',
+            'icon' => 'success',
+            'iconColor' => 'green',
+        ]);
+        // session()->flash('message', 'Section Added');
     }
 }

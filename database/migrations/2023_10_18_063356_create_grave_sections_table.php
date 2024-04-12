@@ -18,8 +18,6 @@ return new class extends Migration
             $table->unsignedInteger('CemeteryID'); // Adding foreign key column
             $table->string('SectionCode'); // Adding varchar column for section code
             $table->unsignedInteger('Rows'); // Adding int column for total graves
-            $table->string('SectionType')->nullable(); // Adding varchar column for section code
-            $table->binary('SectionSvg')->nullable(); // Adding blob column for SVG map, allowing NULL values
 
             
             $table->timestamps(); // Adding created_at and updated_at columns

@@ -1,8 +1,7 @@
-<div style="width: 40%;">
-    
-        <div class="card mt-5 ml-5">
-        <div class="card-header">Add Cemetery</div>
-
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mt-5 ml-5" style="width: 95%;">
+            <h1 class="card-header">Add a Graveyard</h1>
             <div class="card-body">
                 <!--form to add a graveyard-->
                 <form wire:submit="addGrave">
@@ -52,7 +51,7 @@
                                 <option value="{{ $cemetery->CemeteryID }}">{{ $cemetery->CemeteryName }}</option>
                                 @endforeach
 
-                                <option value="other">Create New Cemetery</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
 
@@ -63,7 +62,6 @@
                         <input type="text" class="form-control" id="graveyardName" name="graveyardName" placeholder="Enter Graveyard Name" wire:model="grave_name" />
                         @endif
                     </div>
-               
 
                     <!--section details-->
                     <div class="mb-3">
@@ -94,8 +92,15 @@
 
         </form>
     </div>
-
+</div>
 </div>
 <!-- edit-graveyard component -->
-
+<div class="col-md-6">
+    <div class="card mt-5 ml-5" style="width: 95%;">
+        <h1 class="card-header">Edit Graveyard</h1>
+        <div class="card-body">
+            <livewire:edit-graveyard />
+        </div>
+    </div>
+</div>
 </div>

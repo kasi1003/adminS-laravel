@@ -17,26 +17,20 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('addGraveyards')" :active="request()->routeIs('addGraveyards')">
+                    <x-nav-link :href="route('grave.admin')" :active="request()->routeIs('grave.admin')">
                         {{ __('Manage Graveyards') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('burialRecords')" :active="request()->routeIs('burialRecords')">
+                    <x-nav-link :href="route('grave.records')" :active="request()->routeIs('grave.records')">
                         {{ __('Manage Burial Records') }}
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('serviceProviders')" :active="request()->routeIs('serviceProviders')">
-                        {{ __('Manage Service Providers') }}
+                    <x-nav-link :href="route('grave.edit')" :active="request()->routeIs('grave.edit')">
+                        {{ __('Edit Graveyard') }}
                     </x-nav-link>
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('quotations')" :active="request()->routeIs('quotations')">
-                        {{ __('Manage Manage Quotations') }}
-                    </x-nav-link>
-                </div>
-
             </div>
 
             <!-- Settings Dropdown -->
@@ -63,7 +57,8 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
@@ -91,26 +86,6 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('addGraveyards')" :active="request()->routeIs('addGraveyards')">
-                {{ __('Manage Graveyards') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('burialRecords')" :active="request()->routeIs('burialRecords')">
-                {{ __('Manage Burial Records') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('serviceProviders')" :active="request()->routeIs('serviceProviders')">
-                {{ __('Manage Service Providers') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('quotations')" :active="request()->routeIs('quotations')">
-                {{ __('Manage Manage Quotations') }}
-            </x-responsive-nav-link>
-        </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
@@ -128,7 +103,8 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
-                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
+                    <x-responsive-nav-link :href="route('logout')"
+                            onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
