@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Cemeteries;
 use App\Models\Sections;
 use Livewire\Component;
+use Illuminate\Support\Facades\Http;
 
 class EditGraveyard extends Component
 {
@@ -12,6 +13,9 @@ class EditGraveyard extends Component
     public $selectedCemetery;
     public $cemeteries;
     public $sections;
+    public $cemeteryId;
+
+
     public function mount()
     {
         // Fetch cemetery data from your database
@@ -25,50 +29,30 @@ class EditGraveyard extends Component
 
         return view('livewire.edit-graveyard');
     }
-    public function redirectToAdminPage($cemeteryId)
-    {
-        // Store the selected cemetery details in session
-        $selectedCemeteryDetails = Cemeteries::find($cemeteryId);
-        session(['selectedCemeteryDetails' => $selectedCemeteryDetails]);
+    
 
-        // Redirect to the admin page
-        return redirect()->to('/graveyard-admin');
+
+   
+    public function editCemetery($cemeteryId)
+    {
+        $this->emit('editCemetery', $cemeteryId);
+        $this->emit('updateCemeterySelect', $cemeteryId); // Emit the event to update the selected cemetery in the form component
+
     }
-
-
-    public function openEditModal($cemeteryId)
+    
+    // Livewire component
+    public function deleteCemetery($cemeteryID)
     {
-        $this->selectedCemetery = Cemeteries::find($cemeteryId);
-        $this->showEditModal = true;
-    }
+        // Make a DELETE request to the API endpoint to delete records associated with the selected cemetery ID
+        $response = Http::delete('http://localhost:8000/api/deleteCem/' . $cemeteryID);
 
-    public function saveChanges()
-    {
-        $this->validate([
-            'selectedCemetery.CemeteryName' => 'required',
-            'selectedCemetery.Town' => 'required',
-            'selectedCemetery.NumberOfSections' => 'required|integer',
-            'selectedCemetery.TotalGraves' => 'required|integer',
-            'selectedCemetery.AvailableGraves' => 'required|integer',
-        ]);
-
-        $this->selectedCemetery->save();
-        $this->showEditModal = false;
-    }
-    public function deleteCemetery($cemeteryId)
-    {
-        // Find the cemetery by ID
-        $cemetery = Cemeteries::find($cemeteryId);
-
-        if ($cemetery) {
-            // Get the CemeteryID
-            $cemeteryId = $cemetery->CemeteryID;
-
-            // Delete the cemetery
-            $cemetery->delete();
-
-            // Delete related sections in the grave_sections table
-            Sections::where('CemeteryID', $cemeteryId)->delete();
+        // Handle the response accordingly
+        if ($response->successful()) {
+            // Records deleted successfully
+            // Optionally, you can show a success message to the user
+        } else {
+            // Failed to delete records
+            // Optionally, you can show an error message to the user
         }
     }
 }
