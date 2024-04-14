@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('BuriedPersonsName')->nullable();
             $table->date('DateOfBirth')->nullable();
             $table->date('DateOfDeath')->nullable();
-            $table->string('DeathCode')->nullable();
+            $table->unsignedInteger('DeathCode')->nullable();
 
             $table->timestamps();
 

@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\Cemeteries;
+use App\Models\Graves;
+
 use App\Models\Sections;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
@@ -26,8 +28,8 @@ class EditGraveyard extends Component
     }
     public function render()
     {
-
-        return view('livewire.edit-graveyard');
+        $graves = Graves::all();
+        return view('livewire.edit-graveyard', ['graves' => $graves]);
     }
     
 
