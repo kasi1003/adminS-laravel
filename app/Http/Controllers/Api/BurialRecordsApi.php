@@ -14,6 +14,13 @@ class BurialRecordsApi extends Controller
     public function update(Request $request, $cemeteryID, $sectionCode, $rowID, $graveNum)
     {
         try {
+            // Validate the incoming request data
+        $validatedData = $request->validate([
+            'BuriedPersonsName' => 'required|string',
+            'DateOfBirth' => 'required|date',
+            'DateOfDeath' => 'required|date',
+            'DeathCode' => 'required|integer',
+        ]);
             // Start a transaction
             DB::beginTransaction();
 

@@ -2,7 +2,7 @@
     <div class="card bg-light mb-3 mx-auto mt-3">
         <div class="card-header">Add Burial Record</div>
         <div class="card-body">
-            <form wire:submit.prevent="addRecord">
+            <form wire:submit="addRecord">
                 <div class="mb-3">
                     <label for="cemeteries_selected" class="form-label">Cemetery</label>
                     <select id="cemeteries_selected" name="cemeteries_selected" class="form-select p-2" style="width:100%;" wire:model="selectedCemetery">
@@ -77,14 +77,3 @@
     </div>
 </div>
 
-<script>
-    window.addEventListener('swal', function(e) {
-        Swal.fire({
-            title: e.detail.title,
-            iconColor: e.detail.iconColor,
-            icon: e.detail.icon,
-            timer: 1000,
-            showConfirmButton: false,
-        });
-    });
-</script>
