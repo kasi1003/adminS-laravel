@@ -27,7 +27,7 @@
                                         class="btn btn-danger">Delete</button>
                                     <!-- Button trigger modal -->
                                     <!-- Button trigger modal -->
-                                    <button wire:click="viewServices({{ $provider->id }})" type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    <button wire:click.prevent="viewServices({{ $provider->id }})" type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#staticBackdrop">
                                         View Services
                                     </button>

@@ -34,7 +34,6 @@ Route::put('/editCem/{CemeteryID}', [GraveApi::class, 'update']);
 Route::put('/addBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'update']);
 Route::put('/deleteBurialRecord/{CemeteryID}/{SectionCode}/{RowID}/{GraveNum}', [BurialRecordsApi::class, 'delete']);
 Route::get('/getRows/{SectionCode}', [GetRows::class, 'getRows']);
-
 Route::post('/postProvider', [ServiceProviderApi::class, 'store']);
 Route::put('/editProvider/{id}', [ServiceProviderApi::class, 'update']);
 Route::delete('/deleteProvider/{id}',[ServiceProviderApi::class, 'delete']);

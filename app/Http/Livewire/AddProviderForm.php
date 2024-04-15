@@ -29,7 +29,7 @@ class AddProviderForm extends Component
 
     public function render()
     {
-       
+
 
         return view('livewire.add-provider-form');
     }
@@ -57,22 +57,18 @@ class AddProviderForm extends Component
             'serviceDescriptions' => $this->serviceDescriptions,
             'servicePrices' => $this->servicePrices,
         ];
-        dd('Data sent to API:', $data);
-
         // Make an HTTP POST request to your API endpoint
         $response = Http::post('http://localhost:8000/api/postProvider', $data);
 
         // Check if the request was successful
         if ($response->successful()) {
             // Optionally, show a success message or perform other actions
-            // Reset form fields after successful submission
             $this->resetForm();
         } else {
-            // Handle errors if the request was not successful
-            // You can log errors, display error messages, etc.
-            // For example:
-            $errorMessage = $response->json()['message'];
-            // You can then display $errorMessage to the user or handle it as needed
+            // Display a generic error message to the user
+            session()->flash('error', 'Failed to submit the form. Please try again later.');
+
+            
         }
     }
 
