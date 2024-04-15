@@ -31,6 +31,7 @@ class DisplayProvider extends Component
     {
         $this->selectedProviderId = $providerId; // Store the selected provider's ID
         $this->services = Services::where('ProviderId', $providerId)->get(); // Retrieve services based on the ProviderId
+        $this->dispatchBrowserEvent('openModal');
     }
     public function deleteProvider($id)
     {

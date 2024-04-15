@@ -16,42 +16,35 @@
                     </thead>
                     <tbody>
                         @foreach ($serviceProviders as $provider)
-                            <tr>
-                                <td>{{ $provider->Name }}</td>
-                                <td>{{ $provider->ContactNumber }}</td>
-                                <td>{{ $provider->Email }}</td>
-                                <td>
-                                    <button wire:click="editProvider({{ $provider->id }}) type=" button"
-                                        class="btn btn-primary">Edit</button>
-                                    <button wire:click="deleteProvider({{ $provider->id }})" type="button"
-                                        class="btn btn-danger">Delete</button>
-                                    <!-- Button trigger modal -->
-                                    <!-- Button trigger modal -->
-                                    <button wire:click.prevent="viewServices({{ $provider->id }})" type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#staticBackdrop">
-                                        View Services
-                                    </button>
-                
-                                </td>
+                        <tr>
+                            <td>{{ $provider->Name }}</td>
+                            <td>{{ $provider->ContactNumber }}</td>
+                            <td>{{ $provider->Email }}</td>
+                            <td>
+                                <button wire:click="editProvider({{ $provider->id }}) type=" button" class="btn btn-primary">Edit</button>
+                                <button wire:click="deleteProvider({{ $provider->id }})" type="button" class="btn btn-danger">Delete</button>
+                                <!-- Button trigger modal -->
+                                <button wire:ignore.self type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    View Services
+                                </button>
 
-                            </tr>
+
+                            </td>
+
+                        </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
+
     </div>
-
-
-
-
     <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Services</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -66,11 +59,11 @@
                             </thead>
                             <tbody>
                                 @foreach ($services as $service)
-                                    <tr>
-                                        <td>{{ $service->ServiceName }}</td>
-                                        <td>{{ $service->Description }}</td>
-                                        <td>{{ $service->Price }}</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $service->ServiceName }}</td>
+                                    <td>{{ $service->Description }}</td>
+                                    <td>{{ $service->Price }}</td>
+                                </tr>
                                 @endforeach
                                 <tr>
 
@@ -81,11 +74,17 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
+
+
+
+
+
+
 
 
 </div>
