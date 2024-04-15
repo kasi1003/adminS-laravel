@@ -23,7 +23,7 @@ class ServiceProviderApi extends Controller
             'numberOfServices' => 'required|integer',
             'serviceNames.*' => 'required|string',
             'serviceDescriptions.*' => 'required|string',
-            'servicePrices.*' => 'required|integer',
+            'servicePrices.*' => 'required|numeric',
         ]);
 
         // Start a database transaction
@@ -39,7 +39,6 @@ class ServiceProviderApi extends Controller
                 // Add other model attributes here
             ]);
 
-            // Prepare data for bulk insertion of services
             // Prepare data for bulk insertion of services
             $servicesData = [];
             for ($i = 0; $i < $validatedData['numberOfServices']; $i++) {

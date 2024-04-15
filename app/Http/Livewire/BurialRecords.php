@@ -20,21 +20,31 @@ class BurialRecords extends Component
     public $sections = [];
     public $rows = [];
     public $graveNumbers = [];
-
+    public $cemeteryID;
     public $selectedCemetery;
     public $selectedSection;
     public $selectedRow;
     public $selectedGraveNum;
+
+    public $death_number;
+    public $name;
+    public $surname;
+    public $date_of_birth;
+
+    public $date_of_death;
+    public $validatedData = [];
+
 
     public function mount()
     {
         $this->cemeteries = Cemeteries::all();
     }
 
+
     public function updatedSelectedCemetery($value)
     {
         $this->sections = Sections::where('CemeteryID', $value)->get();
-        $this->selectedSection = null; // Reset selected section when changing cemetery
+        $this->cemeteryID = $value;
         $this->rows = []; // Reset rows when changing cemetery
         $this->selectedRow = null; // Reset selected row when changing cemetery
         $this->graveNumbers = []; // Reset grave numbers when changing cemetery
@@ -44,7 +54,7 @@ class BurialRecords extends Component
     public function updatedSelectedSection($value)
     {
         $this->rows = Rows::where('SectionCode', $value)->get();
-        $this->selectedRow = null; // Reset selected row when changing section
+
         $this->graveNumbers = []; // Reset grave numbers when changing section
         $this->selectedGraveNum = null; // Reset selected grave number when changing section
     }
@@ -53,7 +63,13 @@ class BurialRecords extends Component
     {
         $this->graveNumbers = Graves::where('RowID', $value)->pluck('GraveNum', 'id')->toArray();
         $this->selectedGraveNumber = null; // Reset selected grave number when changing row
+        // Debugging: Output the selected cemetery name and its ID
     }
+    public function updatedSelectedGraveNumber($value)
+    {
+        $this->selectedGraveNumber = $value;
+    }
+
 
     public function render()
     {
@@ -62,31 +78,27 @@ class BurialRecords extends Component
 
     public function addRecord()
     {
-        // Validate your input data
-        $this->validate([
-            'selectedCemetery' => 'required',
-            'selectedSection' => 'required',
-            'selectedRow' => 'required',
-            'selectedGraveNum' => 'required', // Add validation for grave number if necessary
-        ]);
-    
-        // Placeholder logic for adding the record
-        // You can replace this with your actual logic to create a new record in the database
-        // For demonstration purposes, I'm just logging the selected values
-        Log::info('Cemetery: ' . $this->selectedCemetery);
-        Log::info('Section: ' . $this->selectedSection);
-        Log::info('Row: ' . $this->selectedRow);
-        Log::info('Grave Number: ' . $this->selectedGraveNum);
-    
-        // Reset the form fields after adding the record
-        $this->reset([
-            'selectedSection',
-            'selectedRow',
-            'selectedGraveNum',
-        ]);
-    
-        // Optionally, you can emit an event to trigger any updates in other components or notify the user
-        $this->emit('recordAdded', 'Record added successfully!');
+
+
+        // Prepare the data to be sent to the API
+        $validatedData = [
+            'BuriedPersonsName' => $this->name . ' ' . $this->surname, // Concatenate name and surname
+            'DateOfBirth' => $this->date_of_birth,
+            'DateOfDeath' => $this->date_of_death,
+            'DeathCode' => $this->death_number,
+        ];
+
+        // Make a PUT request to the API endpoint with the cemetery ID
+        $response = Http::put('http://localhost:8000/api/addBurialRecord/' . $this->cemeteryID . '/' . $this->selectedSection . '/' . $this->selectedRow . '/' . $this->selectedGraveNumber, $validatedData);
+
+        // Check if the request was successful
+        if ($response->successful()) {
+            // Optionally, you can update the Livewire component state or show a success message
+            //$this->resetForm(); // Reset the form fields
+            // You might want to emit an event or reload data after a successful request
+        } else {
+            // Handle the case where the request failed
+            // You can display an error message or perform any necessary actions
+        }
     }
-    
 }

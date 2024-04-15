@@ -7,6 +7,7 @@
     <div class="container flex">
         <livewire:add-provider-form />
         <livewire:display-provider />
+        
 
     </div>
 </x-app-layout>

@@ -5,12 +5,15 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\ServiceProviders;
 use Illuminate\Support\Facades\Http;
+use App\Models\Services;
 
 
 
 class DisplayProvider extends Component
 {
     public $serviceProviders;
+    public $selectedProviderId; // Add a property to store the selected provider's ID
+    public $services = [];
     
     public function mount()
     {
@@ -22,6 +25,12 @@ class DisplayProvider extends Component
     {
         $this->serviceProviders = ServiceProviders::all();
       
+    }
+    // Method to retrieve services associated with a specific service provider
+    public function viewServices($providerId)
+    {
+        $this->selectedProviderId = $providerId; // Store the selected provider's ID
+        $this->services = Services::where('ProviderId', $providerId)->get(); // Retrieve services based on the ProviderId
     }
     public function deleteProvider($id)
     {
