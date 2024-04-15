@@ -4,6 +4,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PDFController;
+use App\Http\Livewire\Quotations;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,9 +47,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/quotations', function () {
         return view('quotation-view');
     })->name('quotations');
+
+    Route::post('/approve-order/{userId}', [Quotations::class, 'approveOrder'])->name('approve-order');
+
+
+    // New route for generating PDFs
+    Route::post('/generate-pdf/{userId}', [PDFController::class, 'generatePDF'])->name('generate-pdf');
+
+    // Auth routes moved outside the middleware group
     Auth::routes();
-
-
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
