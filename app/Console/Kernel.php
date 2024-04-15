@@ -14,9 +14,9 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
-    }
+{
+    $schedule->command('orders:delete-old')->everyMinute();
+}
 
     /**
      * Register the commands for the application.
@@ -29,4 +29,8 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+    protected $commands = [
+        Commands\DeleteOldOrders::class,
+    ];
+    
 }
