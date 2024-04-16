@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Services;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Faker\Generator as Faker;
+use App\Models\ServiceProviders;
 
 class ServiceSeeder extends Seeder
 {
@@ -17,6 +15,20 @@ class ServiceSeeder extends Seeder
      */
     public function run()
     {
-       
+        // Specify the number of services you want to create (e.g., 10)
+        $numServices = 10;
+        
+        // Get all service provider IDs
+        $providerIds = ServiceProviders::pluck('id')->toArray();
+
+        // Create services for each provider
+        foreach ($providerIds as $providerId) {
+            Services::factory()->count($numServices)->create([
+                'ProviderId' => $providerId,
+            ]);
+        }
     }
 }
+
+
+

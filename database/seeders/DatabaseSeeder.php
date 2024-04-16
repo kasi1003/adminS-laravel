@@ -17,7 +17,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RegionSeeder::class,
             TownSeeder::class,
-            // Add more seeders here if needed
+            CemeteriesSeeder::class,
+            GraveSectionsSeeder::class,
+            RowsSeeder::class,
+            GraveSeeder::class,
+            ServiceProvidersSeeder::class,
+            //ServiceSeeder::class,
         ]);
     }
 }
