@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('SectionCode');
             $table->string('RowID');
             $table->unsignedInteger('GraveNum');
+            $table->decimal('Price', 10, 2)->nullable();
+
             $table->tinyInteger('GraveStatus')->nullable();
             $table->string('BuriedPersonsName')->nullable();
             $table->date('DateOfBirth')->nullable();
