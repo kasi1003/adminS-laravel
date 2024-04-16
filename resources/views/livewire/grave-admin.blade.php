@@ -18,7 +18,6 @@
                     <!-- checked -->
 
                     <!-- Blade View -->
-                    <!-- Blade View -->
                     <div class="mb-3">
                         <div>
                             <label for="townSelect" class="form-label">Town Location</label>
