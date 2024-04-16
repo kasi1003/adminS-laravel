@@ -42,19 +42,28 @@ class EditGraveyard extends Component
 
     }
     
-    // Livewire component
     public function deleteCemetery($cemeteryID)
-    {
-        // Make a DELETE request to the API endpoint to delete records associated with the selected cemetery ID
-        $response = Http::delete('http://localhost:8000/api/deleteCem/' . $cemeteryID);
+{
+    // Make a DELETE request to the API endpoint
+    $response = Http::delete('http://localhost:8000/api/deleteCem/' . $cemeteryID);
 
-        // Handle the response accordingly
-        if ($response->successful()) {
-            // Records deleted successfully
-            // Optionally, you can show a success message to the user
-        } else {
-            // Failed to delete records
-            // Optionally, you can show an error message to the user
-        }
+    // Handle the response accordingly
+    if ($response->successful()) {
+        // Cemetery deleted successfully
+        // Show success message to the user
+        session()->flash('success', 'Cemetery deleted successfully.');
+        // Update cemetery data after deletion
+        $this->cemeteries = $this->cemeteries->reject(function ($cemetery) use ($cemeteryID) {
+            return $cemetery->id === $cemeteryID;
+        });
+    } else {
+        // Failed to delete cemetery
+        // Show error message to the user
+        session()->flash('error', 'Failed to delete cemetery.');
     }
+
+    // Optionally, you can refresh the cemetery data after deletion
+    $this->load_data(); // Assuming this method loads cemetery data
+}
+
 }
