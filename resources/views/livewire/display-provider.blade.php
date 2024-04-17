@@ -21,7 +21,7 @@
                             <td>{{ $provider->ContactNumber }}</td>
                             <td>{{ $provider->Email }}</td>
                             <td>
-                                <button wire:click="editProvider({{ $provider->id }}) type=" button" class="btn btn-primary">Edit</button>
+                            <button wire:click="editProvider({{ $provider->id }})" type="button" class="btn btn-primary">Edit</button>
                                 <button wire:click="deleteProvider({{ $provider->id }})" type="button" class="btn btn-danger">Delete</button>
                                 <!-- Button trigger modal -->
                                 <button wire:ignore.self type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
