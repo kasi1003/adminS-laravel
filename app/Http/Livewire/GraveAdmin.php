@@ -6,7 +6,10 @@ use App\Models\Cemeteries;
 use App\Models\Regions;
 use App\Models\Sections;
 use App\Models\Towns;
-use DB;
+use App\Models\Rows;
+use Illuminate\Support\Facades\DB;
+
+use App\Models\Graves;
 use Illuminate\Support\Facades\Log;
 
 use Livewire\Component;
@@ -138,16 +141,69 @@ class GraveAdmin extends Component
         ];
 
         // Make a PUT request to the API endpoint with the cemetery ID
-        $response = Http::put('http://localhost:8000/api/editCem/' . $this->cemeteries_selected, $validatedData);
 
-        // Handle the response accordingly
-        if ($response->successful()) {
-            // Cemetery data updated successfully
-            // Show success message to the user
-        } else {
-            // Failed to update cemetery data
-            // Show error message to the user
-        }
+         // Delete existing records associated with the given CemeteryID
+         Sections::where('CemeteryID', $this->cemeteries_selected)->delete();
+         Rows::where('CemeteryID', $this->cemeteries_selected)->delete();
+         Graves::where('CemeteryID', $this->cemeteries_selected)->delete();
+ 
+         // Start a database transaction
+         DB::beginTransaction();
+ 
+         try {
+             // Update the Cemeteries record
+             $cemetery = Cemeteries::findOrFail($this->cemeteries_selected);
+             $cemetery->update([
+                 'CemeteryName' => $validatedData['graveyardName'],
+                 'Town' => $validatedData['townLocation'],
+                 'NumberOfSections' => $validatedData['graveyardNumber'],
+                 // Update other model attributes here
+             ]);
+ 
+             // Update or create sections, rows, and graves based on the updated data
+             for ($i = 0; $i < $validatedData['graveyardNumber']; $i++) {
+                 $sectionCode = 'S_' . $this->cemeteries_selected . '_' . ($i + 1);
+ 
+                 // Update or create section
+                 $section = Sections::updateOrCreate(
+                     ['CemeteryID' => $this->cemeteries_selected, 'SectionCode' => $sectionCode],
+                     ['Rows' => $validatedData['numberOfRows'][$i]]
+                     // Add other model attributes here
+                 );
+ 
+                 // Update or create rows for this section
+                 for ($j = 0; $j < $validatedData['numberOfRows'][$i]; $j++) {
+                     $rowID = 'R_' . $this->cemeteries_selected . '_' . ($i + 1) . '_' . ($j + 1);
+                     $row = Rows::updateOrCreate(
+                         ['CemeteryID' => $this->cemeteries_selected, 'SectionCode' => $sectionCode, 'RowID' => $rowID],
+                         ['AvailableGraves' => $validatedData['numberOfGraves'][$i][$j], 'TotalGraves' => $validatedData['numberOfGraves'][$i][$j]]
+                         // Add other model attributes here
+                     );
+ 
+                     // Update or create graves for this row
+                     $numberOfGraves = $validatedData['numberOfGraves'][$i][$j];
+                     for ($k = 0; $k < $numberOfGraves; $k++) {
+                         $graveNum = $k + 1;
+                         $grave = Graves::updateOrCreate(
+                             ['CemeteryID' => $this->cemeteries_selected, 'SectionCode' => $sectionCode, 'RowID' => $rowID, 'GraveNum' => $graveNum],
+                             // Add other model attributes here if needed
+                         );
+                     }
+                 }
+             }
+ 
+             // Commit the transaction
+             DB::commit();
+ 
+             // Return a success response
+             return response()->json(['message' => 'Cemetery data updated successfully', 'cemetery' => $cemetery, 'section' => $section, 'row' => $row, 'grave' => $grave], 200);
+         } catch (\Exception $e) {
+             // Rollback the transaction if an error occurs
+             DB::rollBack();
+ 
+             // Return an error response
+             return response()->json(['message' => 'Failed to update cemetery data. ' . $e->getMessage()], 500);
+         }
     }
 
     //Connection to api endpoint(Post)
@@ -161,19 +217,67 @@ class GraveAdmin extends Component
             'numberOfRows' => $this->number_of_rows,
             'numberOfGraves' => $this->number_of_graves,
         ];
-        // Make a POST request to the API endpoint
-        $response = Http::post('http://localhost:8000/api/postCem', $validatedData);
-        // Check if the API request was successful
-        if ($response->successful()) {
+         // Create a new instance of the Cemeteries model and fill it with validated data
+         $cemetery = Cemeteries::create([
+            'CemeteryName' => $validatedData['graveyardName'],
+            'Town' => $validatedData['townLocation'],
+            'NumberOfSections' => $validatedData['graveyardNumber'],
+            // Add other model attributes here
+        ]);
+        // Create sections based on the number of sections
+        // Get the CemeteryID after creating the cemetery
+        $cemeteryID = $cemetery->getKey();
+        // Prepare an array to store the data for all sections
+        $sectionsData = [];
+        // Loop through each section and prepare data for insertion
+        for ($i = 0; $i < $validatedData['graveyardNumber']; $i++) {
+            $sectionCode = 'S_' . $cemeteryID . '_' . ($i + 1); // Increment $i by 1 to start from 1
 
+            // Add section data to the array
+            $sectionsData[] = [
+                'CemeteryID' => $cemeteryID,
+                'SectionCode' => $sectionCode,
+                'Rows' => $validatedData['numberOfRows'][$i], // Store numberOfRows for each section
+                // Add other model attributes here
+            ];
 
-            $this->resetForm();
+            // Add rows data for each section
+            $rowsData = [];
+            for ($j = 0; $j < $validatedData['numberOfRows'][$i]; $j++) {
+                $rowID = 'R_' . $cemeteryID . '_' . ($i + 1) . '_' . ($j + 1); // Increment $j by 1 to start from 1
 
-            session()->flash('success', 'Graveyard and graves added successfully');
-        } else {
+                // Add row data to the array
+                $rowsData[] = [
+                    'CemeteryID' => $cemeteryID,
+                    'SectionCode' => $sectionCode,
+                    'RowID' => $rowID,
+                    'AvailableGraves' => $validatedData['numberOfGraves'][$i][$j], // Store numberOfGraves for each row
+                    'TotalGraves' => $validatedData['numberOfGraves'][$i][$j], // Store numberOfGraves for each row
 
-            session()->flash('error', 'Failed to add graveyard and graves');
+                    // Add other model attributes here
+                ];
+                // Create graves based on the available graves in the row
+                for ($k = 0; $k < $validatedData['numberOfGraves'][$i][$j]; $k++) {
+                    $graveNum = $k + 1; // Increment $k by 1 to start from 1
+
+                    // Create a new grave and fill it with data
+                    $grave = [
+                        'CemeteryID' => $cemeteryID,
+                        'SectionCode' => $sectionCode,
+                        'RowID' => $rowID,
+                        'GraveNum' => $graveNum,
+                        // Add other model attributes here
+                    ];
+
+                    // Insert the grave into the database
+                    Graves::create($grave);
+                }
+            }
+            Rows::insert($rowsData);
         }
+
+        // Bulk insert all sections into the databas
+        Sections::insert($sectionsData);
     }
 
     public function addGrave()

@@ -3,9 +3,11 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
+use App\Models\ServiceProviders;
+use App\Models\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use App\Models\ServiceProviders;
 
 
 class AddProviderForm extends Component
@@ -50,7 +52,7 @@ class AddProviderForm extends Component
 
     public function postProvider()
     {
-        $data = [
+        $validatedData = [
             'name' => $this->name,
             'motto' => $this->motto,
             'email' => $this->email,
@@ -60,17 +62,46 @@ class AddProviderForm extends Component
             'serviceDescriptions' => $this->serviceDescriptions,
             'servicePrices' => $this->servicePrices,
         ];
-        // Make an HTTP POST request to your API endpoint
-        $response = Http::post('http://localhost:8000/api/postProvider', $data);
+         // Start a database transaction
+         DB::beginTransaction();
 
-        // Check if the request was successful
-        if ($response->successful()) {
-            // Optionally, show a success message or perform other actions
-            $this->resetForm();
-        } else {
-            // Display a generic error message to the user
-            session()->flash('error', 'Failed to submit the form. Please try again later.');
-        }
+         try {
+             // Create a new instance of the ServiceProviders model and fill it with validated data
+             $provider = ServiceProviders::create([
+                 'Name' => $validatedData['name'],
+                 'Motto' => $validatedData['motto'],
+                 'Email' => $validatedData['email'],
+                 'ContactNumber' => $validatedData['cellphoneNumber'],
+                 // Add other model attributes here
+             ]);
+ 
+             // Prepare data for bulk insertion of services
+             $servicesData = [];
+             for ($i = 0; $i < $validatedData['numberOfServices']; $i++) {
+                 $servicesData[] = [
+                     'ProviderId' => $provider->id,
+                     'ServiceName' => $validatedData['serviceNames'][$i],
+                     'Description' => $validatedData['serviceDescriptions'][$i],
+                     'Price' => $validatedData['servicePrices'][$i],
+                 ];
+             }
+ 
+ 
+             // Bulk insert all services into the database
+             Services::insert($servicesData);
+ 
+             // Commit the transaction
+             DB::commit();
+ 
+             // Return a success response
+             return response()->json(['message' => 'Service provider and services saved successfully', 'provider' => $provider, 'services' => $servicesData], 201);
+         } catch (\Exception $e) {
+             // Rollback the transaction if an error occurs
+             DB::rollBack();
+ 
+             // Return an error response
+             return response()->json(['message' => 'Failed to save cemetery data. ' . $e->getMessage()], 500);
+         }
     }
     protected $listeners = ['editProvider'];
 
@@ -96,7 +127,7 @@ class AddProviderForm extends Component
 
     public function editProviderApi()
     {
-        $data = [
+        $validatedData = [
             'name' => $this->name,
             'motto' => $this->motto,
             'email' => $this->email,
@@ -107,16 +138,47 @@ class AddProviderForm extends Component
             'servicePrices' => $this->servicePrices,
         ];
 
-        // Make an HTTP PUT request to the edit API endpoint with the provider ID
-        $response = Http::put('http://localhost:8000/api/editProvider/' . $this->providerId, $data);
+        
+        try {
+        
+            // Delete all associated services for the deleted ServiceProvider
+            Services::where('ProviderId', $this->providerId)->delete();
+            // Find the ServiceProvider by ID
+            $provider = ServiceProviders::findOrFail($this->providerId);
 
-        // Check if the request was successful
-        if ($response->successful()) {
-            // Optionally, show a success message or perform other actions
-            $this->resetForm();
-        } else {
-            // Display a generic error message to the user
-            session()->flash('error', 'Failed to update the provider. Please try again later.');
+            // Update the ServiceProvider data
+            $provider->update([
+                'Name' => $validatedData['name'],
+                'Motto' => $validatedData['motto'],
+                'Email' => $validatedData['email'],
+                'ContactNumber' => $validatedData['cellphoneNumber'],
+                // Add other model attributes here
+            ]);
+            // Prepare data for bulk insertion of services
+            $servicesData = [];
+            for ($i = 0; $i < $validatedData['numberOfServices']; $i++) {
+                $servicesData[] = [
+                    'ProviderId' => $provider->id,
+                    'ServiceName' => $validatedData['serviceNames'][$i],
+                    'Description' => $validatedData['serviceDescriptions'][$i],
+                    'Price' => $validatedData['servicePrices'][$i],
+                ];
+            }
+
+            // Bulk insert all services into the database
+            Services::insert($servicesData);
+
+            // Commit the transaction
+            DB::commit();
+
+            // Return a success response
+            return response()->json(['message' => 'Service provider and services updated successfully', 'provider' => $provider, 'services' => $servicesData], 200);
+        } catch (\Exception $e) {
+            // Rollback the transaction if an error occurs
+            DB::rollBack();
+
+            // Return an error response
+            return response()->json(['message' => 'Failed to update service provider and services. ' . $e->getMessage()], 500);
         }
     }
 

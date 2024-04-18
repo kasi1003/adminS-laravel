@@ -34,6 +34,7 @@ class BurialRecords extends Component
     public $date_of_death;
     public $validatedData = [];
 
+  
 
     public function mount()
     {
@@ -79,26 +80,55 @@ class BurialRecords extends Component
     public function addRecord()
     {
 
+        try {
+            // Validate the incoming request data
+            $validatedData = $this->validate([
+                'BuriedPersonsName' => 'required|string',
+                'DateOfBirth' => 'required|date',
+                'DateOfDeath' => 'required|date',
+                'DeathCode' => 'required|integer',
+            ]);
 
-        // Prepare the data to be sent to the API
-        $validatedData = [
-            'BuriedPersonsName' => $this->name . ' ' . $this->surname, // Concatenate name and surname
-            'DateOfBirth' => $this->date_of_birth,
-            'DateOfDeath' => $this->date_of_death,
-            'DeathCode' => $this->death_number,
-        ];
+            // Start a transaction
+            DB::beginTransaction();
 
-        // Make a PUT request to the API endpoint with the cemetery ID
-        $response = Http::put('http://localhost:8000/api/addBurialRecord/' . $this->cemeteryID . '/' . $this->selectedSection . '/' . $this->selectedRow . '/' . $this->selectedGraveNumber, $validatedData);
+            // Assuming you have $cemeteryID, $sectionCode, $rowID, and $graveNum defined somewhere
 
-        // Check if the request was successful
-        if ($response->successful()) {
-            // Optionally, you can update the Livewire component state or show a success message
-            //$this->resetForm(); // Reset the form fields
-            // You might want to emit an event or reload data after a successful request
-        } else {
-            // Handle the case where the request failed
-            // You can display an error message or perform any necessary actions
+            $dataToUpdate = [
+                'BuriedPersonsName' => $this->BuriedPersonsName,
+                'DateOfBirth' => $this->DateOfBirth,
+                'DateOfDeath' => $this->DateOfDeath,
+                'DeathCode' => $this->DeathCode,
+                'GraveStatus' => 1,
+            ];
+
+            $affectedRows = Graves::where('CemeteryID', $this->cemeteryID)
+                ->where('SectionCode', $this->selectedSection)
+                ->where('RowID', $this->selectedRow)
+                ->where('GraveNum', $this->selectedGraveNumber)
+                ->update($dataToUpdate);
+
+            // Fetch the updated Grave record
+            $updatedGrave = Graves::where('CemeteryID', $this->cemeteryID)
+                ->where('SectionCode', $this->selectedSection)
+                ->where('RowID', $this->selectedRow)
+                ->where('GraveNum', $this->selectedGraveNumber)
+                ->firstOrFail();
+
+            // Commit the transaction
+            DB::commit();
+
+            // Optionally, you can include cemetery, section, row along with the updated grave in the response
+            $this->reset(); // Clear input fields after successful submission
+            $this->emit('recordAdded'); // Emit event to notify parent or other components
+            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Cemetery data updated successfully']);
+        } catch (\Exception $e) {
+            // Rollback the transaction if an error occurs
+            DB::rollBack();
+
+            // Return an error response
+            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Failed to update cemetery data. ' . $e->getMessage()]);
         }
     }
-}
+    }
+
