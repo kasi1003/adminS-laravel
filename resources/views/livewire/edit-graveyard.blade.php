@@ -30,7 +30,7 @@
                                 <!-- Button trigger modal -->
                                 <button wire:click="editCemetery({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">Edit</button>
 
-                                <button wire:click="deleteCemetery({{ $cemetery->CemeteryID }})" class="btn btn-danger">Delete</button>
+                                <button wire:click.prevent="deleteCemetery({{ $cemetery->CemeteryID }})" class="btn btn-danger">Delete</button>
 
 
                             </td>

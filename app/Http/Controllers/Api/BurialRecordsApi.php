@@ -26,7 +26,6 @@ class BurialRecordsApi extends Controller
 
             $dataToUpdate = $request->only(['BuriedPersonsName', 'DateOfBirth', 'DateOfDeath', 'DeathCode']);
             $dataToUpdate['GraveStatus'] = 1;
-
             $affectedRows = Graves::where('CemeteryID', $cemeteryID)
                 ->where('SectionCode', $sectionCode)
                 ->where('RowID', $rowID)

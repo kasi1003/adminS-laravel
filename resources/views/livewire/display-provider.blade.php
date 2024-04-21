@@ -24,7 +24,8 @@
                             <button wire:click="editProvider({{ $provider->id }})" type="button" class="btn btn-primary">Edit</button>
                                 <button wire:click="deleteProvider({{ $provider->id }})" type="button" class="btn btn-danger">Delete</button>
                                 <!-- Button trigger modal -->
-                                <button wire:ignore.self type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                  
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     View Services
                                 </button>
 
@@ -52,6 +53,8 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th scope="col">Provider ID</th>
+
                                     <th scope="col">Service Name</th>
                                     <th scope="col">Service Description</th>
                                     <th scope="col">Service Price</th>
@@ -60,6 +63,7 @@
                             <tbody>
                                 @foreach ($services as $service)
                                 <tr>
+                                    <td>{{ $service->ProviderId }}</td>
                                     <td>{{ $service->ServiceName }}</td>
                                     <td>{{ $service->Description }}</td>
                                     <td>{{ $service->Price }}</td>
@@ -74,7 +78,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>

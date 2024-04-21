@@ -77,7 +77,7 @@ class BurialRecords extends Component
         return view('livewire.burial-records');
     }
 
-    public function addRecord()
+    public function updateRecord()
     {
 
         try {
@@ -95,21 +95,21 @@ class BurialRecords extends Component
             // Assuming you have $cemeteryID, $sectionCode, $rowID, and $graveNum defined somewhere
 
             $dataToUpdate = [
-                'BuriedPersonsName' => $this->BuriedPersonsName,
-                'DateOfBirth' => $this->DateOfBirth,
-                'DateOfDeath' => $this->DateOfDeath,
-                'DeathCode' => $this->DeathCode,
+                'BuriedPersonsName' => $this->name .' '.$this->surname,
+                'DateOfBirth' => $this->date_of_birth,
+                'DateOfDeath' => $this->date_of_death,
+                'DeathCode' => $this->death_number,
                 'GraveStatus' => 1,
             ];
 
-            $affectedRows = Graves::where('CemeteryID', $this->cemeteryID)
+            $affectedRows = Graves::where('CemeteryID', $this->selectedCemetery)
                 ->where('SectionCode', $this->selectedSection)
                 ->where('RowID', $this->selectedRow)
                 ->where('GraveNum', $this->selectedGraveNumber)
                 ->update($dataToUpdate);
 
             // Fetch the updated Grave record
-            $updatedGrave = Graves::where('CemeteryID', $this->cemeteryID)
+            $updatedGrave = Graves::where('CemeteryID', $this->selectedCemetery)
                 ->where('SectionCode', $this->selectedSection)
                 ->where('RowID', $this->selectedRow)
                 ->where('GraveNum', $this->selectedGraveNumber)
@@ -130,5 +130,9 @@ class BurialRecords extends Component
             $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Failed to update cemetery data. ' . $e->getMessage()]);
         }
     }
+    public function addRecord(){
+        $this->updateRecord();
+    }
+
     }
 

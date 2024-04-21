@@ -14,6 +14,7 @@ class DisplayProvider extends Component
     public $serviceProviders;
     public $selectedProviderId; // Add a property to store the selected provider's ID
     public $services = [];
+    public $providerId;
 
     public function mount()
     {
@@ -26,29 +27,17 @@ class DisplayProvider extends Component
         $this->serviceProviders = ServiceProviders::all();
     }
     // Method to retrieve services associated with a specific service provider
-    public function viewServices($providerId)
+    public function viewServices($id)
     {
-        $this->selectedProviderId = $providerId; // Store the selected provider's ID
-        $this->services = Services::where('ProviderId', $providerId)->get(); // Retrieve services based on the ProviderId
-        $this->dispatchBrowserEvent('openModal');
+        $this->services = Services::where('ProviderId', $id)->get(); // Retrieve services based on the ProviderId
+      
     }
     public function deleteProvider($id)
     {
-        try {
-            // Make HTTP DELETE request to your API endpoint
-            $response = Http::delete('http://localhost:8000/api/deleteProvider/' . $id);
-
-            if ($response->successful()) {
-                // Redirect to the named route
-                return redirect()->route('serviceProviders');
-            } else {
-                // Handle error response
-                session()->flash('error', 'Failed to delete service provider.');
-            }
-        } catch (\Exception $e) {
-            // Handle exception
-            session()->flash('error', 'Failed to delete service provider: ' . $e->getMessage());
-        }
+       // Find the ServiceProvider by ID
+       ServiceProviders::where('id', $id)->delete();
+       // Delete all associated services for the ServiceProvider
+       Services::where('ProviderId', $id)->delete();
     }
     // Emit an event when the "Edit" button is clicked
     public function editProvider($providerId)
