@@ -25,7 +25,7 @@ class BurialRecords extends Component
     public $selectedSection;
     public $selectedRow;
     public $selectedGraveNum;
-
+    public $graveStatus;
     public $death_number;
     public $name;
     public $surname;
@@ -34,7 +34,6 @@ class BurialRecords extends Component
     public $date_of_death;
     public $validatedData = [];
 
-  
 
     public function mount()
     {
@@ -80,59 +79,52 @@ class BurialRecords extends Component
     public function updateRecord()
     {
 
-        try {
-            // Validate the incoming request data
-            $validatedData = $this->validate([
-                'BuriedPersonsName' => 'required|string',
-                'DateOfBirth' => 'required|date',
-                'DateOfDeath' => 'required|date',
-                'DeathCode' => 'required|integer',
-            ]);
+        // Validate the form inputs here if necessary
 
-            // Start a transaction
-            DB::beginTransaction();
+        // Retrieve the selected values from the form
+        $cemeteryID = $this->selectedCemetery;
+        $sectionCode = $this->selectedSection;
+        $rowID = $this->selectedRow;
+        $graveNum = $this->selectedGraveNumber;
 
-            // Assuming you have $cemeteryID, $sectionCode, $rowID, and $graveNum defined somewhere
+        // Find the grave record based on the selected values
+        $grave = Graves::where('CemeteryID', $cemeteryID)
+            ->where('SectionCode', $sectionCode)
+            ->where('RowID', $rowID)
+            ->where('GraveNum', $graveNum)
+            ->first();
 
-            $dataToUpdate = [
-                'BuriedPersonsName' => $this->name .' '.$this->surname,
+        if ($grave) {
+            // Update the model values with the form inputs
+            $grave->update([
+                'GraveStatus' => $this->graveStatus,
+                'BuriedPersonsName' => $this->name . ' ' . $this->surname,
                 'DateOfBirth' => $this->date_of_birth,
                 'DateOfDeath' => $this->date_of_death,
                 'DeathCode' => $this->death_number,
-                'GraveStatus' => 1,
-            ];
+            ]);
 
-            $affectedRows = Graves::where('CemeteryID', $this->selectedCemetery)
-                ->where('SectionCode', $this->selectedSection)
-                ->where('RowID', $this->selectedRow)
-                ->where('GraveNum', $this->selectedGraveNumber)
-                ->update($dataToUpdate);
+            // Optionally, you can add a success message or perform other actions here
 
-            // Fetch the updated Grave record
-            $updatedGrave = Graves::where('CemeteryID', $this->selectedCemetery)
-                ->where('SectionCode', $this->selectedSection)
-                ->where('RowID', $this->selectedRow)
-                ->where('GraveNum', $this->selectedGraveNumber)
-                ->firstOrFail();
-
-            // Commit the transaction
-            DB::commit();
-
-            // Optionally, you can include cemetery, section, row along with the updated grave in the response
-            $this->reset(); // Clear input fields after successful submission
-            $this->emit('recordAdded'); // Emit event to notify parent or other components
-            $this->dispatchBrowserEvent('alert', ['type' => 'success', 'message' => 'Cemetery data updated successfully']);
-        } catch (\Exception $e) {
-            // Rollback the transaction if an error occurs
-            DB::rollBack();
-
-            // Return an error response
-            $this->dispatchBrowserEvent('alert', ['type' => 'error', 'message' => 'Failed to update cemetery data. ' . $e->getMessage()]);
+            // Clear form inputs after successful submission
+            $this->resetForm();
+        } else {
+            // Handle the case where the grave record is not found
+            // You may display an error message or perform other actions here
         }
     }
-    public function addRecord(){
-        $this->updateRecord();
+    // Helper method to reset form inputs after submission
+    private function resetForm()
+    {
+        $this->selectedCemetery = null;
+        $this->selectedSection = null;
+        $this->selectedRow = null;
+        $this->selectedGraveNumber = null;
+        $this->graveStatus = null;
+        $this->name = null;
+        $this->surname = null;
+        $this->date_of_birth = null;
+        $this->date_of_death = null;
+        $this->death_number = null;
     }
-
-    }
-
+}

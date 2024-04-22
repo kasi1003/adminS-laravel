@@ -118,9 +118,7 @@ class AddProviderForm extends Component
         $this->motto = $this->provider->Motto;
         $this->email = $this->provider->Email;
         $this->cellphoneNumber = $this->provider->ContactNumber;
-        // You might also need to load and populate services associated with this provider
-        // You can emit another event to trigger this if necessary
-        // Fetch the count of services associated with the provider
+        
         $this->numberOfServices = $this->provider->services ? count($this->provider->services) : 0;
     }
 
