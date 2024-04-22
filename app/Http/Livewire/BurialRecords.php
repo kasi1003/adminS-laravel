@@ -75,33 +75,40 @@ class BurialRecords extends Component
     {
         return view('livewire.burial-records');
     }
-
-    public function updateRecord()
+    // Validation rules
+    protected $rules = [
+        'selectedCemetery' => 'required',
+        'selectedSection' => 'required',
+        'selectedRow' => 'required',
+        'selectedGraveNumber' => 'required',
+        'graveStatus' => 'required',
+        'name' => 'required',
+        'surname' => 'required',
+        'date_of_birth' => 'required|date',
+        'date_of_death' => 'required|date',
+        'death_number' => 'required',
+    ];
+    public function addRecord()
     {
+        // Validate the form inputs
+        $this->validate();
 
-        // Validate the form inputs here if necessary
-
-        // Retrieve the selected values from the form
-        $cemeteryID = $this->selectedCemetery;
-        $sectionCode = $this->selectedSection;
-        $rowID = $this->selectedRow;
-        $graveNum = $this->selectedGraveNumber;
 
         // Find the grave record based on the selected values
-        $grave = Graves::where('CemeteryID', $cemeteryID)
-            ->where('SectionCode', $sectionCode)
-            ->where('RowID', $rowID)
-            ->where('GraveNum', $graveNum)
+        $grave = Graves::where('CemeteryID', $this->selectedCemetery)
+            ->where('SectionCode', $this->selectedSection)
+            ->where('RowID', $this->selectedRow)
+            ->where('GraveNum', $this->selectedGraveNumber)
             ->first();
 
         if ($grave) {
             // Update the model values with the form inputs
             $grave->update([
-                'GraveStatus' => $this->graveStatus,
                 'BuriedPersonsName' => $this->name . ' ' . $this->surname,
                 'DateOfBirth' => $this->date_of_birth,
                 'DateOfDeath' => $this->date_of_death,
                 'DeathCode' => $this->death_number,
+                'GraveStatus' => 1
             ]);
 
             // Optionally, you can add a success message or perform other actions here
