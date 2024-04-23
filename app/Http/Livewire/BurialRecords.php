@@ -77,17 +77,17 @@ class BurialRecords extends Component
     }
     // Validation rules
     protected $rules = [
-        'selectedCemetery' => 'required',
-        'selectedSection' => 'required',
-        'selectedRow' => 'required',
-        'selectedGraveNumber' => 'required',
-        'graveStatus' => 'required',
-        'name' => 'required',
-        'surname' => 'required',
+        'selectedCemetery' => 'required|integer',
+        'selectedSection' => 'required|string',
+        'selectedRow' => 'required|string', // Assuming it's a string based on migration
+        'selectedGraveNumber' => 'required|integer',
+        'name' => 'required|string',
+        'surname' => 'required|string',
         'date_of_birth' => 'required|date',
         'date_of_death' => 'required|date',
-        'death_number' => 'required',
+        'death_number' => 'required|integer', // Assuming it's an integer based on migration
     ];
+
     public function addRecord()
     {
         // Validate the form inputs
