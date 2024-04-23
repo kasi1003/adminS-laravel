@@ -32,7 +32,7 @@
                             <td>
                                 <!-- Button trigger modal -->
                                 <button wire:click="" type="button" class="btn btn-primary">Edit</button>
-                                <button wire:click="" type="button" class="btn btn-danger">Delete</button>
+                                <button wire:click="deleteGrave({{ $grave->id }})" type="button" class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
                         @endforeach

@@ -10,7 +10,27 @@ use App\Models\Graves;
 
 class ShowBurialRecords extends Component
 {
-    
+    // Inside your ShowBurialRecords component
+    public function deleteGrave($graveId)
+    {
+        // Find the grave record by ID
+        $grave = Graves::find($graveId);
+
+        if ($grave) {
+            // Nullify the specified columns
+            $grave->update([
+                'GraveStatus' => null,
+                'BuriedPersonsName' => null,
+                'DateOfBirth' => null,
+                'DateOfDeath' => null,
+                'DeathCode' => null,
+            ]);
+        }
+
+        // Optionally, you can reload the graves data after deletion
+        $this->render();
+    }
+
     public function render()
     {
         // Fetch graves data from the Graves model
