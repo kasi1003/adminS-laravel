@@ -10,6 +10,6 @@ class Sections extends Model
 
     use HasFactory;
     protected $table = 'grave_sections';
-    protected $fillable = ['CemeteryID','SectionCode', 'Rows', 'SectionType', 'SectionSvg'];
+    protected $fillable = ['CemeteryID','SectionCode', 'Rows', 'Price', 'SectionType', 'SectionSvg'];
 
 }

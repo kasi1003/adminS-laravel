@@ -8,10 +8,8 @@ use App\Models\Sections;
 use App\Models\Towns;
 use App\Models\Rows;
 use Illuminate\Support\Facades\DB;
-
 use App\Models\Graves;
 use Illuminate\Support\Facades\Log;
-
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 

@@ -17,7 +17,7 @@ class EditGraveyard extends Component
     public $cemeteries;
     public $sections;
     public $cemeteryId;
-
+    public $showModal;
 
     public function mount()
     {
@@ -50,5 +50,15 @@ class EditGraveyard extends Component
         Sections::where('CemeteryID', $cemeteryID)->delete();
         Rows::where('CemeteryID', $cemeteryID)->delete();
         Graves::where('CemeteryID', $cemeteryID)->delete();
+    }
+    protected $listeners = ['viewSections'];
+
+    public function viewSections($cemeteryId)
+    {
+        $sections = Sections::where('CemeteryID', $cemeteryId)->get();
+        $this->sections = $sections;
+        $this->viewSections($cemeteryId);
+        // Then show the modal
+        $this->emit('showModal');
     }
 }

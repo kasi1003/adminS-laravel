@@ -1,6 +1,6 @@
 <div style="width: 65%;">
     <div class="card mt-5">
-    <div class="card-header">Display Cemeteries</div>
+        <div class="card-header">Display Cemeteries</div>
 
         <div class="card-body">
             <div class="table-responsive">
@@ -31,6 +31,10 @@
                                 <button wire:click="editCemetery({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">Edit</button>
 
                                 <button wire:click.prevent="deleteCemetery({{ $cemetery->CemeteryID }})" class="btn btn-danger">Delete</button>
+                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    View More
+                                </button>
+
 
 
                             </td>
@@ -50,5 +54,46 @@
 
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Services</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form wire:submit="">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Section</th>
+                                        <th scope="col">Number of Rows</th>
+                                        <th scope="col">Service Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($sections as $section)
+                                    <tr>
+                                        <td>{{ $section->SectionCode }}</td>
+                                        <td>{{ $section->Rows }}</td>
+                                        <td>{{ $section->Price }}</td> <!-- Assuming you also want to display ServicePrice -->
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>

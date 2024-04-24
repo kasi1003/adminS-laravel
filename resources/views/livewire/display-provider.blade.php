@@ -69,7 +69,7 @@
                                     <td>{{ $service->Price }}</td>
                                 </tr>
                                 @endforeach
-                                <tr>
+                                
 
 
                             </tbody>
