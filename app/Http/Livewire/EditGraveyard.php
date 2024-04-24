@@ -18,6 +18,7 @@ class EditGraveyard extends Component
     public $sections;
     public $cemeteryId;
     public $showModal;
+    public $sectionPrices;
 
     public function mount()
     {
@@ -45,7 +46,6 @@ class EditGraveyard extends Component
     {
 
         // Delete records associated with the selected cemetery ID from Sections, Rows, and Graves models
-        // Delete records associated with the selected cemetery ID from Sections, Rows, and Graves models
         Cemeteries::where('CemeteryID', $cemeteryID)->delete();
         Sections::where('CemeteryID', $cemeteryID)->delete();
         Rows::where('CemeteryID', $cemeteryID)->delete();
@@ -58,7 +58,31 @@ class EditGraveyard extends Component
         $sections = Sections::where('CemeteryID', $cemeteryId)->get();
         $this->sections = $sections;
         $this->viewSections($cemeteryId);
+        // Set the section price if it's not null
+        $this->sectionPrices = $sections->first()->ServicePrice;
         // Then show the modal
         $this->emit('showModal');
+    }
+    public function addPrice()
+    {
+        foreach ($this->sectionPrices as $sectionId => $price) {
+            if ($price !== null) {
+                // Find the section by SectionID
+                $section = Sections::find($sectionId);
+
+                // If the section exists, update the price
+                if ($section) {
+                    $section->update(['Price' => $price]);
+                }
+            }else{
+                //display available price
+            }
+        }
+
+        // Emit an event to notify that the records have been updated
+        $this->emit('priceUpdated');
+
+        // Close the modal
+        $this->showModal = false;
     }
 }

@@ -62,35 +62,41 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Services</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form wire:submit="">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Section</th>
-                                        <th scope="col">Number of Rows</th>
-                                        <th scope="col">Service Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($sections as $section)
-                                    <tr>
-                                        <td>{{ $section->SectionCode }}</td>
-                                        <td>{{ $section->Rows }}</td>
-                                        <td>{{ $section->Price }}</td> <!-- Assuming you also want to display ServicePrice -->
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                <form wire:submit="addPrice">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Section</th>
+                                    <th scope="col">Number of Rows</th>
+                                    <th scope="col">Service Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($sections as $section)
+                                <tr>
+                                    <td>{{ $section->SectionCode }}</td>
+                                    <td>{{ $section->Rows }}</td>
+                                    <td>
+                                        @if($section->Price)
+                                        {{ $section->Price }}
+                                        @else
+                                        <input type="number" placeholder="Enter Price" wire:model="sectionPrices.{{ $section->Price }}">
+                                        <input type="hidden" wire:model="sectionIds.{{ $section->id }}" value="{{ $section->id }}">
+                                        @endif
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
 
-                </div>
+
             </div>
         </div>
     </div>
