@@ -4,7 +4,7 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th scope="col">Service Provider Name</th>

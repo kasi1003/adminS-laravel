@@ -4,7 +4,7 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-striped">
                     <thead>
                         <tr>
                             <th scope="col">Cemetery Name</th>
@@ -32,7 +32,8 @@
                             <td>
                                 <!-- Button trigger modal -->
                                 <button wire:click="" type="button" class="btn btn-primary">Edit</button>
-                                <button wire:click="deleteGrave({{ $grave->id }})" type="button" class="btn btn-danger">Delete</button>
+                                <!-- Inside your Blade file or Livewire component view -->
+                                <button wire:click="confirmDelete({{ $grave->id }})" type="button" class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
                         @endforeach
@@ -41,4 +42,25 @@
             </div>
         </div>
     </div>
+    <!-- Inside your Livewire component view -->
+    <script>
+        window.addEventListener('swal:confirmDelete', function(e) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                // Call the Livewire method directly with the graveId
+                Livewire.emit('deleteGrave', e.detail.graveId);           
+             }
+            });
+        });
+    </script>
+
+
 </div>
