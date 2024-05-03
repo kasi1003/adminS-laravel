@@ -92,33 +92,27 @@ class BurialRecords extends Component
     {
         // Validate the form inputs
         $this->validate();
-
+        // Debugging: Check selected values
 
         // Find the grave record based on the selected values
         $grave = Graves::where('CemeteryID', $this->selectedCemetery)
             ->where('SectionCode', $this->selectedSection)
             ->where('RowID', $this->selectedRow)
             ->where('GraveNum', $this->selectedGraveNumber)
-            ->first();
+            ->firstOrNew();
 
-        if ($grave) {
-            // Update the model values with the form inputs
-            $grave->update([
-                'BuriedPersonsName' => $this->name . ' ' . $this->surname,
-                'DateOfBirth' => $this->date_of_birth,
-                'DateOfDeath' => $this->date_of_death,
-                'DeathCode' => $this->death_number,
-                'GraveStatus' => 1
-            ]);
+        // Update the model values with the form inputs
+        $grave->BuriedPersonsName = $this->name . ' ' . $this->surname;
+        $grave->DateOfBirth = $this->date_of_birth;
+        $grave->DateOfDeath = $this->date_of_death;
+        $grave->DeathCode = $this->death_number;
+        $grave->GraveStatus = 1;
 
-            // Optionally, you can add a success message or perform other actions here
+        // Save the changes
+        $grave->save();
 
-            // Clear form inputs after successful submission
-            $this->resetForm();
-        } else {
-            // Handle the case where the grave record is not found
-            // You may display an error message or perform other actions here
-        }
+
+        $this->resetForm();
     }
     // Helper method to reset form inputs after submission
     private function resetForm()
