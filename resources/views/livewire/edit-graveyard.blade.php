@@ -59,7 +59,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Services</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Sections</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form wire:submit="addPrice">
@@ -69,7 +69,7 @@
                                 <tr>
                                     <th scope="col">Section</th>
                                     <th scope="col">Number of Rows</th>
-                                    <th scope="col">Service Price</th>
+                                    <th scope="col">Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -81,7 +81,7 @@
                                         @if($section->Price)
                                         {{ $section->Price }}
                                         @else
-                                        <input type="number" placeholder="Enter Price" wire:model="sectionPrices.{{ $section->Price }}">
+                                        <input type="number" placeholder="Enter Price" wire:model="sectionPrices.{{ $section->id }}">
                                         <input type="hidden" wire:model="sectionIds.{{ $section->id }}" value="{{ $section->id }}">
                                         @endif
                                     </td>

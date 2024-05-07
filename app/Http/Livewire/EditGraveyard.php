@@ -66,23 +66,13 @@ class EditGraveyard extends Component
     public function addPrice()
     {
         foreach ($this->sectionPrices as $sectionId => $price) {
-            if ($price !== null) {
-                // Find the section by SectionID
-                $section = Sections::find($sectionId);
-
-                // If the section exists, update the price
-                if ($section) {
-                    $section->update(['Price' => $price]);
-                }
-            }else{
-                //display available price
-            }
+            $section = Sections::findOrFail($sectionId);
+            $section->Price = $price;
+            $section->save();
         }
-
-        // Emit an event to notify that the records have been updated
-        $this->emit('priceUpdated');
-
-        // Close the modal
-        $this->showModal = false;
+        // Optionally, you can emit an event to inform the parent component that the prices have been updated
+        $this->emit('pricesUpdated');
+        // Optionally, you can reset the form or any relevant properties after the update
+        $this->reset(['sectionPrices', 'sectionIds']);
     }
 }
