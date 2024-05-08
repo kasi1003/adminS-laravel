@@ -31,7 +31,7 @@
                                 <button wire:click="editCemetery({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">Edit</button>
 
                                 <button wire:click.prevent="deleteCemetery({{ $cemetery->CemeteryID }})" class="btn btn-danger">Delete</button>
-                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">
                                     View More
                                 </button>
 
@@ -55,7 +55,7 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  wire:ignore.self>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -78,11 +78,17 @@
                                     <td>{{ $section->SectionCode }}</td>
                                     <td>{{ $section->Rows }}</td>
                                     <td>
+                                        @if($editingSectionId == $section->id)
+                                        <input type="number" placeholder="Enter Price" wire:model="sectionPrices.{{ $section->id }}">
+                                        <input type="hidden" wire:model="sectionIds.{{ $section->id }}" value="{{ $section->id }}">
+                                        @else
                                         @if($section->Price)
                                         {{ $section->Price }}
+                                        <button class="btn btn-sm btn-primary">Edit</button>
                                         @else
                                         <input type="number" placeholder="Enter Price" wire:model="sectionPrices.{{ $section->id }}">
                                         <input type="hidden" wire:model="sectionIds.{{ $section->id }}" value="{{ $section->id }}">
+                                        @endif
                                         @endif
                                     </td>
                                 </tr>
@@ -100,6 +106,14 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('livewire:load', function() {
+            Livewire.on('showModal', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                myModal.show();
+            });
+        });
+    </script>
 
 
 </div>

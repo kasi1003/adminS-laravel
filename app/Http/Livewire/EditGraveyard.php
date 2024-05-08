@@ -14,6 +14,7 @@ class EditGraveyard extends Component
 {
     public $showEditModal = false;
     public $selectedCemetery;
+    public $editingSectionId;
     public $cemeteries;
     public $sections;
     public $cemeteryId;
@@ -51,18 +52,15 @@ class EditGraveyard extends Component
         Rows::where('CemeteryID', $cemeteryID)->delete();
         Graves::where('CemeteryID', $cemeteryID)->delete();
     }
-    protected $listeners = ['viewSections'];
 
     public function viewSections($cemeteryId)
     {
-        $sections = Sections::where('CemeteryID', $cemeteryId)->get();
-        $this->sections = $sections;
-        $this->viewSections($cemeteryId);
-        // Set the section price if it's not null
-        $this->sectionPrices = $sections->first()->ServicePrice;
-        // Then show the modal
+        // Fetch sections associated with the selected cemetery
+        $this->sections = Sections::where('CemeteryID', $cemeteryId)->get();
+        // Emit an event to show the modal
         $this->emit('showModal');
     }
+    
     public function addPrice()
     {
         foreach ($this->sectionPrices as $sectionId => $price) {
