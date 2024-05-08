@@ -11,7 +11,6 @@
                             <th scope="col">Contact Number</th>
                             <th scope="col">Email</th>
                             <th scope="col">Action</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -21,31 +20,21 @@
                             <td>{{ $provider->ContactNumber }}</td>
                             <td>{{ $provider->Email }}</td>
                             <td>
-                            <button wire:click="editProvider({{ $provider->id }})" type="button" class="btn btn-primary">Edit</button>
+                                <button wire:click="editProvider({{ $provider->id }})" type="button" class="btn btn-primary">Edit</button>
                                 <button wire:click="deleteProvider({{ $provider->id }})" type="button" class="btn btn-danger">Delete</button>
                                 <!-- Button trigger modal -->
-                  
-                                <button wire:click="viewServices({{ $provider->id }})" type="button" class="btn btn-primary">View Services</button>
-
-
+                                <button wire:click="viewServices({{ $provider->id }})" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    View Services
+                                </button>
                             </td>
-
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
-    <script>
-    document.addEventListener('livewire:load', function () {
-        Livewire.on('openViewServicesModal', function () {
-            var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-            myModal.show();
-        });
-    });
-</script>
+
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -56,44 +45,31 @@
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Provider ID</th>
-
-                                    <th scope="col">Service Name</th>
-                                    <th scope="col">Service Description</th>
-                                    <th scope="col">Service Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($services as $service)
-                                <tr>
-                                    <td>{{ $service->ProviderId }}</td>
-                                    <td>{{ $service->ServiceName }}</td>
-                                    <td>{{ $service->Description }}</td>
-                                    <td>{{ $service->Price }}</td>
-                                </tr>
-                                @endforeach
-                                
-
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Provider ID</th>
+                <th>Service Name</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($services as $service)
+            <tr>
+                <td>{{ $service->ProviderId }}</td>
+                <td>{{ $service->ServiceName }}</td>
+                <td>{{ $service->Description }}</td>
+                <td>{{ $service->Price }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
 </div>

@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: false, darkMode: false }" :class="{ 'dark': darkMode }" class="border-b border-gray-700 dark:border-gray-800" :class="{ 'bg-gray-800 dark:bg-gray-800': open, 'bg-white dark:bg-gray-800': !open }">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -137,3 +137,21 @@
         </div>
     </div>
 </nav>
+
+<script>
+    function toggleDarkMode() {
+        const body = document.body;
+        const isDarkMode = body.classList.contains('dark');
+
+        // Toggle between dark and light mode
+        if (isDarkMode) {
+            // Switch to light mode
+            body.classList.remove('dark');
+            this.darkMode = false;
+        } else {
+            // Switch to dark mode
+            body.classList.add('dark');
+            this.darkMode = true;
+        }
+    }
+</script>

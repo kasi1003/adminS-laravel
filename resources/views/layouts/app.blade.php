@@ -14,19 +14,51 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Dark Mode Styles -->
+    <style>
+        /* Dark mode styles */
+        .dark-mode .bg-gray-100 {
+            background-color: #111827; /* Dark mode background color */
+        }
+
+        .dark-mode .bg-white {
+            background-color: #1f2937; /* Dark mode background color */
+        }
+
+        /* Add more dark mode styles as needed */
+    </style>
+
+    <!-- Dark Mode Script -->
+    <script>
+        // Function to toggle dark mode
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDarkMode = body.classList.contains('dark-mode');
+
+            // Toggle between dark and light mode
+            if (isDarkMode) {
+                // Switch to light mode
+                body.classList.remove('dark-mode');
+            } else {
+                // Switch to dark mode
+                body.classList.add('dark-mode');
+            }
+        }
+    </script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased dark-mode">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
         @if (isset($header))
-            <header class="bg-white dark:bg-gray-800 shadow">
+            <header class="bg-blue dark:bg-gray-800 shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
