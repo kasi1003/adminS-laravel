@@ -13,11 +13,9 @@ class ShowBurialRecords extends Component
     public $graveIdToDelete;
     public $graveId;
     
-    public function confirmDelete($graveId)
+    public function confirmDelete()
     {
-        // Set the graveId property
-        $this->graveIdToDelete = $graveId;
-
+    
         // Dispatch a SweetAlert confirmation dialog
         $this->dispatchBrowserEvent('swal:confirmDelete', ['graveId' => $this->graveIdToDelete]);
     }

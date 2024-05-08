@@ -60,6 +60,10 @@ class EditGraveyard extends Component
         // Emit an event to show the modal
         $this->emit('showModal');
     }
+    public function editSection($sectionId)
+    {
+        $this->editingSectionId = $sectionId;
+    }
     
     public function addPrice()
     {

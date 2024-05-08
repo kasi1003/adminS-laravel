@@ -33,7 +33,7 @@
                                 <!-- Button trigger modal -->
                                 <button wire:click="" type="button" class="btn btn-primary">Edit</button>
                                 <!-- Inside your Blade file or Livewire component view -->
-                                <button wire:click="confirmDelete({{ $grave->id }})" type="button" class="btn btn-danger">Delete</button>
+                                <button wire:click="confirmDelete" type="button" class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
                         @endforeach
@@ -55,9 +55,11 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                // Call the Livewire method directly with the graveId
-                Livewire.emit('deleteGrave', e.detail.graveId);           
-             }
+                    Swal.fire("Successfully Deleted!", "", "success");
+                    Livewire.emit('deleteGrave', e.detail.graveId);
+                } else if (result.isDenied) {
+                    Swal.fire("Changes are not saved", "", "info");
+                }
             });
         });
     </script>
