@@ -25,9 +25,7 @@
                                 <button wire:click="deleteProvider({{ $provider->id }})" type="button" class="btn btn-danger">Delete</button>
                                 <!-- Button trigger modal -->
                   
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    View Services
-                                </button>
+                                <button wire:click="viewServices({{ $provider->id }})" type="button" class="btn btn-primary">View Services</button>
 
 
                             </td>
@@ -40,6 +38,14 @@
         </div>
 
     </div>
+    <script>
+    document.addEventListener('livewire:load', function () {
+        Livewire.on('openViewServicesModal', function () {
+            var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+            myModal.show();
+        });
+    });
+</script>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
