@@ -30,8 +30,8 @@
                                 <!-- Button trigger modal -->
                                 <button wire:click="editCemetery({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">Edit</button>
 
-                                <button wire:click.prevent="deleteCemetery({{ $cemetery->CemeteryID }})" class="btn btn-danger">Delete</button>
-                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">
+                                <button wire:click="deleteConfirm({{ $cemetery->CemeteryID }})"
+                                            class="btn btn-danger">Delete</button>                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">
                                     View More
                                 </button>
 
@@ -54,6 +54,33 @@
 
         </div>
     </div>
+    <script>
+        window.addEventListener('confirmDelete', event => {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // You can trigger another Livewire action or perform any other logic here
+                    Livewire.emit('deleteGrave')
+                }
+            });
+        });
+
+        window.addEventListener('cemDeleted', event => {
+            Swal.fire({
+                title: "Deleted!",
+                text: "Cemetery successfully deleted.",
+                icon: "success"
+            });
+        });
+    </script>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  wire:ignore.self>
         <div class="modal-dialog">

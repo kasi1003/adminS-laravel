@@ -12,19 +12,21 @@ class ShowBurialRecords extends Component
 {
     public $graveIdToDelete;
     public $graveId;
+    public $graveID;
+
     
-    public function confirmDelete()
+    protected $listeners = ['deleteRecord' => 'deleteGrave'];
+    public function deleteConfirm($graveId)
     {
-    
-        // Dispatch a SweetAlert confirmation dialog
-        $this->dispatchBrowserEvent('swal:confirmDelete', ['graveId' => $this->graveIdToDelete]);
+        $this->graveID = $graveId;
+        $this->dispatchBrowserEvent('confirmDelete');
     }
 
     // Inside your ShowBurialRecords component
-    public function deleteGrave($graveId)
+    public function deleteGrave()
     {
         // Find the grave record by ID
-        $grave = Graves::find($graveId);
+        $grave = Graves::find($this->graveID);
         if ($grave) {
             // Nullify the specified columns
             $grave->update([
@@ -34,7 +36,9 @@ class ShowBurialRecords extends Component
                 'DateOfDeath' => null,
                 'DeathCode' => null,
             ]);
+
         }
+        $this->dispatchBrowserEvent('cemDeleted'); // Dispatch event after deletion
 
         // Optionally, you can reload the graves data after deletion
         $this->render();

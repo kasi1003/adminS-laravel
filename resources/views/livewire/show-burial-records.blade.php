@@ -33,7 +33,7 @@
                                 <!-- Button trigger modal -->
                                 <button wire:click="" type="button" class="btn btn-primary">Edit</button>
                                 <!-- Inside your Blade file or Livewire component view -->
-                                <button wire:click="confirmDelete" type="button" class="btn btn-danger">Delete</button>
+                                <button wire:click="deleteConfirm({{ $grave->id }})" type="button" class="btn btn-danger">Delete</button>
                             </td>
                         </tr>
                         @endforeach
@@ -44,7 +44,7 @@
     </div>
     <!-- Inside your Livewire component view -->
     <script>
-        window.addEventListener('swal:confirmDelete', function(e) {
+        window.addEventListener('confirmDelete', event => {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -52,14 +52,21 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes',
+
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire("Successfully Deleted!", "", "success");
-                    Livewire.emit('deleteGrave', e.detail.graveId);
-                } else if (result.isDenied) {
-                    Swal.fire("Changes are not saved", "", "info");
+                    // You can trigger another Livewire action or perform any other logic here
+                    Livewire.emit('deleteRecord')
                 }
+            });
+        });
+
+        window.addEventListener('cemDeleted', event => {
+            Swal.fire({
+                title: "Deleted!",
+                text: "Cemetery successfully deleted.",
+                icon: "success"
             });
         });
     </script>

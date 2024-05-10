@@ -92,25 +92,28 @@ class BurialRecords extends Component
     {
         // Validate the form inputs
         $this->validate();
-        // Debugging: Check selected values
 
+
+        // Find the grave record based on the selected values
         // Find the grave record based on the selected values
         $grave = Graves::where('CemeteryID', $this->selectedCemetery)
             ->where('SectionCode', $this->selectedSection)
             ->where('RowID', $this->selectedRow)
             ->where('GraveNum', $this->selectedGraveNumber)
-            ->firstOrNew();
+            ->first();
+/*             dd($this->selectedCemetery, $this->selectedSection, $this->selectedRow, $this->selectedGraveNumber);
+ */
+        // Prepare the data to update
+        $data = [
+            'BuriedPersonsName' => $this->name . ' ' . $this->surname,
+            'DateOfBirth' => $this->date_of_birth,
+            'DateOfDeath' => $this->date_of_death,
+            'DeathCode' => $this->death_number,
+            'GraveStatus' => 1,
+        ];
 
-        // Update the model values with the form inputs
-        $grave->BuriedPersonsName = $this->name . ' ' . $this->surname;
-        $grave->DateOfBirth = $this->date_of_birth;
-        $grave->DateOfDeath = $this->date_of_death;
-        $grave->DeathCode = $this->death_number;
-        $grave->GraveStatus = 1;
-
-        // Save the changes
-        $grave->save();
-
+        // Update the grave record
+        $grave->update($data);
 
         $this->resetForm();
     }

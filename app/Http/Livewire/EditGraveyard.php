@@ -15,9 +15,12 @@ class EditGraveyard extends Component
     public $showEditModal = false;
     public $selectedCemetery;
     public $editingSectionId;
-    public $cemeteries;
-    public $sections;
+    public $cemeteries = [];
+    public $sections = [];
+    public $rows = [];
+    public $graves = [];
     public $cemeteryId;
+    public $deleteCemId;
     public $showModal;
     public $sectionPrices;
 
@@ -27,11 +30,7 @@ class EditGraveyard extends Component
         $this->cemeteries = Cemeteries::all();
         $this->sections = Sections::all();
     }
-    public function render()
-    {
-        $graves = Graves::all();
-        return view('livewire.edit-graveyard', ['graves' => $graves]);
-    }
+ 
 
 
 
@@ -42,17 +41,29 @@ class EditGraveyard extends Component
         $this->emit('updateCemeterySelect', $cemeteryId); // Emit the event to update the selected cemetery in the form component
 
     }
-
-    public function deleteCemetery($cemeteryID)
+    protected $listeners = ['deleteGrave' => 'deleteCemetery'];
+    
+    
+    public function deleteConfirm($cemeteryId)
     {
-
-        // Delete records associated with the selected cemetery ID from Sections, Rows, and Graves models
-        Cemeteries::where('CemeteryID', $cemeteryID)->delete();
-        Sections::where('CemeteryID', $cemeteryID)->delete();
-        Rows::where('CemeteryID', $cemeteryID)->delete();
-        Graves::where('CemeteryID', $cemeteryID)->delete();
+        $this->deleteCemId = $cemeteryId;
+        $this->dispatchBrowserEvent('confirmDelete');
     }
+    public function deleteCemetery()
+    {
+        // Delete records associated with the selected cemetery ID
+        $cemeteries = Cemeteries::where('CemeteryID', $this->deleteCemId)->first();
+        $sections = Sections::where('CemeteryID', $this->deleteCemId)->delete();
+        $rows = Rows::where('CemeteryID', $this->deleteCemId)->delete();
+        $graves = Graves::where('CemeteryID', $this->deleteCemId)->delete();
 
+        if ($cemeteries) {
+            $cemeteries->delete(); // Delete the cemetery only if it exists
+            $this->dispatchBrowserEvent('cemDeleted'); // Dispatch event after deletion
+        } else {
+            // Handle case where cemetery was not found
+        }
+    }
     public function viewSections($cemeteryId)
     {
         // Fetch sections associated with the selected cemetery
@@ -76,5 +87,14 @@ class EditGraveyard extends Component
         $this->emit('pricesUpdated');
         // Optionally, you can reset the form or any relevant properties after the update
         $this->reset(['sectionPrices', 'sectionIds']);
+    }
+    public function render()
+    {
+        $this->cemeteries = Cemeteries::all(); // Fetch cemeteries once
+        $graves = Graves::all();
+        $this->sections = Sections::all();
+        $rows = Rows::all();
+
+        return view('livewire.edit-graveyard', ['graves' => $graves, 'cemeteries' => $this->cemeteries, 'sections' => $this->sections, 'rows' => $rows]);
     }
 }

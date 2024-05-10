@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Dark Mode Styles -->
-    <style>
+    <!-- <style>
         /* Dark mode styles */
         .dark-mode .bg-gray-100 {
             background-color: #111827; /* Dark mode background color */
@@ -26,10 +26,10 @@
         }
 
         /* Add more dark mode styles as needed */
-    </style>
+    </style> -->
 
     <!-- Dark Mode Script -->
-    <script>
+    <!-- <script>
         // Function to toggle dark mode
         function toggleDarkMode() {
             const body = document.body;
@@ -45,7 +45,7 @@
             }
         }
     </script>
-
+ -->
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles

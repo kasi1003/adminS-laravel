@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PDFController;
 use App\Http\Livewire\Quotations;
+use App\Models\Graves;
 
 
 /*
@@ -39,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/addGraveyards', function () {
         return view('addGraveyards');
     })->name('addGraveyards');
-
+    
     Route::get('/burialRecords', function () {
         return view('burial-records-view');
     })->name('burialRecords');

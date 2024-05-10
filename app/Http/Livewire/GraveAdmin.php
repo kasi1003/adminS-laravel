@@ -12,9 +12,12 @@ use App\Models\Graves;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
+use Livewire\WithFileUploads;
 
 class GraveAdmin extends Component
 {
+    use WithFileUploads;
+
     //variables
     public $region_selected;
     public $town_selected;
@@ -34,6 +37,8 @@ class GraveAdmin extends Component
     public $number_of_rows = [];
     public $search = '';
     public $selectedCemeteryId;
+    public $cem_map;
+
     public $newGraveyardName;
     //this function is only called once when the page loads
 
@@ -136,6 +141,7 @@ class GraveAdmin extends Component
             'graveyardNumber' => $this->grave_number,
             'numberOfRows' => $this->number_of_rows,
             'numberOfGraves' => $this->number_of_graves,
+            'cemMap' => $this->cem_map,
         ];
 
         // Make a PUT request to the API endpoint with the cemetery ID
@@ -155,8 +161,8 @@ class GraveAdmin extends Component
                  'CemeteryName' => $validatedData['graveyardName'],
                  'Town' => $validatedData['townLocation'],
                  'NumberOfSections' => $validatedData['graveyardNumber'],
-                 // Update other model attributes here
-             ]);
+                 'SvgMap' => $validatedData['cemMap'],
+                ]);
  
              // Update or create sections, rows, and graves based on the updated data
              for ($i = 0; $i < $validatedData['graveyardNumber']; $i++) {
@@ -214,13 +220,15 @@ class GraveAdmin extends Component
             'graveyardNumber' => $this->grave_number,
             'numberOfRows' => $this->number_of_rows,
             'numberOfGraves' => $this->number_of_graves,
+            'cemMap' => $this->cem_map,
+
         ];
          // Create a new instance of the Cemeteries model and fill it with validated data
          $cemetery = Cemeteries::create([
             'CemeteryName' => $validatedData['graveyardName'],
             'Town' => $validatedData['townLocation'],
             'NumberOfSections' => $validatedData['graveyardNumber'],
-            // Add other model attributes here
+            'SvgMap' => $validatedData['cemMap'],
         ]);
         // Create sections based on the number of sections
         // Get the CemeteryID after creating the cemetery
@@ -286,6 +294,7 @@ class GraveAdmin extends Component
         } else {
             $this->addCemeteryData();
         }
+        $this->resetForm();
     }
     private function resetForm()
     {

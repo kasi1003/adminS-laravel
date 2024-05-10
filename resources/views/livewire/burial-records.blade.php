@@ -2,13 +2,13 @@
     <div class="card bg-light mb-3 mx-auto mt-3">
         <div class="card-header">Add Burial Record</div>
         <div class="card-body">
-            <form wire:submit="addRecord">
+            <form wire:submit.prevent="addRecord">
                 <div class="mb-3">
                     <label for="cemeteries_selected" class="form-label">Cemetery</label>
                     <select id="cemeteries_selected" name="cemeteries_selected" class="form-select p-2" style="width:100%;" wire:model="selectedCemetery">
                         <option value="">Select Cemetery</option>
                         @foreach ($cemeteries as $cemetery)
-                            <option value="{{ $cemetery->CemeteryID }}">{{ $cemetery->CemeteryName }}</option>
+                        <option value="{{ $cemetery->CemeteryID }}">{{ $cemetery->CemeteryName }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -18,7 +18,7 @@
                     <select id="section_select" name="section_select" class="form-select p-2" style="width:100%;" wire:model="selectedSection">
                         <option value="">Select Section</option>
                         @foreach ($sections as $section)
-                            <option value="{{ $section->SectionCode }}">{{ $section->SectionCode }}</option>
+                        <option value="{{ $section->SectionCode }}">{{ $section->SectionCode }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -28,7 +28,7 @@
                     <select id="row_select" name="row_select" class="form-select p-2" style="width:100%;" wire:model="selectedRow">
                         <option value="">Select Row</option>
                         @foreach ($rows as $row)
-                            <option value="{{ $row->RowID }}">{{ $row->RowID }}</option>
+                        <option value="{{ $row->RowID }}">{{ $row->RowID }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -37,14 +37,15 @@
                     <label for="grave_number_select" class="form-label">Select Grave Number</label>
                     <select id="grave_number_select" name="grave_number_select" class="form-select p-2" style="width:100%;" wire:model="selectedGraveNumber">
                         <option value="">Select Grave Number</option>
-                        @foreach ($graveNumbers as $id => $GraveNum)
-                            <option value="{{ $id }}">{{ $GraveNum }}</option>
+                        @foreach ($graveNumbers as $GraveNum)
+                        <option value="{{ $GraveNum }}">{{ $GraveNum }}</option>
                         @endforeach
+
                     </select>
                 </div>
-                
-                
-                
+
+
+
 
                 <div class="mb-3">
                     <label for="death_code" class="form-label">Enter Death Certificate Number</label>
@@ -76,4 +77,3 @@
         </div>
     </div>
 </div>
-
