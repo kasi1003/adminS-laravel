@@ -31,7 +31,7 @@
                                 <button wire:click="editCemetery({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">Edit</button>
 
                                 <button wire:click="deleteConfirm({{ $cemetery->CemeteryID }})" class="btn btn-danger">Delete</button>
-                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">View More</button>
+                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-success">View More</button>
 
 
                             </td>

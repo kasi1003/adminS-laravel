@@ -26,7 +26,7 @@
                                 <!-- Button trigger modal -->
                                 <button wire:click="deleteConfirm({{ $provider->id }})" class="btn btn-danger">Delete</button>
 
-                                <button wire:click="viewServices({{ $provider->id }})" type="button" class="btn btn-primary">View Services</button>
+                                <button wire:click="viewServices({{ $provider->id }})" type="button" class="btn btn-success">View Services</button>
 
 
 
@@ -62,8 +62,14 @@
         window.addEventListener('cemDeleted', event => {
             Swal.fire({
                 title: "Deleted!",
-                text: "Cemetery successfully deleted.",
+                text: "Service Provider successfully deleted.",
                 icon: "success"
+            });
+        });
+        document.addEventListener('livewire:load', function() {
+            Livewire.on('openViewServicesModal', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                myModal.show();
             });
         });
     </script>
@@ -109,14 +115,7 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('livewire:load', function() {
-            Livewire.on('openViewServicesModal', function() {
-                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-                myModal.show();
-            });
-        });
-    </script>
+    
 
 
 
