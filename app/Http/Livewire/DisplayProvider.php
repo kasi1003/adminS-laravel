@@ -69,7 +69,6 @@ class DisplayProvider extends Component
     public function render()
     {
         $this->serviceProviders = ServiceProviders::all();
-        $this->services = Services::all();
 
         return view('livewire.display-provider', [
             'serviceProviders' => $this->serviceProviders,

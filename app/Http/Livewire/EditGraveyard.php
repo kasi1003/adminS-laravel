@@ -46,7 +46,7 @@ class EditGraveyard extends Component
     {
         $this->editingSectionId = null;
     }
-    
+
     public function editCemetery($cemeteryId)
     {
         $this->emit('editCemetery', $cemeteryId);
@@ -55,6 +55,7 @@ class EditGraveyard extends Component
     }
     public function viewSections($cemeteryId)
     {
+
         // Fetch sections associated with the selected cemetery
         $this->sections = Sections::where('CemeteryID', $cemeteryId)->get();
         // Emit an event to show the modal
@@ -103,7 +104,7 @@ class EditGraveyard extends Component
     {
         $this->cemeteries = Cemeteries::all(); // Fetch cemeteries once
         $graves = Graves::all();
-        $this->sections = Sections::all();
+        // No need to fetch all sections here
         $rows = Rows::all();
 
         return view('livewire.edit-graveyard', ['graves' => $graves, 'cemeteries' => $this->cemeteries, 'sections' => $this->sections, 'rows' => $rows]);
