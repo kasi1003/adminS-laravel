@@ -25,7 +25,6 @@ class DisplayProvider extends Component
         $this->serviceProviders = ServiceProviders::all();
     }
 
-    // Method to retrieve services associated with a specific service provider
     public function viewServices($id)
     {
         // Load services associated with the selected provider ID
@@ -35,6 +34,7 @@ class DisplayProvider extends Component
         // Emit an event to open the modal
         $this->emit('openViewServicesModal');
     }
+
 
 
 

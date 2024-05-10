@@ -66,12 +66,6 @@
                 icon: "success"
             });
         });
-        document.addEventListener('livewire:load', function() {
-            Livewire.on('openViewServicesModal', function() {
-                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
-                myModal.show();
-            });
-        });
     </script>
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -115,6 +109,15 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('livewire:load', function() {
+            Livewire.on('openViewServicesModal', function() {
+                var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                myModal.show();
+            });
+        });
+    </script>
+
 
 
 

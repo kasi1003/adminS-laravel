@@ -30,11 +30,8 @@
                                 <!-- Button trigger modal -->
                                 <button wire:click="editCemetery({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">Edit</button>
 
-                                <button wire:click="deleteConfirm({{ $cemetery->CemeteryID }})"
-                                            class="btn btn-danger">Delete</button>                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">
-                                    View More
-                                </button>
-
+                                <button wire:click="deleteConfirm({{ $cemetery->CemeteryID }})" class="btn btn-danger">Delete</button>
+                                <button wire:click="viewSections({{ $cemetery->CemeteryID }})" type="button" class="btn btn-primary">View More</button>
 
 
                             </td>
@@ -82,14 +79,14 @@
         });
     </script>
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"  wire:ignore.self>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" wire:ignore.self>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Sections</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form wire:submit="addPrice">
+                <form wire:submit.prevent="addPrice">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -108,24 +105,25 @@
                                         @if($editingSectionId == $section->id)
                                         <input type="number" placeholder="Enter Price" wire:model="sectionPrices.{{ $section->id }}">
                                         <input type="hidden" wire:model="sectionIds.{{ $section->id }}" value="{{ $section->id }}">
+                                        <button class="btn btn-sm btn-primary" wire:click.prevent="savePrice({{ $section->id }})">Save</button>
+                                        <button class="btn btn-sm btn-secondary" wire:click.prevent="cancelEdit">Cancel</button>
                                         @else
                                         @if($section->Price)
                                         {{ $section->Price }}
-                                        <button class="btn btn-sm btn-primary">Edit</button>
+                                        <button class="btn btn-sm btn-primary" wire:click.prevent="editPrice({{ $section->id }})">Edit</button>
                                         @else
-                                        <input type="number" placeholder="Enter Price" wire:model="sectionPrices.{{ $section->id }}">
-                                        <input type="hidden" wire:model="sectionIds.{{ $section->id }}" value="{{ $section->id }}">
+                                        <button class="btn btn-sm btn-primary" wire:click.prevent="editPrice({{ $section->id }})">Add Price</button>
                                         @endif
                                         @endif
                                     </td>
                                 </tr>
                                 @endforeach
+
                             </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
 

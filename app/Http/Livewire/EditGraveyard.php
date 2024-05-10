@@ -22,28 +22,45 @@ class EditGraveyard extends Component
     public $cemeteryId;
     public $deleteCemId;
     public $showModal;
-    public $sectionPrices;
+    public $sectionPrices = [];
 
     public function mount()
     {
         // Fetch cemetery data from your database
-        $this->cemeteries = Cemeteries::all();
-        $this->sections = Sections::all();
+
     }
- 
+    public function editPrice($sectionId)
+    {
+        $this->editingSectionId = $sectionId;
+    }
 
+    public function savePrice($sectionId)
+    {
+        $section = Sections::findOrFail($sectionId);
+        $section->Price = $this->sectionPrices[$sectionId];
+        $section->save();
+        $this->editingSectionId = null;
+    }
 
-
-
+    public function cancelEdit()
+    {
+        $this->editingSectionId = null;
+    }
+    
     public function editCemetery($cemeteryId)
     {
         $this->emit('editCemetery', $cemeteryId);
         $this->emit('updateCemeterySelect', $cemeteryId); // Emit the event to update the selected cemetery in the form component
 
     }
+    public function viewSections($cemeteryId)
+    {
+        // Fetch sections associated with the selected cemetery
+        $this->sections = Sections::where('CemeteryID', $cemeteryId)->get();
+        // Emit an event to show the modal
+        $this->emit('showModal');
+    }
     protected $listeners = ['deleteGrave' => 'deleteCemetery'];
-    
-    
     public function deleteConfirm($cemeteryId)
     {
         $this->deleteCemId = $cemeteryId;
@@ -64,18 +81,12 @@ class EditGraveyard extends Component
             // Handle case where cemetery was not found
         }
     }
-    public function viewSections($cemeteryId)
-    {
-        // Fetch sections associated with the selected cemetery
-        $this->sections = Sections::where('CemeteryID', $cemeteryId)->get();
-        // Emit an event to show the modal
-        $this->emit('showModal');
-    }
+
     public function editSection($sectionId)
     {
         $this->editingSectionId = $sectionId;
     }
-    
+
     public function addPrice()
     {
         foreach ($this->sectionPrices as $sectionId => $price) {
