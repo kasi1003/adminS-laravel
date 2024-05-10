@@ -37,8 +37,18 @@ class EditGraveyard extends Component
     public function savePrice($sectionId)
     {
         $section = Sections::findOrFail($sectionId);
+        $price = number_format((float) $this->sectionPrices[$sectionId], 2, '.', ''); // Format to two decimal places
         $section->Price = $this->sectionPrices[$sectionId];
         $section->save();
+        // Update the displayed price in the $sections collection
+        // Update the displayed price in the $sections array
+        foreach ($this->sections as &$sectionItem) {
+            if ($sectionItem['id'] == $sectionId) {
+                $sectionItem['Price'] = $section->Price;
+                break;
+            }
+        }
+
         $this->editingSectionId = null;
     }
 
@@ -46,6 +56,7 @@ class EditGraveyard extends Component
     {
         $this->editingSectionId = null;
     }
+
 
     public function editCemetery($cemeteryId)
     {
@@ -62,6 +73,11 @@ class EditGraveyard extends Component
         $this->emit('showModal');
     }
     protected $listeners = ['deleteGrave' => 'deleteCemetery'];
+    public function priceUpdated()
+    {
+        // Re-fetch sections to update the view
+        $this->sections = Sections::where('CemeteryID', $this->selectedCemetery)->get();
+    }
     public function deleteConfirm($cemeteryId)
     {
         $this->deleteCemId = $cemeteryId;

@@ -108,9 +108,9 @@
                                         <button class="btn btn-sm btn-primary" wire:click.prevent="savePrice({{ $section->id }})">Save</button>
                                         <button class="btn btn-sm btn-secondary" wire:click.prevent="cancelEdit">Cancel</button>
                                         @else
-                                        @if($section->Price)
-                                        {{ $section->Price }}
-                                        <button class="btn btn-sm btn-primary" wire:click.prevent="editPrice({{ $section->id }})">Edit</button>
+                                        
+                                        @if(number_format($section->Price, 2))
+                                        {{ number_format($section->Price, 2) }}                                        <button class="btn btn-sm btn-primary" wire:click.prevent="editPrice({{ $section->id }})">Edit</button>
                                         @else
                                         <button class="btn btn-sm btn-primary" wire:click.prevent="editPrice({{ $section->id }})">Add Price</button>
                                         @endif
