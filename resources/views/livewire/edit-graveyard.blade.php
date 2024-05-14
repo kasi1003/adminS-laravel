@@ -40,7 +40,7 @@
                         @else
                         <p>No cemeteries found.</p>
                         @endif
-
+                    
                     </tbody>
 
                 </table>
