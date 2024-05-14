@@ -5,13 +5,14 @@ namespace App\Http\Livewire;
 use App\Models\Cemeteries;
 use App\Models\Graves;
 use App\Models\Rows;
-
+use Livewire\WithPagination;
 use App\Models\Sections;
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 
 class EditGraveyard extends Component
 {
+    use WithPagination;
     public $showEditModal = false;
     public $selectedCemetery;
     public $editingSectionId;
