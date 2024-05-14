@@ -21,7 +21,7 @@
                     <tbody>
                         @foreach ($graves as $grave)
                         <tr>
-                            <td>{{ $grave->CemeteryID }}</td>
+                        <td>{{ $grave->cemetery->CemeteryName }}</td>
                             <td>{{ $grave->SectionCode }}</td>
                             <td>{{ $grave->RowID }}</td>
                             <td>{{ $grave->GraveNum }}</td>

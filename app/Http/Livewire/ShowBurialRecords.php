@@ -47,7 +47,7 @@ class ShowBurialRecords extends Component
     public function render()
     {
         // Fetch graves data from the Graves model
-        $graves = Graves::all();
+        $graves = Graves::with('cemetery')->get();
 
         // Pass the fetched data to the view
         return view('livewire.show-burial-records', compact('graves'));
