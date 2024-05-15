@@ -12,4 +12,10 @@ class Services extends Model
 
 
     protected $fillable = ['ServiceName', 'Description', 'ProviderId', 'Price'];
+    public function provider()
+    {
+        return $this->belongsTo(ServiceProvider::class, 'ProviderId', 'id');
+    }
 }
+
+

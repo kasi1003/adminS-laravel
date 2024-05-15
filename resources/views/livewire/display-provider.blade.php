@@ -86,7 +86,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Provider ID</th>
+                                    <th scope="col">ProviderName</th>
 
                                     <th scope="col">Service Name</th>
                                     <th scope="col">Service Description</th>
@@ -96,7 +96,7 @@
                             <tbody>
                                 @foreach ($services as $service)
                                 <tr>
-                                    <td>{{ $service->ProviderId }}</td>
+                                    <td>{{ $provider->Name }}</td>
                                     <td>{{ $service->ServiceName }}</td>
                                     <td>{{ $service->Description }}</td>
                                     <td>{{ $service->Price }}</td>
