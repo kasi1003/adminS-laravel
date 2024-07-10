@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PDFController;
 use App\Http\Livewire\Quotations;
+use App\Http\Controllers\DarkModeController;
+use App\Models\Graves;
 
 
 /*
@@ -18,6 +20,8 @@ use App\Http\Livewire\Quotations;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::post('/toggle-dark-mode', [DarkModeController::class, 'toggle']);
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,7 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/addGraveyards', function () {
         return view('addGraveyards');
     })->name('addGraveyards');
-
+    
     Route::get('/burialRecords', function () {
         return view('burial-records-view');
     })->name('burialRecords');
@@ -58,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Auth::routes();
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
 });
 
 require __DIR__ . '/auth.php';
