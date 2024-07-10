@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="lg:h-full {{ session('dark_mode') ? 'dark' : '' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -17,17 +17,12 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    
 </head>
 
-<body class="font-sans antialiased {{ session('dark_mode') ? 'dark' : '' }}">
+<body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
-
-        <!-- Dark Mode Toggle -->
-        <div class="container mt-4 flex justify-end">
-            <label for="dark-mode-toggle" class="mr-2">Dark Mode</label>
-            <input type="checkbox" id="dark-mode-toggle" {{ session('dark_mode') ? 'checked' : '' }}>
-        </div>
 
         <!-- Page Heading -->
         @if (isset($header))
@@ -39,6 +34,7 @@
         @endif
 
         <!-- Page Content -->
+
         <main>
             {{ $slot }}
         </main>
@@ -47,27 +43,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
     @livewireScripts
-
-    <!-- Dark Mode Toggle Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const toggle = document.getElementById('dark-mode-toggle');
-            toggle.addEventListener('change', function () {
-                fetch('/toggle-dark-mode', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ dark_mode: toggle.checked })
-                }).then(response => {
-                    if (response.ok) {
-                        location.reload();
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>

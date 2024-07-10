@@ -15,33 +15,28 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('addGraveyards')" :active="request()->routeIs('addGraveyards')">
                         {{ __('Manage Graveyards') }}
                     </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('burialRecords')" :active="request()->routeIs('burialRecords')">
                         {{ __('Manage Burial Records') }}
                     </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('serviceProviders')" :active="request()->routeIs('serviceProviders')">
                         {{ __('Manage Service Providers') }}
                     </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('quotations')" :active="request()->routeIs('quotations')">
                         {{ __('Manage Manage Quotations') }}
                     </x-nav-link>
                 </div>
-            </div>
 
-            <!-- Dark Mode Toggle -->
-            <div class="flex items-center">
-                <label for="dark-mode-toggle" class="mr-2 text-gray-500 dark:text-gray-400">Dark Mode</label>
-                <input type="checkbox" id="dark-mode-toggle" class="hidden" {{ session('dark_mode') ? 'checked' : '' }}>
-                <div class="flex items-center">
-                    <input type="checkbox" id="dark-mode-toggle" class="hidden" {{ session('dark_mode') ? 'checked' : '' }}>
-                    <label for="dark-mode-toggle" class="relative inline-flex items-center cursor-pointer">
-                        <span class="sr-only">Dark Mode</span>
-                        <span class="w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full border-2 border-transparent dark:border-gray-600 toggle-bg"></span>
-                        <span class="absolute left-1 top-1 w-4 h-4 bg-white border-2 border-gray-300 rounded-full dark:border-gray-600 transform dark:translate-x-5 transition-transform duration-200"></span>
-                    </label>
-                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -50,6 +45,7 @@
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
+
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -66,7 +62,9 @@
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+
+                            <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                                                this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
@@ -92,15 +90,23 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('addGraveyards')" :active="request()->routeIs('addGraveyards')">
                 {{ __('Manage Graveyards') }}
             </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('burialRecords')" :active="request()->routeIs('burialRecords')">
                 {{ __('Manage Burial Records') }}
             </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('serviceProviders')" :active="request()->routeIs('serviceProviders')">
                 {{ __('Manage Service Providers') }}
             </x-responsive-nav-link>
+        </div>
+        <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('quotations')" :active="request()->routeIs('quotations')">
                 {{ __('Manage Manage Quotations') }}
             </x-responsive-nav-link>
@@ -121,6 +127,7 @@
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
+
                     <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();
                                         this.closest('form').submit();">
                         {{ __('Log Out') }}
@@ -130,23 +137,3 @@
         </div>
     </div>
 </nav>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const toggle = document.getElementById('dark-mode-toggle');
-        toggle.addEventListener('change', function () {
-            fetch('/toggle-dark-mode', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ dark_mode: toggle.checked })
-            }).then(response => {
-                if (response.ok) {
-                    location.reload();
-                }
-            });
-        });
-    });
-</script>
