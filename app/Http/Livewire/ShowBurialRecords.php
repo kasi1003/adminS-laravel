@@ -14,7 +14,8 @@ class ShowBurialRecords extends Component
     public $graveId;
     public $graveID;
 
-    
+    protected $dates = ['archived_at'];
+
     protected $listeners = ['deleteRecord' => 'deleteGrave'];
     public function deleteConfirm($graveId)
     {
@@ -52,4 +53,15 @@ class ShowBurialRecords extends Component
         // Pass the fetched data to the view
         return view('livewire.show-burial-records', compact('graves'));
     }
+
+    public function archive($id)
+    {
+        $record = BurialRecord::find($id);
+        $record->archived_at = now();
+        $record->save();
+        $this->emit('recordArchived');
+    }
+
 }
+
+

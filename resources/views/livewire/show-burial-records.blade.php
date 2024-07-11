@@ -21,7 +21,7 @@
                     <tbody>
                         @foreach ($graves as $grave)
                         <tr>
-                        <td>{{ $grave->cemetery->CemeteryName }}</td>
+                            <td>{{ $grave->cemetery->CemeteryName }}</td>
                             <td>{{ $grave->SectionCode }}</td>
                             <td>{{ $grave->RowID }}</td>
                             <td>{{ $grave->GraveNum }}</td>
@@ -34,6 +34,7 @@
                                 <button wire:click="" type="button" class="btn btn-primary">Edit</button>
                                 <!-- Inside your Blade file or Livewire component view -->
                                 <button wire:click="deleteConfirm({{ $grave->id }})" type="button" class="btn btn-danger">Delete</button>
+                                <button wire:click="archive({{ $grave->id }})" type="button" class="btn btn-secondary">Archive</button>
                             </td>
                         </tr>
                         @endforeach
@@ -42,6 +43,7 @@
             </div>
         </div>
     </div>
+    
     <!-- Inside your Livewire component view -->
     <script>
         window.addEventListener('confirmDelete', event => {
@@ -53,7 +55,6 @@
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes',
-
             }).then((result) => {
                 if (result.isConfirmed) {
                     // You can trigger another Livewire action or perform any other logic here
@@ -70,6 +71,4 @@
             });
         });
     </script>
-
-
 </div>
